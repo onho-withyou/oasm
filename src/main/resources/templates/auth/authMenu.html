@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/AuthLayout}">
+<th:block layout:fragment="main">
+        <div class="mainTitleBar">
+            <span>등급 권한 관리 - 메뉴 권한 관리</span>
+            <div class="btnbox">
+                <!--<div class="btndiv1">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>
+                <div class="btndiv2">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>-->
+            </div>
+        </div>
+        <div class="main">
+            <th:block th:each="map, mapStat : ${menuMap}">
+                <div class="menuDiv">
+                    <div class="menuName">
+                        <div class="nameSpace cbox"><img th:src="@{/img/folder_icon.png}">[[${map.key}]]</div>
+                        <input class="clickBtn2" type="button" value="관리"/>
+                    </div>
+                    <div class="hiddenList hiddenAll">
+                        <div th:each="rt, rtStat : ${ratings}">
+                            <div class="checkList">
+                                <input type="checkbox" th:value="${rt.rating_cd}" th:text="${rt.rating_nm}" th:attr="data-seq=${mapStat.index}"/>
+                            </div>
+                        </div>
+                        <div><input class="clickBtn2 saveCheckBox" type="button" value="저장"/></div>
+                    </div>
+
+                    <div class="menuList" th:each="list : ${map.value}">
+                        <div class="listLine">
+                            <div class="visibleList">
+                                <div class="cbox" th:text="${list.menu_nm}"></div>
+                                <div><input class="clickBtn" type="button" value="관리"/></div>
+                            </div>
+                            <div class="hiddenList hiddenOne">
+                                <div th:each="rt, rtStat : ${ratings}">
+                                    <div class="checkList">
+                                        <input type="checkbox" th:value="${rt.rating_cd}" th:text="${rt.rating_nm}" th:attr="data-seq=${mapStat.index}, data-name=${list.menu_nm}"/>
+                                    </div>
+                                </div>
+                                <div><input class="clickBtn2 saveCheckBox2" type="button" value="저장"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+</th:block>
+</html>
+<script type="text/javascript">
+    $(function(){
+        setTimeout(function() {
+            $("input[value='관리']").click();
+        }, 100);
+        // 전체선택 체크박스 기능
+        $(".hiddenAll > div > div > input").change(function(){
+            let value = $(this).val();
+            let seq = $(this).data("seq");
+            if($(this).is(":checked")){
+                $("input[value='" + value + "'][data-seq='" + seq + "']").prop('checked', true);
+            } else {
+                $("input[value='" + value + "'][data-seq='" + seq + "']").prop('checked', false);
+            }
+        });
+        // 단일선택 체크박스 기능
+        let cbox = [];
+        for (let i = 0; i < $('.cbox').length; i++) {
+            cbox.push($('.cbox').eq(i).text().trim());
+        }
+        $.ajax({
+            url:'/auth/authMenuVO',
+            type:'post',
+            data:{},
+            dataType:'json',
+            success: function(data){
+                $.each(data, function (key, value){
+                    if(cbox.includes(value.menu_nm) && value.menu_flag_yn === "Y"){
+                        $('input[type=checkbox][value="' + value.rating_cd + '"][data-name="' + value.menu_nm + '"]').prop('checked', true);
+                    }
+                });
+            },
+            error: function(){
+                console.log('2. 실패')
+            }
+        });
+        // 전체선택 저장 이벤트
+        $(".saveCheckBox").on("click", function(){
+            let rating_cd = [];
+            let seq = $(this).closest(".menuDiv").index();
+            let menu_nm = $(".nameSpace").eq(seq).text().trim();
+            let checkbox = $(this).closest(".menuDiv").find(".hiddenAll > div > div > input[type=checkbox]:checked");
+            checkbox.each(function(index, el) {
+                rating_cd.push($(el).val());
+            });
+            $.ajax({
+                url:'/auth/authMenu/allSave',
+                type:'post',
+                data:{'rating_cd': rating_cd, 'menu_nm': menu_nm},
+                dataType:'text',
+                traditional: true,
+                success: function(){
+                    alert('모든값 변경 완료');
+                    location.reload();
+                }
+            });
+        });
+        // 단일선택 저장 이벤트
+        $(".saveCheckBox2").on("click", function(){
+            let rating_cd = [];
+            let menu_nm = $(this).closest('.listLine').find('.visibleList > div').text().trim();
+            let checkbox = $(this).closest(".listLine").find(".hiddenOne > div > div > input[type=checkbox]:checked");
+            checkbox.each(function(index, el) {
+                rating_cd.push($(el).val());
+            });
+            console.log(menu_nm, rating_cd)
+            $.ajax({
+                url:'/auth/authMenu/save',
+                type:'post',
+                data:{'rating_cd': rating_cd, 'menu_nm': menu_nm},
+                dataType:'text',
+                traditional: true,
+                success: function(){
+                    alert('해당값 변경 완료');
+                    location.reload();
+                }
+            });
+        });
+        $(".hidebtn").on("click", function(){
+            toggleMenu($(this));
+        });
+
+        /* display - flex로 초기화 */
+        $('.hiddenList').css('display', 'flex');
+        $('.hiddenList').slideUp(0);
+
+        /* 클릭 이벤트 */
+        $('input[value="관리"]').on("click", function(){
+
+            let hidden;
+
+            /* 전체 관리인지 부분 관리인지 구분 */
+            if ($(this).attr('class') == 'clickBtn'){
+                hidden = $(this).parent().parent().next();
+            } else {
+                hidden = $(this).parent().next();
+            }
+
+            /* 슬라이드 함수 */
+            if (hidden.css('display') == 'none') {
+                hidden.slideDown(500);
+            } else {
+                hidden.slideUp(500);
+            }
+        });
+    });
+    function toggleMenu(btn) {
+
+        if (btn.attr('id') === 'hidebtn') {
+            var hidemenu = $("#main-tree-ul");
+        } else {
+            var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+        }
+        var img = btn.parent().find("img");
+
+        if(hidemenu.css('display') === 'none'){
+            hidemenu.show();
+            img.attr("src", "./script/closebtn_icon.png");
+        } else{
+            hidemenu.hide();
+            img.attr("src", "./script/openbtn2_icon.png");
+        }
+    }
+</script>

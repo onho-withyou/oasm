@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/advSurveyStatus.css}" rel="stylesheet">
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/datePicker.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+        <!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+            <!-- 메인화면 -->
+            <div class="mainColumn">
+                <div class="mainTitleBar">
+                    <span>광고물 조사 내역 - 간판별 조회</span>
+                    <div class="btnbox">
+                        <!--<div class="btndiv1">
+                            <button type="button" class="mainbtn">버튼</button>
+                        </div>
+                        <div class="btndiv2">
+                            <button type="button" class="mainbtn">버튼</button>
+                        </div>-->
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="searchArea">
+                        <div class="searchController">
+                            <div class="aboveLine">
+                                <div>
+                                    <div>조사번호</div>
+                                    <input type="text" id="surveyNo"/>
+                                </div>
+                                <div>
+                                    <div>조사일자</div>
+                                    <div>
+                                        <input type="text" class="datePicker" id="firstDate"/>
+                                        <span>~</span>
+                                        <input type="text" class="datePicker" id="secondDate"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div>전수조사판별</div>
+                                    <select id="surveyDistinct">
+                                        <option value="">선택</option>
+                                        <option value="1">일치</option>
+                                        <option value="2">불일치</option>
+                                        <option value="3">검토필요</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="belowLine">
+                                <div>
+                                    <div>간판코드</div>
+                                    <input type="text" id="signCode"/>
+                                </div>
+                                <div>
+                                    <div>조사결과</div>
+                                    <select id="surveyResult">
+                                        <option value="">선택</option>
+                                        <th:block th:each="result : ${results}">
+                                            <option th:value="${result.sub_cd}" th:text="${result.code_nm}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div>신고</div>
+                                    <select id="surveyReport">
+                                        <option value="">선택</option>
+                                        <th:block th:each="result : ${results}">
+                                            <option th:value="${result.sub_cd}" th:text="${result.code_nm}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div>입력자</div>
+                                    <input type="text" id="insertId"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input id="searchBtn" class="clickBtn" type="button" value="검색"/>
+                        </div>
+                    </div>
+                    <div class="tableArea">
+                        <div class="tableHeader">
+                            <!--<div>
+                                <select id="pagingSize">
+                                    <option value="5">5개</option>
+                                    <option value="10">10개</option>
+                                    <option value="15">15개</option>
+                                    <option value="20">20개</option>
+                                    <option value="30">30개</option>
+                                    <option value="50">50개</option>
+                                </select>
+                            </div>-->
+                            <div>총 [[ ${elements} ]]건</div>
+                        </div>
+                        <div class="tableDiv">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>순번</th>
+                                        <th>조사번호</th>
+                                        <th>사진</th>
+                                        <th>조사일자</th>
+                                        <th>신고</th>
+                                        <th>조사결과</th>
+                                        <th>전수조사판별</th>
+                                        <th>입력자(조사자)</th>
+                                    </tr>
+
+                                </thead>
+                                <tbody id="tbody">
+                                    <tr th:each="list, stat : ${lists}">
+                                        <td th:text="${(current - 1) * 10} + ${stat.count}"></td>
+                                        <td th:text="${list.survey_no}"></td>
+                                        <td><img th:src="'/image/' + ${list.file_nm}" /></td>
+                                        <td th:text="${list.survey_date}"></td>
+                                        <td th:text="${list.survey_report}"></td>
+                                        <td th:text="${list.code_nm}"></td>
+                                        <td th:text="${list.survey_distinct}"></td>
+                                        <td th:text="${list.insert_id}"></td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(lists)}">
+                                        <td colspan="8" style="text-align: center">조회 결과가 없습니다.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="paging">
+                            <th:block th:if="${current < 10}">
+                                <div class="pagingDisabled">〈〈</div>
+                                <div class="pagingDisabled">〈</div>
+                            </th:block>
+                            <th:block th:unless="${current < 10}">
+                                <div>〈〈</div>
+                                <div>〈</div>
+                            </th:block>
+                            <th:block th:each="pageNumber : ${#numbers.sequence(first, last)}">
+                                <div th:if="${current == pageNumber}" class="pagingActive" th:text="${pageNumber}"></div>
+                                <div th:unless="${current == pageNumber}" th:text="${pageNumber}"></div>
+                            </th:block>
+                            <th:block th:if="${totalPage - current < 10}">
+                                <div class="pagingDisabled">〉</div>
+                                <div class="pagingDisabled">〉〉</div>
+                            </th:block>
+                            <th:block th:unless="${totalPage - current < 10}">
+                                <div>〉</div>
+                                <div>〉〉</div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        
+        
+
+
+</body>
+<script>
+	$(function (){
+        $(".paging > div").on("click", function(){
+
+            let all = window.location.href;
+
+            if (all.search('pageNumber') === -1) {
+                location.href = all +  "?pageNumber=" + $(this).text();
+            } else {
+                let href = all.substring(0, all.indexOf('pageNumber'));
+                location.href = href +  "pageNumber=" + $(this).text();
+            }
+
+        });
+
+
+        $("#searchBtn").on("click", function(){
+            let no = $("#surveyNo").val();
+            let firstDate = $("#firstDate").val();
+            let secondDate = $("#secondDate").val();
+            let dist = $("#surveyDistinct").val();
+            let code = $("#signCode").val();
+            let result = $("#surveyResult").val();
+            let report = $("#surveyReport").val();
+            let insertId = $("#insertId").val();
+
+            let qry = '';
+            let params = [ ['survey_no', no] , ['firstDate' , firstDate] , ['secondDate' , secondDate] , ['survey_distinct' , dist],
+                            ['sign_cd', code], ['survey_result', result], ['survey_report', report], ['insert_id', insertId] ];
+            let count = 0;
+
+            params.forEach(function(param){
+
+                if (!(!param[1])) {
+
+                    if (count > 0) {
+                     qry += '&';
+                    } else {
+                        qry += '?';
+                    }
+
+                    qry += param[0] + '=' + param[1];
+                    count ++;
+                }
+            });
+
+            location.href = '/stat/advSurveyStatus' + qry;
+
+        });
+
+    });
+</script>
+</html>

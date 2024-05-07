@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>index</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <!--<link th:href="@{/css/analysis.css}" rel="stylesheet">-->
+    <link rel="stylesheet" th:href="@{/css/yearAnalysis.css}">
+    <link rel="stylesheet" th:href="@{/css/registerStatus.css}">
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/chart.js}"></script>
+</head>
+<body>
+<div class="container">
+    <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+        <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+            <th:block layout:fragment="main">
+                <th:block class="main_table" layout:fragment="main">
+                    <div class="mainTitleBar">
+                        <span>광고물 조사 내역 - 수동 및 Excel 등록</span>
+                        <div class="btnbox">
+                            <div class="btndiv1">
+                                <button id="registerButton" class="mainbtn" type="button">등록</button>
+                            </div>
+                            <div class="btndiv2">
+                                <button id="excelButton" class="mainbtn" type="button">Excel 등록</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="main">
+                        <div class="searchArea">
+                          <form id="dataForm">
+                            <div class="searchController">
+                                <div class="pre_form">
+                                    <div class="dotted_border">
+                                        <div class="form-close-button">
+                                            <button class="close-button" type="button" data-original-form="true">&times;</button>
+                                        </div>
+                                        <div class="form-row">
+                                            <!-- 상호명 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control large-input" id="enterprise_nm"
+                                                       placeholder="업체명"
+                                                       type="text">
+                                            </div>
+
+
+                                            <!-- 조사일자 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control large-input" id="survey_date"
+                                                       placeholder="YYYYMMDD" type="text">
+                                            </div>
+
+                                            <!-- 광고물 가로 크기 입력 필드 -->
+                                            <div class="form-group">
+
+                                                <input class="form-control medium-input" id="sign_width"
+                                                       placeholder="가로 크기"
+                                                       type="text">
+                                            </div>
+
+                                            <!-- 광고물 세로 크기 입력 필드 -->
+                                            <div class="form-group">
+
+                                                <input class="form-control medium-input" id="sign_length"
+                                                       placeholder="세로 크기"
+                                                       type="text">
+                                            </div>
+                                        </div><!-- form-row -->
+                                        <div class="form-row">
+                                            <!-- 지번 주소 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control large-input" id="lot_number_adr"
+                                                       placeholder="지번 주소" type="text">
+                                            </div>
+
+                                            <!-- 도로명 주소 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control large-input" id="street_adr"
+                                                       placeholder="도로명 주소" type="text">
+                                            </div>
+
+                                            <!-- 건물번호1 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control medium-input" id="street_no1"
+                                                       placeholder="건물 주번호" type="text">
+                                            </div>
+
+                                            <!-- 건물번호2 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control medium-input" id="street_no2"
+                                                       placeholder="건물 부번호" type="text">
+                                            </div>
+
+                                            <!-- 시군구 주소 입력 필드 -->
+                                            <div class="form-group">
+                                                <input class="form-control small-input" id="sigungu_adr"
+                                                       placeholder="시군구" type="text">
+                                            </div>
+                                        </div><!-- form-row -->
+
+
+                                        <div class="form-row">
+
+                                            <!-- 조사결과 선택 필드 -->
+                                            <div class="form-group">
+                                                <select class="form-control select-input" id="survey_result">
+                                                    <option value="">조사결과</option>
+                                                    <option value="10">허가</option>
+                                                    <option value="11">신고</option>
+                                                    <option value="12">허가신고</option>
+                                                    <option value="13">배제</option>
+                                                    <option value="14">무허가요건구비</option>
+                                                    <option value="15">무허가요건불구비</option>
+                                                    <option value="16">무신고요건구비</option>
+                                                    <option value="17">무신고요건불구비</option>
+                                                    <option value="18">요건불비(수량초과)</option>
+                                                    <option value="19">요건불비(위치장소)</option>
+                                                    <option value="20">요건불비(규격)</option>
+                                                    <option value="21">요건불비(표시장소)</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 광고물 종류 선택 필드 -->
+                                            <div class="form-group">
+
+                                                <select class="form-control select-input" id="sign_kind">
+                                                    <option value="">광고물 종류</option>
+                                                    <option value="01">가로형간판</option>
+                                                    <option value="02">세로형간판</option>
+                                                    <option value="03">돌출형간판</option>
+                                                    <option value="04">공연간판</option>
+                                                    <option value="05">옥상간판</option>
+                                                    <option value="06">지주이용간판</option>
+                                                    <option value="07">현수막</option>
+                                                    <option value="08">애드벌룬</option>
+                                                    <option value="09">벽보</option>
+                                                    <option value="10">전단</option>
+                                                    <option value="11">공공시설물 이용 광고물</option>
+                                                    <option value="12">교통시설이용광고물</option>
+                                                    <option value="13">입간판</option>
+                                                    <option value="14">벽면이용현수막</option>
+                                                    <option value="15">지주이용현수막</option>
+                                                    <option value="16">현수막게시틀</option>
+                                                    <option value="17">가로등</option>
+                                                    <option value="18">현수기</option>
+                                                    <option value="19">기타</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 조명 종류 선택 필드 -->
+                                            <div class="form-group">
+
+                                                <select class="form-control select-input" id="light_kind">
+                                                    <option value="">조명 유무</option>
+                                                    <option value="01">전광</option>
+                                                    <option value="02">네온사인</option>
+                                                    <option value="03">일반전기</option>
+                                                    <option value="04">화공</option>
+                                                    <option value="05">비조명</option>
+                                                    <option value="06">기타</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- 도로 저촉 유무 선택 필드 -->
+                                            <div class="form-group">
+
+                                                <select class="form-control select-input" id="road_yn">
+                                                    <option value="">도로 저촉 유무</option>
+                                                    <option value="Y">있음</option>
+                                                    <option value="N">없음</option>
+                                                </select>
+                                            </div>
+                                        </div><!-- form-row -->
+                                    </div>
+                                </div><!-- pre_form -->
+
+                                <!-- 추가 버튼과 입력 필드 -->
+                                <div class="input-group mb-3">
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary addButton" type="button">+</button>
+                                    </div>
+                                </div>
+
+                                <!-- 여기에 새로운 form-group이 추가될 위치 -->
+                                <div id="additionalFields">
+
+                                </div>
+                            </div><!-- // searchController -->
+                          </form>
+                        </div><!-- //searchArea -->
+                    </div><!-- //main -->
+
+                </th:block>
+
+
+</html>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchController = document.querySelector('.searchController');
+
+        searchController.addEventListener('click', function(event) {
+            // '+' 버튼이 클릭되었을 때 새 양식을 추가하는 기능입니다.
+            if (event.target.classList.contains('addButton')) {
+                var formGroupsContainer = document.querySelector('.pre_form');
+                var clone = formGroupsContainer.cloneNode(true);
+
+                // 입력 및 선택 필드 초기화 및 클래스 부여
+                var inputsAndSelects = clone.querySelectorAll('input, select');
+                inputsAndSelects.forEach(function(el, index) {
+                    if (el.tagName === 'INPUT') {
+                        el.value = '';
+                        el.classList.add(`input-${index}`); // 고유한 클래스 추가
+                    } else if (el.tagName === 'SELECT') {
+                        el.selectedIndex = 0;
+                        el.classList.add(`select-${index}`); // 고유한 클래스 추가
+                    }
+                    el.removeAttribute('id'); // id 속성 제거
+                });
+
+                // ID 속성 변경
+                var allElements = clone.querySelectorAll('[id]');
+                allElements.forEach(function(element, index) {
+                    element.id = `${element.id}_clone_${index}`;
+                });
+
+                // 복제된 양식 내 '×' 버튼에 이벤트 리스너 추가
+                var closeButton = clone.querySelector('.close-button');
+                closeButton.addEventListener('click', function(e) {
+                    e.target.closest('.pre_form').remove();
+                });
+
+                // 복제된 양식을 페이지에 추가
+                var additionalFields = document.getElementById('additionalFields');
+                additionalFields.appendChild(clone);
+
+                // '+' 버튼과 버튼을 감싸고 있는 '.input-group'을 복제된 양식의 아래로 이동
+                var buttonGroup = document.querySelector('.input-group.mb-3');
+                additionalFields.appendChild(buttonGroup.cloneNode(true));
+
+                // 원래의 '+' 버튼을 감싸고 있는 '.input-group' 제거
+                buttonGroup.remove();
+            }
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Excel 등록 버튼 클릭 이벤트
+        document.querySelector('.btndiv2 .mainbtn').addEventListener('click', function() {
+            // 새로운 팝업 윈도우를 'registerStatusPopup' 페이지로 엽니다
+            window.open('/registerStatusPopup', 'registerStatusPopup', 'width=800,height=600,location=no');
+        });
+
+
+    });
+
+    function fileNameChange() {
+        var fileInput = document.getElementById('fileInput');
+        var fileChosen = document.getElementById('fileChosen'); // 파일 이름을 표시할 요소의 ID
+        fileChosen.textContent = fileInput.files[0].name; // 선택된 파일 이름 표시
+    }
+
+
+    document.getElementById('registerButton').addEventListener('click', function() {
+        var allFormData = []; // 모든 폼 데이터를 저장할 배열
+        var allForms = document.querySelectorAll('.pre_form'); // 모든 입력 폼을 선택
+        var isAllDataValid = true; // 모든 데이터가 유효한지 확인하는 플래그
+
+        // 각 폼을 순회하며 입력 값을 검사
+        allForms.forEach(function(formElement, index) {
+            var enterprise_nm = formElement.querySelector('input[id*="enterprise_nm"]').value.trim();
+            var survey_date = formElement.querySelector('input[id*="survey_date"]').value.trim();
+            var sign_width = formElement.querySelector('input[id*="sign_width"]').value.trim();
+            var sign_length = formElement.querySelector('input[id*="sign_length"]').value.trim();
+            var lot_number_adr = formElement.querySelector('input[id*="lot_number_adr"]').value.trim();
+            var street_adr = formElement.querySelector('input[id*="street_adr"]').value.trim();
+            var street_no1 = formElement.querySelector('input[id*="street_no1"]').value.trim();
+            var street_no2 = formElement.querySelector('input[id*="street_no2"]').value.trim();
+            var sigungu_adr = formElement.querySelector('input[id*="sigungu_adr"]').value.trim();
+            var survey_result = formElement.querySelector('select[id*="survey_result"]').value;
+            var sign_kind = formElement.querySelector('select[id*="sign_kind"]').value;
+            var light_kind = formElement.querySelector('select[id*="light_kind"]').value;
+            var road_yn = formElement.querySelector('select[id*="road_yn"]').value;
+
+            // 필수 필드가 채워졌는지 확인
+            if (!enterprise_nm || !survey_date || !sign_width || !sign_length || !lot_number_adr || !street_adr || !street_no1 || !sigungu_adr || !sign_kind || !light_kind || !road_yn) {
+                alert("모든 필수 필드를 채워주세요.");
+                isAllDataValid = false; // 데이터가 유효하지 않으므로 전송 중지
+                return;
+            }
+
+            // 모든 데이터가 유효한 경우에만 배열에 폼 데이터 객체 추가
+            if (isAllDataValid) {
+                var formData = {
+                    enterprise_nm: enterprise_nm,
+                    survey_date: survey_date,
+                    sign_width: sign_width,
+                    sign_length: sign_length,
+                    lot_number_adr: lot_number_adr,
+                    street_adr: street_adr,
+                    street_no1: street_no1,
+                    street_no2: street_no2,
+                    sigungu_adr: sigungu_adr,
+                    survey_result: survey_result,
+                    sign_kind: sign_kind,
+                    light_kind: light_kind,
+                    road_yn: road_yn
+                };
+                allFormData.push(formData); // 폼 데이터 객체를 배열에 추가
+            }
+        });
+
+        // 모든 데이터가 유효하고, 데이터 배열에 최소 하나 이상의 객체가 있을 때만 서버로 전송
+        if (isAllDataValid && allFormData.length > 0) {
+            fetch('/api/registerStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(allFormData) // JSON 형태로 서버로 전송
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('서버 처리 중 오류 발생');
+                    }
+                    return response.json(); // 응답을 JSON으로 변환
+                })
+                .then(data => {
+                    alert('등록이 성공적으로 완료되었습니다.'); // 성공 메시지 표시
+                })
+                .catch(error => {
+                    console.error('등록 중 문제가 발생했습니다: ', error);
+                    alert('등록 중 문제가 발생했습니다: ' + error.message); // 오류 메시지 표시
+                });
+        } else {
+            alert("모든 필수 필드를 정확히 채워주세요.");
+        }
+    });
+
+
+</script>

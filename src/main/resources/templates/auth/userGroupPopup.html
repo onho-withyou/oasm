@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>userGroupPopup</title>
+    <link th:href="@{/css/userGroupPopup.css}" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script text="javascript">
+        function changeRowColor(checkbox) {
+            var row = checkbox.parentNode.parentNode; // 체크박스의 부모 요소(td)의 부모 요소(tr)를 찾음
+            if (checkbox.checked) {
+                row.classList.add('checked');
+            } else {
+                row.classList.remove('checked');
+            }
+        }
+
+        function toggleCheckSelectAll() {
+            var checkboxes = document.querySelectorAll('.tdcheck');
+            var checkall = document.getElementById('checkall');
+            checkboxes.forEach(function (cb) {
+                cb.checked = checkall.checked;
+                changeRowColor(cb);
+            });
+        }
+
+        /* 추가 팝업 */
+        function showPopup(path) {
+            var _width = "700";
+            var _height = "500";
+            //팝업을 가운데위치 시키기위한 값
+            var _left = Math.ceil((window.screen.width - _width) / 2);
+            var _top = Math.ceil((window.screen.height - _height) / 2);
+            window.open(
+            path,
+            "new2",
+            "toolbar=no,width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+            );
+        }
+
+
+        $(function(){
+            /* 저장 */
+            $("#rtnSave").on("click", function(){
+                let name = $("#rtnName").val();
+                let code = $("#rtnCode").val();
+                let users = [];
+
+                const length = window.localStorage.length;
+                for (let k=0; k<length; k++){
+                    const localKey = window.localStorage.key(k);
+                    users.push(localKey);
+                }
+                localStorage.clear();
+
+                $.ajax({
+                    type: 'post',
+                    url: '/auth/userGroupPopup',
+                    data: {name: name, code: code, users: users},
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data === 1){
+                            alert('생성되었습니다.');
+                            location.href='/auth/userGroupPopup?rating=' + code;
+                        } else if (data === 2) {
+                            alert('저장되었습니다.');
+                            location.reload();
+                        } else if (data === 3) {
+                            alert('중복된 코드 또는 권한 명입니다.');
+                        } else {
+                            alert('값을 입력해주세요.');
+                        }
+                    }
+                });
+            });
+
+            /* 삭제 */
+            $("#rtnDelete").on("click", function(){
+                $('.inputCheck').each(function (index, item){
+                    if ($(this).is(':checked')){
+                        $(this).parent().parent().remove();
+                        localStorage.removeItem($(this).val());
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+</head>
+<body>
+<div class="popup">
+    <form name="form">
+        <div class="topBar">
+            <th:block th:if="${#arrays.isEmpty(rtn)}">
+                <label>권한 명</label>
+                <input type="text" id="rtnName" class="bartext" >
+                <label>권한코드</label>
+                <input type="text" id="rtnCode" class="bartext" >
+            </th:block>
+            <th:block th:if="${not #arrays.isEmpty(rtn)}">
+                <label>권한 명</label>
+                <input type="text" id="rtnName" class="bartext" th:value="${rtn.rating_nm}">
+                <label>권한코드</label>
+                <input type="text" id="rtnCode" class="bartext" th:value="${rtn.rating_cd}">
+            </th:block>
+
+            <button type="button" class="barbtn" onclick="showPopup('/auth/userGroupAddPopup')">추가</button>
+            <button type="button" class="barbtn" id="rtnDelete">삭제</button>
+            <button type="button" class="barbtn" id="rtnSave">저장</button>
+        </div>
+
+        <div class="tableContainer">
+            <table id="usertable">
+                <thead>
+                <th class="thcheck"><input type="checkbox" id="checkall" onchange="toggleCheckSelectAll(this)"></th>
+                <th class="thuserId">사용자ID</th>
+                <th class="thuserName">사용자명</th>
+                </thead>
+                <tbody>
+                    <th:block th:if="${#lists.isEmpty(users)}">
+                    </th:block>
+                    <th:block th:if="${not #lists.isEmpty(users)}">
+                        <tr th:each="user : ${users}">
+                            <td class="tdcheck"><input type="checkbox" class="tdcheck inputCheck"
+                                                       onchange="changeRowColor(this)" th:value="${user.user_id}"></td>
+                            <td th:text="${user.user_id}" class="tduserId"></td>
+                            <td th:text="${user.user_nm}" class="tduserName"></td>
+                        </tr>
+                    </th:block>
+                </tbody>
+            </table>
+        </div>
+        <div class="bottomBar">
+            <label>ID</label>
+            <input type="text" class="bartext">
+            <button class="searchbtn"></button>
+            <button class="pagingbtn">paging</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

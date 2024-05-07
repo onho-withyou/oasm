@@ -1,0 +1,286 @@
+@font-face {
+  font-family: 'SDGothic';
+  src: url('./font/AppleSDGothicNeoM.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: KBO;
+  src: url("./font/KBODiaGothic_medium.ttf") format("truetype");
+}
+* {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+a {
+  text-decoration-line: none;
+  color: black;
+}
+
+html,
+body {
+  width: 100%;
+  min-width: 666px;
+  background: #ffffff;
+  font-family: "SDGothic";
+  overflow: hidden;
+}
+
+header {
+  width: 100%;
+  height: 94px;
+  padding-top: 20px;
+  margin-bottom: -4px;
+}
+
+/* 헤더 */
+.top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.logobox {
+  width: 150px;
+  height: 50px;
+  padding-left: 20px;
+}
+.right-menu {
+  padding-right: 30px;
+}
+.title span {
+  font-size: 19px;
+  font-weight: 500;
+}
+.userspan {
+  padding-right: 20px;
+}
+.logo {
+  width: 130px;
+}
+
+.logoutbtn {
+  border: 1px solid #e53935;
+  width: 70px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #e53935;
+  cursor: pointer;
+}
+
+.logoutbtn:hover {
+  background-color: #e53935;
+  color: #ffffff;
+}
+.line1 {
+  border-top: 1px solid #dadada;
+  padding-top: 13px;
+}
+
+.main-menu {
+  width: 100%;
+  height: 40px;
+  background-color: rgb(226, 226, 226);
+  cursor: pointer;
+}
+ul.main-menu > li {
+  display: inline-block;
+  width: 80px;
+  padding: 5px 1px;
+  padding-left: 10px;
+  padding-top: 10px;
+  text-align: center;
+}
+
+ul.main-menu > li:hover ul.sub-menu {
+  display: block;
+}
+.sub-menu {
+  display: none;
+  border: 1px solid rgb(187, 187, 187);
+  background-color: rgb(226, 226, 226);
+  position: absolute;
+  margin-top: 8px;
+  height: 110px;
+  cursor: pointer;
+  margin-left: 3px;
+}
+.sub-menu > li {
+  margin-top: 11px;
+  text-align: center;
+}
+/* 왼쪽메뉴 */
+.left-menu {
+  width: 30%;
+  min-width: 334px;
+  max-width: 334px;
+  height: 890px;
+}
+.tree-menu {
+  padding: 15px;
+}
+
+.main-tree-ul {
+  padding-top: 6px;
+  display: block;
+}
+
+.main-tree-li {
+  padding-left: 18px;
+  background: url(./script/bg_tree_branch.gif) no-repeat 9px -22px;
+}
+
+.main-tree-ul {
+  background: url(./script/bg_tree_stream.gif) repeat-y 9px 0;
+  margin: 0;
+  padding: 0;
+}
+.sub-tree-ul {
+  background: url(./script/bg_tree_stream.gif) repeat-y 9px 0;
+  display: block;
+}
+.tree-sub-li {
+  padding-left: 18px;
+  background: url(./script/bg_tree_branch.gif) no-repeat 9px -22px;
+}
+
+.tree-last-li {
+  padding-left: 18px;
+  margin-bottom: 25px;
+  background: url(script/bg_tree_branch_last.gif) no-repeat 9px -22px;
+}
+
+.main-tree-ul li img {
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.main-tree-li-last {
+  padding-left: 18px;
+  background: url(./script/bg_tree_branch_last.gif) no-repeat 9px -22px;
+}
+
+.treelabel {
+  margin-left: 3px;
+  vertical-align: top;
+  text-decoration: none;
+}
+/* 메인 */
+.middleContainer {
+  display: flex;
+  min-height: 100vh;
+}
+.mainColumn {
+  max-height: 100%;
+  width: 100%;
+  border-left: 1px solid rgb(226, 226, 226);
+}
+
+.mainTitleBar {
+  height: 25px;
+  background-color: rgb(226, 226, 226);
+  padding: 5px;
+  border-top: 1px solid rgb(197, 196, 196);
+}
+
+.mainTitleBar > span {
+  line-height: 25px;
+}
+
+.btndiv1 > button {
+  width: 50px;
+  height: 25px;
+  background-color: rgb(83, 83, 83);
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btndiv1 > button:hover {
+  background-color: #8f8f8f;
+}
+.btndiv2 > button {
+  width: 50px;
+  height: 25px;
+  background-color: rgb(83, 83, 83);
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btndiv2 > button:hover {
+  background-color: #8f8f8f;
+}
+.btndiv1 {
+  margin-right: 10px;
+}
+.btnbox {
+  float: right;
+  margin-right: 25px;
+  display: flex;
+}
+.searchform {
+  margin-top: 20px;
+}
+.searchform > label {
+  margin-left: 19px;
+}
+.maincodeselect {
+  width: 120px;
+  border-radius: 3px;
+  border: 1px solid #8f8f8f;
+  height: 20px;
+}
+.subcodeBar {
+  width: 120px;
+  border-radius: 3px;
+  border: 1px solid #8f8f8f;
+  height: 20px;
+}
+.codesearch {
+  float: right;
+  height: 30px;
+  width: 30px;
+  position: relative;
+  right: 19px;
+  bottom: 5px;
+  border: 1px solid rgb(165, 165, 165);
+  background-image: url("./script/search.svg");
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: center;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+table {
+  border-collapse: collapse;
+  width: 99.7%;
+  position: relative;
+  top: 18px;
+  margin-left: 1px;
+}
+.contentth {
+  border: 1.5px solid rgb(155, 154, 154);
+  text-align: left;
+  padding-left: 10px;
+  height: 30px;
+}
+.contenttd {
+  border: 1px solid rgb(212, 212, 212);
+  padding-left: 10px;
+  height: 25px;
+}
+.btntd {
+  width: 6.7%;
+}
+.detailbtn {
+  height: 25px;
+  width: 90px;
+  font-weight: 600;
+  border-radius: 0;
+  border: 1px solid #8f8f8f;
+  font-size: 15px;
+}

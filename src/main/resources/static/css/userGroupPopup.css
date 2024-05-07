@@ -1,0 +1,171 @@
+@font-face {
+    font-family: "SDGothic";
+    src: url("../font/AppleSDGothicNeoM.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: KBO;
+    src: url("../font/KBODiaGothic_medium.ttf") format("truetype");
+}
+
+html {
+    font-family: "SDGothic", sans-serif;
+    overflow: hidden;
+}
+
+.popup {
+    position: absolute;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    width: 700px;
+    height: 500px;
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(240, 240, 240);
+}
+
+.topBar {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.barbtn {
+    width: 60px;
+    height: 30px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 9px;
+}
+
+.bartext {
+    width: 140px;
+    height: 18px;
+    margin-right: 10px;
+}
+
+.topBar > label {
+    margin-left: 10px;
+}
+
+.tableContainer {
+    height: 390px;
+    overflow-y: auto;
+    border: 1px solid;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-height: 120px;
+    max-height: 120px;
+    height: 120px;
+}
+.thuserId {
+    width: 320px;
+    background-color: #d8d8d8;
+    height: 25px;
+    position: sticky;
+    top: 0;
+}
+
+.thcheck {
+    width: 50px;
+    background-color: #d8d8d8;
+    text-align: left;
+    height: 25px;
+    position: sticky;
+    top: 0;
+}
+
+.thuserName {
+    width: 320px;
+    background-color: #d8d8d8;
+    height: 25px;
+    position: sticky;
+    top: 0;
+}
+
+.bottomBar {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.tduserId {
+    text-align: center;
+    padding: 5px;
+}
+
+.tduserName {
+    text-align: center;
+}
+
+.searchbtn {
+    height: 27px;
+    width: 27px;
+    border: 1px solid rgb(165, 165, 165);
+    background-image: url("../img/search.svg");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    position: relative;
+    top: 7px;
+}
+
+.pagingbtn {
+    width: 120px;
+    height: 25px;
+    background-color: rgb(251, 251, 251);
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+    float: right;
+    margin-right: 30px;
+    margin-top: 8px;
+}
+
+.pagingbtn:hover {
+    background-color: #ececec;
+}
+
+.checked {
+    background-color: rgb(244, 240, 10);
+}
+
+/* 페이징 스타일 */
+
+.paging {
+    display: flex;
+    justify-content: end;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.paging > div {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    margin: 5px;
+    border-radius: 50%;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+.pagingDisabled {
+    color: #bdbdbd;
+    cursor: default;
+}
+.pagingActive {
+    background: #98ef9e;
+    cursor: default;
+}

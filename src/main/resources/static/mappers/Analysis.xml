@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.AnalysisDAO">
+    <!--광고물 조회-->
+    <select id="getAdvType" resultType="com.oasm.domain.AnalysisVO">
+        SELECT sl.sign_kind, cm.sub_cd, cm.code_nm, cm.main_cd, ss.survey_date, COUNT(*) AS count
+        FROM cm_code cm
+        INNER JOIN sign_list sl ON cm.sub_cd = sl.sign_kind
+        INNER JOIN survey_state ss ON sl.sign_cd = ss.sign_cd
+        WHERE cm.main_cd = 'Adkind'
+        AND STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN #{startDate} AND #{endDate}
+        <if test="selectedItems != null and selectedItems.size() > 0">
+            AND cm.code_nm IN
+            <foreach item="item" collection="selectedItems" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY cm.code_nm;
+    </select>
+
+    <select id="getcodeNm" resultType="java.lang.String">
+        SELECT code_nm
+        FROM cm_code
+        WHERE main_cd = 'Adkind' AND NOT sub_cd = '*';
+    </select>
+    <!--조명 조회-->
+    <select id="getLightType" resultType="com.oasm.domain.AnalysisVO">
+        SELECT sl.sign_kind, cm.sub_cd, cm.code_nm, cm.main_cd, ss.survey_date, COUNT(*) AS count
+        FROM cm_code cm
+        INNER JOIN sign_list sl ON cm.sub_cd = sl.sign_kind
+        INNER JOIN survey_state ss ON sl.sign_cd = ss.sign_cd
+        WHERE cm.main_cd = 'LightType'
+        AND STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN #{startDate} AND #{endDate}
+        <if test="selectedItems != null and selectedItems.size() > 0">
+            AND cm.code_nm IN
+            <foreach item="item" collection="selectedItems" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY cm.code_nm;
+    </select>
+
+    <select id="getLightcodeNm" resultType="java.lang.String">
+        SELECT code_nm
+        FROM cm_code
+        WHERE main_cd = 'LightType' AND NOT sub_cd = '*';
+    </select>
+
+    <!--광고물 조사 결과 조회-->
+
+    <select id="getResult" resultType="com.oasm.domain.AnalysisVO">
+        SELECT
+        cm.code_nm, cm.sub_cd, ss.survey_date, COUNT(*) AS count
+        FROM
+        survey_state ss
+        JOIN
+        cm_code cm ON cm.sub_cd = ss.survey_result
+        WHERE cm.main_cd = 'Result'
+        AND STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN #{startDate} AND #{endDate}
+        <if test="selectedItems != null and selectedItems.size() > 0">
+            AND cm.code_nm IN
+            <foreach item="item" collection="selectedItems" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY  cm.code_nm
+        ORDER BY cm.sub_cd ASC
+
+    </select>
+
+    <select id="getResultCodeNm" resultType="java.lang.String">
+        SELECT code_nm
+        FROM cm_code
+        WHERE main_cd = 'Result' AND NOT sub_cd = '*';
+    </select>
+    <!--도로 저촉 유무 조회-->
+    <select id="getFlag" resultType="com.oasm.domain.AnalysisVO">
+        SELECT
+        cm.code_nm, cm.sub_cd, bl.building_cd, bl.road_yn, ss.survey_date, COUNT(bl.road_yn) AS count
+        FROM
+        survey_state ss
+        INNER JOIN
+        sign_list sl ON ss.sign_cd = sl.sign_cd
+        INNER JOIN
+        enterprise_list el ON sl.enterprise_cd = el.enterprise_cd
+        INNER JOIN
+        building_enter_list bel ON el.enterprise_cd = bel.enterprise_cd
+        INNER JOIN
+        building_list bl ON bel.building_cd = bl.building_cd
+        INNER JOIN
+        cm_code cm ON cm.sub_cd = bl.road_yn
+        WHERE STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN #{startDate} AND #{endDate}
+        <if test="selectedItems != null and selectedItems.size() > 0">
+            AND cm.code_nm IN
+            <foreach item="item" collection="selectedItems" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        GROUP BY
+        bl.road_yn
+        ORDER BY
+        bl.building_cd ASC;
+    </select>
+
+    <select id="getFlagCodeNm" resultType="java.lang.String">
+        SELECT code_nm
+        FROM cm_code
+        WHERE main_cd = 'Flag' AND NOT sub_cd = '*';
+    </select>
+</mapper>

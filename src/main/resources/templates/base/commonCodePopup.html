@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기초코드 관리/서브코드 등록</title>
+    <link th:href="@{/css/commonCodePopup.css}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script text="javascript">
+      function getSelect() {
+        let codeInput = document.getElementById('mainCd');
+        let nameInput = document.getElementById('mainNm');
+        let selectValue = document.querySelector('#selector').value;
+
+
+        if (selectValue === 'select') {
+
+        } else if (selectValue === 'insert') {
+          codeInput.value = null;
+          nameInput.value = null;
+          codeInput.focus();
+        } else {
+          codeInput.value = selectValue;
+          nameInput.value = document.querySelector('select[name=codeselect] option:checked').dataset.name;
+        }
+
+
+      }
+    </script>
+  </head>
+  <body>
+    <div class="popup">
+      <form name="form">
+        <div class="formArea">
+          <div class="formContent">
+            <div>
+              <label>주코드</label>
+            </div>
+            <div>
+              <input type="text" id="mainCd" placeholder="code" th:value="${code?.main_cd}" />
+              <input type="text" id="mainNm" placeholder="주코드명" th:value="${code?.code_nm}" />
+              <select name="codeselect" id="selector" onchange="getSelect()">
+                <option value="select">선택</option>
+                <th:block th:each="main : ${mains}">
+                  <option th:value="${main.main_cd}" th:data-name="${main.code_nm}" th:text="${main.code_nm}"></option>
+                </th:block>
+                <option value="insert">직접 입력</option>
+              </select>
+            </div>
+          </div>
+          <div class="formContent">
+            <div>
+              <label>서브코드</label>
+            </div>
+            <div>
+              <input type="text" id="subCd" th:value="${code?.sub_cd}" />
+            </div>
+          </div>
+          <div class="formContent">
+            <div>
+              <label>코드명</label>
+            </div>
+            <div>
+              <input type="text" id="subNm" th:value="${code?.sub_nm}" />
+            </div>
+          </div>
+          <div class="formContent">
+            <div>
+              <label>비고</label><br />
+            </div>
+            <div>
+              <textarea id="remark" cols="30" rows="10"></textarea>
+            </div>
+          </div>
+        </div>
+        <input type="button" value="등록" th:text="${code?.rmk}" />
+      </form>
+    </div>
+  </body>
+</html>
+
+<script>
+  $("input[type='button']").on("click", function(){
+    let main_cd = $("#mainCd").val();
+    let code_nm = $("#mainNm").val();
+    let sub_cd = $("#subCd").val();
+    let sub_nm = $("#subNm").val();
+    let rmk = $("#remark").val();
+
+    $.ajax({
+      url: '/base/commonCodePopup',
+      type: 'post',
+      data: JSON.stringify({"main_cd":main_cd, "code_nm":code_nm, "sub_cd":sub_cd, "sub_nm":sub_nm, "rmk":rmk}),
+      contentType: 'application/json',
+      dataType: 'json',
+      success: function(data) {
+        if (data > 0) {
+          alert('저장되었습니다.');
+        }
+      }
+    });
+
+  });
+</script>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.MonthDAO">
+
+    <!-- 월별 광고물 종류 통계 -->
+    <select id="monthadvtype"  resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(ss.survey_date, '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM
+        sign_list sl
+        JOIN
+        survey_state ss ON ss.sign_cd = sl.sign_cd
+        JOIN
+        cm_code cm ON cm.sub_cd = sl.sign_kind
+        WHERE
+        cm.main_cd = 'Adkind'
+
+        GROUP BY
+        `survey_date`, cm.code_nm
+        ORDER BY
+        `survey_date` ASC, cm.code_nm ASC;
+
+    </select>
+
+    <!-- 월별 광고물 종류 통계 (요청) -->
+    <select id="monthadvtypeWithList" parameterType="com.oasm.domain.MonthTypeFormVO" resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM sign_list sl
+        JOIN survey_state ss ON ss.sign_cd = sl.sign_cd
+        JOIN cm_code cm ON cm.sub_cd = sl.sign_kind
+        WHERE cm.main_cd = 'Adkind'
+        <if test="code_nm != null and !code_nm.isEmpty()">
+            AND cm.code_nm IN
+            <foreach item="item" collection="code_nm" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startDate != null and endDate != null">
+            AND DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m')
+            BETWEEN #{startDate} AND #{endDate}
+        </if>
+        GROUP BY `survey_date`, cm.code_nm
+        ORDER BY `survey_date` ASC, cm.code_nm ASC
+    </select>
+
+    <!-- 월별 조명 종류 통계 -->
+    <select id="monthLightType"  resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(ss.survey_date, '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM
+        sign_list sl
+        JOIN
+        survey_state ss ON ss.sign_cd = sl.sign_cd
+        JOIN
+        cm_code cm ON cm.sub_cd = sl.light_kind
+        WHERE
+        cm.main_cd = 'LightType'
+        AND
+        STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN DATE_SUB(NOW(), INTERVAL 12 MONTH) AND NOW()
+        GROUP BY
+        `survey_date`, cm.code_nm
+        ORDER BY
+        `survey_date` ASC, cm.code_nm ASC;
+
+    </select>
+
+    <!-- 월별 조명 종류 통계 (요청) -->
+    <select id="monthLightTypeWithList" parameterType="com.oasm.domain.MonthTypeFormVO" resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM sign_list sl
+        JOIN survey_state ss ON ss.sign_cd = sl.sign_cd
+        JOIN cm_code cm ON cm.sub_cd = sl.light_kind
+        WHERE cm.main_cd = 'LightType'
+        <if test="code_nm != null and !code_nm.isEmpty()">
+            AND cm.code_nm IN
+            <foreach item="item" collection="code_nm" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startDate != null and endDate != null">
+            AND DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m')
+            BETWEEN #{startDate} AND #{endDate}
+        </if>
+        GROUP BY `survey_date`, cm.code_nm
+        ORDER BY `survey_date` ASC, cm.code_nm ASC
+    </select>
+
+    <!-- 월별 광고물 조사 결과 통계  -->
+    <select id="monthSurveyResult"  resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(ss.survey_date, '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM
+        survey_state ss
+        JOIN
+        cm_code cm ON cm.sub_cd = ss.survey_result
+        WHERE
+        cm.main_cd = 'Result'
+        AND
+        STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN DATE_SUB(NOW(), INTERVAL 12 MONTH) AND NOW()
+        GROUP BY
+        DATE_FORMAT(ss.survey_date, '%Y-%m'), cm.code_nm
+        ORDER BY
+        DATE_FORMAT(ss.survey_date, '%Y-%m') ASC, cm.code_nm ASC;
+
+    </select>
+
+    <!-- 월별 광고물 조사 결과 통계 (요청) -->
+    <select id="monthSurveyResultList" parameterType="com.oasm.domain.MonthTypeFormVO" resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m'), '%Y-%m') AS `survey_date`,
+        cm.code_nm
+        FROM survey_state ss
+        JOIN cm_code cm ON cm.sub_cd = ss.survey_result
+        WHERE cm.main_cd = 'Result'
+        <if test="code_nm != null and !code_nm.isEmpty()">
+            AND cm.code_nm IN
+            <foreach item="item" collection="code_nm" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startDate != null and endDate != null">
+            AND DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m'), '%Y-%m')
+            BETWEEN #{startDate} AND #{endDate}
+        </if>
+        GROUP BY `survey_date`, cm.code_nm
+        ORDER BY `survey_date` ASC, cm.code_nm ASC
+    </select>
+
+
+    <!-- 도로 저촉 유무 통계  -->
+    <select id="monthRoadInvasion"  resultType="com.oasm.domain.SurveyStateVO">
+
+        SELECT
+        bl.building_cd,
+        bl.road_yn,
+        DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m') AS survey_date
+        FROM
+        survey_state ss
+        INNER JOIN
+        sign_list sl ON ss.sign_cd = sl.sign_cd
+        INNER JOIN
+        enterprise_list el ON sl.enterprise_cd = el.enterprise_cd
+        INNER JOIN
+        building_enter_list bel ON el.enterprise_cd = bel.enterprise_cd
+        INNER JOIN
+        building_list bl ON bel.building_cd = bl.building_cd
+        WHERE
+        STR_TO_DATE(ss.survey_date, '%Y%m%d') BETWEEN DATE_SUB(NOW(), INTERVAL 12 MONTH) AND NOW()
+        GROUP BY
+        bl.building_cd,
+        bl.road_yn
+        ORDER BY
+        bl.building_cd ASC;
+
+    </select>
+
+    <!-- 도로 저촉 유무 통계 (요청) -->
+    <select id="monthRoadInvasionList" parameterType="com.oasm.domain.MonthTypeFormVO" resultType="com.oasm.domain.SurveyStateVO">
+        SELECT
+        bl.building_cd,
+        bl.road_yn,
+        DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m') AS survey_date
+        FROM
+        survey_state ss
+        INNER JOIN sign_list sl ON ss.sign_cd = sl.sign_cd
+        INNER JOIN enterprise_list el ON sl.enterprise_cd = el.enterprise_cd
+        INNER JOIN building_enter_list bel ON el.enterprise_cd = bel.enterprise_cd
+        INNER JOIN building_list bl ON bel.building_cd = bl.building_cd
+        <where>
+            <if test="startDate != null and endDate != null">
+                DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m')
+                BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="road_yn != null">
+                AND bl.road_yn = #{road_yn}
+            </if>
+        </where>
+        GROUP BY
+        bl.building_cd, bl.road_yn, DATE_FORMAT(STR_TO_DATE(ss.survey_date, '%Y%m%d'), '%Y-%m')
+        ORDER BY
+        survey_date ASC, bl.building_cd ASC;
+    </select>
+
+
+
+
+
+
+</mapper>

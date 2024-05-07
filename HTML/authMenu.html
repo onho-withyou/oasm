@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link href="index.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".hidebtn").on("click", function(){
+                toggleMenu($(this));
+            });
+
+            /* display - flex로 초기화 */
+            $('.hiddenList').css('display', 'flex');
+            $('.hiddenList').slideUp(0);
+
+            /* 클릭 이벤트 */
+            $('input[value="관리"]').on("click", function(){
+
+                let hidden;
+
+                /* 전체 관리인지 부분 관리인지 구분 */
+                if ($(this).attr('class') == 'clickBtn'){
+                    hidden = $(this).parent().parent().next();
+                } else {
+                    hidden = $(this).parent().next();
+                }
+                
+                /* 슬라이드 함수 */
+                if (hidden.css('display') == 'none') {
+                    hidden.slideDown(500);
+                } else {
+                    hidden.slideUp(500);
+                }
+                
+            });
+
+        });
+        function toggleMenu(btn) {
+
+            if (btn.attr('id') === 'hidebtn') {
+                var hidemenu = $("#main-tree-ul");
+            } else {
+                var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+            }
+            var img = btn.parent().find("img");
+
+            if(hidemenu.css('display') === 'none'){
+                hidemenu.show();
+                img.attr("src", "./script/closebtn_icon.png");
+            } else{
+                hidemenu.hide();
+                img.attr("src", "./script/openbtn2_icon.png");
+            }
+        }
+
+    </script>
+    <script>
+
+    </script>
+    <style>
+        .main {
+            display: flex;
+            flex-direction: column;
+        }
+        .searchArea {
+            width: 100%;
+            max-width: 1280px;
+            height: 60px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: center;
+        }
+        .clickBtn {
+            width: 100%;
+            height: 100%;
+            background: white;
+            font-size: 14px;
+            border: none;
+            border-left: 1px solid #dbdbdb;
+        }
+        .clickBtn:hover {
+            cursor: pointer;
+        }
+        .clickBtn2 {
+            width: 50px;
+            height: 25px;
+            background-color: rgb(83, 83, 83);
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .menuDiv {
+            width: 80%;
+            max-width: 1200px;
+            height: auto;
+            padding: 25px;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .menuName {
+            height: 30px;
+            align-content: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding-bottom: 5px;
+            padding-right: 10px;
+            border-bottom: 2px solid #888;
+        }
+        .nameSpace > img {
+            width: 25px;
+            margin-right: 5px;
+        }
+        .menuList {}
+        .listLine {
+
+        }
+        .visibleList {
+            display: flex;
+            justify-content: space-between;
+            border: 1px solid #dbdbdb;
+
+        }
+        .visibleList > div:nth-child(1) {
+            width: 70%;
+            padding: 10px;
+            font-size: 15px;
+            text-align: center;
+        }
+        .visibleList > div:nth-child(2) {
+            width: 30%;
+        }
+        .hiddenList {
+            display: none;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .hiddenList > div {
+            display: flex;
+            flex-direction: row;
+        }
+        .checkList {
+            margin-right: 20px;
+        }
+        .hiddenAll {
+            background: #ebebeb;
+        }
+        .hiddenOne {
+            border: 1px solid #dbdbdb;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+    <header>
+        <div class="top">
+        <div class="logobox"><img class="logo" src="./script/sug_logo.png"></div>
+        <div class="title"><span>옥외광고물 측정 시스템</span></div>
+        <div class="right-menu">
+            <div class="user"><span class="userspan">관리자(admin)님</span>
+            <button type="button" class="logoutbtn">Logout</button>
+            </div>
+        </div>
+        </div>
+        <ul class="main-menu">
+            <li class="menu1">
+                <a>조사내역</a>
+            </li>
+            <li class="menu2">
+                <a>통계분석</a>
+            </li>
+            <li class="menu3">
+                <a>기초관리</a>
+                <ul class="sub-menu">
+                    <li>submenu1</li>
+                    <li>submenu2</li>
+                    <li>submenu3</li>
+                </ul>
+            </li>
+            <li class="menu4">
+                <a>권한관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+            <li class="menu5">
+                <a>사용자관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+<!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <div class="left-menu">
+
+                <div class="tree-menu">
+                    <strong class="treeTitle">
+                        <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+                        <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+                        <span>카테고리</span>
+                    </strong>
+                    <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+                        <li class="main-tree-li">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px" height="15px"  alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                            <a href="#" class="treelabel">항목1</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                                <li class="tree-sub-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목1-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목1-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="main-tree-li">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px" height="15px"  alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                            <a href="#" class="treelabel">항목2</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                                <li class="tree-sub-li">
+
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="main-tree-li main-tree-li-last">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt="" ></span>
+                            <a href="#" class="treelabel">항목2</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                                <li class="tree-sub-li">
+
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    <!-- 메인화면 -->
+    <div class="mainColumn">
+        <div class="mainTitleBar">
+            <span>등급 권한 관리 - 메뉴 권한 관리</span>
+            <div class="btnbox">
+                <!--<div class="btndiv1">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>
+                <div class="btndiv2">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>-->
+            </div>
+        </div>
+        <div class="main">
+            <div class="menuDiv">
+                <div class="menuName">
+                    <div class="nameSpace"><img src="./script/folder_icon.png">메뉴 그룹 명</div>
+                    <input class="clickBtn2" type="button" value="관리"/>
+                </div>
+                <div class="hiddenList hiddenAll">
+                    <div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                    </div>
+                    <div><input class="clickBtn2" type="button" value="저장"/></div>
+                </div>
+                <div class="menuList">
+                    <div class="listLine">
+                        <div class="visibleList">
+                            <div>메뉴명1</div>
+                            <div><input class="clickBtn" type="button" value="관리"/></div>
+                        </div>
+                        <div class="hiddenList hiddenOne">
+                            <div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                            </div>
+                            <div><input class="clickBtn2" type="button" value="저장"/></div>
+                        </div>
+                    </div>
+                    <div class="listLine">
+                        <div class="visibleList">
+                            <div>메뉴명2</div>
+                            <div><input class="clickBtn" type="button" value="관리"/></div>
+                        </div>
+                        <div class="hiddenList hiddenOne">
+                            <div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                            </div>
+                            <div><input class="clickBtn2" type="button" value="저장"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menuDiv">
+                <div class="menuName">
+                    <div class="nameSpace"><img src="./script/folder_icon.png">메뉴 그룹 명</div>
+                    <input class="clickBtn2" type="button" value="관리"/>
+                </div>
+                <div class="hiddenList hiddenAll">
+                    <div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                        <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                    </div>
+                    <div><input class="clickBtn2" type="button" value="저장"/></div>
+                </div>
+                <div class="menuList">
+                    <div class="listLine">
+                        <div class="visibleList">
+                            <div>메뉴명1</div>
+                            <div><input class="clickBtn" type="button" value="관리"/></div>
+                        </div>
+                        <div class="hiddenList hiddenOne">
+                            <div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                            </div>
+                            <div><input class="clickBtn2" type="button" value="저장"/></div>
+                        </div>
+                    </div>
+                    <div class="listLine">
+                        <div class="visibleList">
+                            <div>메뉴명2</div>
+                            <div><input class="clickBtn" type="button" value="관리"/></div>
+                        </div>
+                        <div class="hiddenList hiddenOne">
+                            <div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                                <div class="checkList"><input type="checkbox" value="등급명"/> 등급명</div>
+                            </div>
+                            <div><input class="clickBtn2" type="button" value="저장"/></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+        
+        
+
+
+</body>
+<script>
+	
+</script>
+</html>

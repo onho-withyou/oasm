@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>inquiryBuilding</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/inquiryBuilding.css}">
+    <script th:src="@{/js/index.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+        <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+            <th:block layout:fragment="main"></th:block>
+            <div class="mainTitleBar">
+                <span>광고물 조사 내역 - 건물별 조회</span>
+                <div class="btnbox">
+                    <div class="btndiv1">
+                        <button class="mainbtn" type="button" onclick="showPopup()">등록</button>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- 화면 안 -->
+            <div class="inquiryBuilding_Container">
+                <div class="map" id="map"></div>
+                <form class="form-group">
+                    <label class="doroNm">도로 명</label>
+                    <input type="text" id="road_address">
+                    <label>건물 번호</label>
+                    <input type="text" id="main_build_nm">
+                    <input type="text" id="sub_build_nm">
+                    <label>상호 명</label>
+                    <input type="text" id="enterpriseName">
+                    <label>건물 명</label>
+                    <input type="text" id="buildingName">
+                    <button type="button" class="searchbtn"></button>
+                </form>
+                <div class="building-detail">
+                    <div class="building-file"><img src="" alt="건물사진"></img></div>
+                    <div class="middle">
+                        <span id="road_adr">해운대구 재반로 20</span><br/>
+                        <span class="numofcase">해당 건물 내 상호 <span id="num">5</span> 건</span>
+                        <div class="enterprise_table">
+                            <table class="enterpriseTable">
+                                <thead>
+                                <tr>
+                                    <th class="thth">순번</th>
+                                    <th class="thth">상호 명</th>
+                                    <th class="thth">업종</th>
+                                </tr>
+
+                                </thead>
+                                <div class="line"></div>
+                                <tbody>
+                                <tr>
+                                    <td class="tdtd" id="index_num">1</td>
+                                    <td class="tdtd" id="enterprise_nm">꽃도새기</td>
+                                    <td class="tdtd" id="code_nm">요식업</td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="building_list">
+                        <div id="building_cd">0000001</div>
+                        <div id="building_nm">건물 이름</div>
+                        <div class="roaddiv">
+                            <span class="road_span">도로 저촉</span>
+                            <div class="road_width">가로 : <span id="road_width"></span></div>
+                            <div class="road_length">세로 : <span id="road_length"></span></div>
+                        </div>
+                        <div id="rmk">비고</div>
+                    </div>
+
+                </div>
+
+
+            <div class="building_table" >
+                <select id="selectRowCount">
+                    <option value="1">1개</option>
+                    <option value="3">3개</option>
+                    <option value="5">5개</option>
+                    <option value="10" selected>10개</option>
+                    <option value="15">15개</option>
+                </select>
+                <span class="num2"></span>
+                <div class="table-round">
+                <table class="buildingList" id="building_List" >
+                    <thead>
+                    <th class="building_th">순번</th>
+                    <th class="building_th">시군구</th>
+                    <th class="building_th">지번 주소</th>
+                    <th class="building_th">도로명 주소</th>
+                    <th class="building_th">건물번호 1</th>
+                    <th class="building_th">건물번호2</th>
+                    <th class="building_th">상호갯수</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                        <td class="building_td"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div id="nav"></div> <!--페이징 처리-->
+            </div>
+        </div>
+        </div>
+        </div>
+    </div>
+
+
+</body>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=938e12e4e1a3a535c01b162472e6ecb3"></script>
+<script>
+    function showPopup() {
+        let url = "/stat/inquiryBuildingPopup"
+        let _width = "700";
+        let _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        let _left = Math.ceil((window.screen.width - _width) / 2);
+        let _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+            url,
+            "new",
+            "toolbar=no,width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+        );
+    }
+
+
+
+
+
+    $.ajax({
+        url: '/buildingList',
+        type: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+            // 건물을 building_cd로 그룹화
+            let groupedData = groupByBuildingCd(response);
+            console.log(groupedData);
+
+            // 가져온 데이터를 테이블에 추가
+            let tableBody = $('#building_List tbody');
+            tableBody.empty();
+
+            // 위도 경도
+            for (let key in groupedData) {
+                if (groupedData.hasOwnProperty(key)) {
+                    let buildings = groupedData[key].buildings;
+                    buildings.forEach(function (building, index) {
+                    });
+                }
+            }
+
+            // 카카오 지도 API
+            let mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(35.17353580014918, 129.12912713239638), // 지도의 중심좌표
+                    level: 6 // 지도의 확대 레벨
+                };
+
+
+            let map = new kakao.maps.Map(mapContainer, mapOption);
+
+            let zoomControl = new kakao.maps.ZoomControl();
+            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+            // 마커 생성
+            for (let key in groupedData) {
+                if (groupedData.hasOwnProperty(key)) {
+                    let buildings = groupedData[key].buildings;
+                    buildings.forEach(function (building) {
+                        if (building.map_latitude && building.map_longitude) {
+                            let marker = new kakao.maps.Marker({
+                                map: map,
+                                position: new kakao.maps.LatLng(parseFloat(building.map_latitude), parseFloat(building.map_longitude)), // 마커 위치
+                                title: building.building_cd // 마커에 표시할 타이틀
+                            });
+
+                            // 마커 클릭 이벤트 리스너 등록
+                            kakao.maps.event.addListener(marker, 'click', function() {
+
+                                highlightTableRow(building.building_cd);
+                                $('#building_List tbody tr.highlight').click();
+                            });
+                        }
+                    });
+                }
+            }
+
+            // 마커 이벤트
+            function highlightTableRow(buildingCd) {
+                $('#building_List tbody tr').each(function() {
+                    let row = $(this);
+                    let rowBuildingCd = row.find('input[type="hidden"]').val();
+
+                    if (rowBuildingCd === buildingCd && !row.hasClass('highlight')) {
+                        row.addClass('highlight');
+
+                    } else if (row.hasClass('highlight')) {
+                        row.removeClass('highlight');
+                        row.trigger('click');
+                    }
+                });
+            }
+
+
+
+            // 그룹화된 데이터를 테이블에 추가
+            Object.keys(groupedData).forEach(function(buildingCd, index) {
+                let group = groupedData[buildingCd];
+                let item = group.buildings[0];
+                let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+
+                let row = $('<tr>');
+                row.append($('<td>').text(index + 1));
+                row.append($('<td>').text(item.sigungu_adr));
+                row.append($('<td>').text(item.lot_number_adr));
+                row.append($('<td>').text(item.street_adr));
+                row.append($('<td>').text(item.street_no1));
+                row.append($('<td>').text(item.street_no2));
+                row.append($('<td>').text(count));
+                row.append($('<input>').attr('type', 'hidden').val(buildingCd)); // building_cd를 히든 값으로 추가
+                row.addClass('Table');
+                tableBody.append(row); // 새로운 행을 테이블에 추가
+
+                // 행 클릭하면 상세보기
+                row.click(function () {
+                    let street_no2 = group.buildings[0].street_no2 ? "- " + group.buildings[0].street_no2 : ""; // street_no2 값이 존재하면 "-"를 추가하고, 그렇지 않으면 빈 문자열을 할당
+                    let street_adr = group.buildings[0].sigungu_adr + " " + group.buildings[0].street_adr + " " + group.buildings[0].street_no1 + " " + street_no2;
+
+                    if ($('.building-detail').is(':visible') && $('.building-detail').data('clickedRow') === row.index()) {
+                        // 이미 열려있는 경우 slideUp으로 닫기
+                        $('.building-detail').slideUp();
+                        $('.building-detail').removeData('clickedRow');  // 클릭한 행 데이터 삭제
+                    } else {
+                        $('.building-detail').slideDown();
+                        $('#road_adr').text(street_adr);
+                        let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+                        $('#num').text(count);
+                        $('#building_cd').text(group.buildings[0].building_cd);
+                        $('#building_nm').text(group.buildings[0].building_nm);
+                        $('#road_width').text(group.buildings[0].road_width);
+                        $('#road_length').text(group.buildings[0].road_length);
+                        $('#rmk').text(group.buildings[0].rmk);
+
+                        // enterprise table
+                        let enterpriseTable = $('.enterpriseTable tbody');
+                        enterpriseTable.empty();
+
+                        group.buildings.forEach(function (building, index){
+                            let row = $('<tr>');
+                            row.append($('<td>').text(index + 1));
+                            row.append($('<td>').text(building.enterprise_nm));
+                            row.append($('<td>').text(building.code_nm));
+                            enterpriseTable.append(row);
+                            row.addClass('detailTable');
+                        });
+
+                        $('.building-detail').data('clickedRow', row.index()); // 클릭한 행 데이터 저장
+                    }
+                });
+            });
+            setupPagination();
+            countRows();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    });
+
+    // 건물을 building_cd로 그룹화하고 그룹의 갯수를 세는 함수
+    function groupByBuildingCd(buildingList) {
+        let groupedData = {};
+        buildingList.forEach(function(building) {
+            let buildingCd = building.building_cd;
+            if (!groupedData[buildingCd]) {
+                groupedData[buildingCd] = {
+                    count: 0,
+                    buildings: []
+                };
+            }
+            groupedData[buildingCd].buildings.push(building);
+            groupedData[buildingCd].count++;
+        });
+        return groupedData;
+    }
+
+
+
+
+    $(document).ready(function() {
+        // 검색기능
+        $('.searchbtn').click(function() {
+            searchBuilding();
+        });
+
+        $('#road_address, #main_build_nm, #sub_build_nm, #enterpriseName, #buildingName').keypress(function(event) {
+
+            if (event.which === 13) {
+                searchBuilding();
+            }
+        });
+
+        // 검색
+        function searchBuilding() {
+            let keyword1 = $('#road_address').val();
+            let keyword2 = $('#main_build_nm').val();
+            let keyword3 = $('#sub_build_nm').val();
+            let keyword4 = $('#enterpriseName').val();
+            let keyword5 = $('#buildingName').val();
+
+            $.ajax({
+                url: '/searchBuilding',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    keyword1: keyword1,
+                    keyword2: keyword2,
+                    keyword3: keyword3,
+                    keyword4: keyword4,
+                    keyword5: keyword5
+                }),
+                success: function(response) {
+                    console.log(response);
+                    updateTable(response);
+                    countRows();
+                    setupPagination();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+
+        function updateTable(data) {
+            let groupedData = groupByBuildingCd(data); // building_cd를 기준으로 데이터를 그룹화
+            let tableBody = $('#building_List tbody');
+
+            tableBody.empty();
+
+            // 카카오 지도 API
+            let mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                mapOption = {
+                    center: new kakao.maps.LatLng(35.17353580014918, 129.12912713239638), // 지도의 중심좌표
+                    level: 6 // 지도의 확대 레벨
+                };
+
+            let map = new kakao.maps.Map(mapContainer, mapOption);
+            var zoomControl = new kakao.maps.ZoomControl();
+            map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+            // 그룹화된 데이터를 이용하여 새로운 테이블 내용 생성
+            let index = 1;
+            for (let buildingCode in groupedData) {
+                let group = groupedData[buildingCode];
+                let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+                let row = $('<tr>');
+                row.append($('<td>').text(index++));
+                row.append($('<td>').text(group.buildings[0].sigungu_adr));  // 시군구
+                row.append($('<td>').text(group.buildings[0].lot_number_adr)); // 지번
+                row.append($('<td>').text(group.buildings[0].street_adr)); // 도로명
+                row.append($('<td>').text(group.buildings[0].street_no1)); // 건물번호 1
+                row.append($('<td>').text(group.buildings[0].street_no2)); // 건물번호 2
+                row.append($('<td>').text(count)); // 그룹 내의 건물 갯수
+                row.append($('<input>').attr('type', 'hidden').val(group.buildings[0].building_cd)); // building_cd를 히든 값으로 추가
+                row.addClass('updateTable');
+                tableBody.append(row);
+
+                // 마커 생성
+                if (group.buildings[0].map_latitude && group.buildings[0].map_longitude) {
+                    let marker = new kakao.maps.Marker({
+                        map: map,
+                        position: new kakao.maps.LatLng(parseFloat(group.buildings[0].map_latitude), parseFloat(group.buildings[0].map_longitude)), // 마커 위치
+                        title: group.buildings[0].building_cd // 마커에 표시할 타이틀
+                    });
+
+                    // 마커 클릭 이벤트 리스너 등록
+                    kakao.maps.event.addListener(marker, 'click', function() {
+                        highlightTableRow(group.buildings[0].building_cd);
+                        $('#building_List tbody tr.highlight').click();
+                    });
+                }
+
+                function highlightTableRow(buildingCd) {
+                    $('#building_List tbody tr').each(function() {
+                        let row = $(this);
+                        let rowBuildingCd = row.find('input[type="hidden"]').val();
+
+                        if (rowBuildingCd === buildingCd && !row.hasClass('highlight')) {
+                            row.addClass('highlight');
+
+                        } else if (row.hasClass('highlight')) {
+                            row.removeClass('highlight');
+                            row.trigger('click');
+                        }
+                    });
+                }
+
+                // 행 클릭 시 상세 정보 표시
+                row.click(function () {
+                    let street_no2 = group.buildings[0].street_no2 ? "- " + group.buildings[0].street_no2 : "";
+                    let street_adr = group.buildings[0].sigungu_adr + " " + group.buildings[0].street_adr + " " + group.buildings[0].street_no1 + " " + street_no2;
+
+                    if ($('.building-detail').is(':visible') && $('.detailTable').data('clickedRow') === row.index()) {
+                        $('.building-detail').hide();
+                        $('.detailTable').removeData('clickedRow');
+                    } else {
+                        $('.building-detail').show();
+                        $('#road_adr').text(street_adr);
+                        let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+                        $('#num').text(count);
+                        $('#building_cd').text(group.buildings[0].building_cd);
+                        $('#building_nm').text(group.buildings[0].building_nm);
+                        $('#road_width').text(group.buildings[0].road_width);
+                        $('#road_length').text(group.buildings[0].road_length);
+                        $('#rmk').text(group.buildings[0].rmk);
+
+                        // enterprise table
+                        let enterpriseTable = $('.enterpriseTable tbody');
+                        enterpriseTable.empty();
+
+                        group.buildings.forEach(function (building, index) {
+                            let row = $('<tr>');
+                            row.append($('<td>').text(index + 1));
+                            row.append($('<td>').text(building.enterprise_nm));
+                            row.append($('<td>').text(building.code_nm));
+                            enterpriseTable.append(row);
+                            row.addClass('detailTable');
+                        });
+
+                        $('.detailTable').data('clickedRow', row.index());
+                    }
+                });
+            }
+        }
+
+    });
+    function countRows() {
+        let rowCount = $('#building_List tbody tr').length;
+        let row = "총 " + rowCount + "건";
+        $('.num2').text(row);
+    }
+    function setupPagination() {
+        $(document).ready(function() {
+            let $products = $('#building_List tbody tr');
+            let rowPerPage = parseInt($('#selectRowCount').val()); // 선택된 행 수 가져오기
+
+            // 초기 페이징 설정 적용
+            applyPagination($products, rowPerPage, 5);
+
+            // 행 수가 변경될 때마다 새로운 값으로 업데이트하여 페이징 함수 호출
+            $('#selectRowCount').on('change', function() {
+                rowPerPage = parseInt($(this).val());
+                applyPagination($products, rowPerPage, 5);
+            });
+        });
+    }
+
+    // 페이징 처리 함수
+    function applyPagination($products, rowPerPage, maxPageDisplay) {
+        let rowTotals = $products.length;
+        let pageTotal = Math.ceil(rowTotals / rowPerPage);
+        let currentPage = 0;
+
+
+        let startRow = 0;
+        let endRow = rowPerPage;
+
+
+        $products.hide().slice(startRow, endRow).show();
+
+
+        function updatePagination() {
+            $('#nav').empty();
+
+
+            let $prevButton = $('<a href="#" id="prevPage">〈</a>');
+            if (currentPage > 0) {
+                $prevButton.appendTo('#nav');
+            } else {
+                $prevButton.addClass('disabled'); // 현재 페이지가 첫 번째 페이지 그룹이면 이전 버튼을 비활성화
+            }
+
+            // 페이지 숫자 버튼 생성
+            let startPage = Math.floor(currentPage / maxPageDisplay) * maxPageDisplay;
+            let endPage = Math.min(startPage + maxPageDisplay, pageTotal);
+            for (let i = startPage; i < endPage; i++) {
+                $('<a href="#" class="pageNumber"></a>')
+                    .attr('rel', i)
+                    .html(i + 1)
+                    .appendTo('#nav');
+            }
+
+            // 다음 버튼 생성
+            let $nextButton = $('<a href="#" id="nextPage">〉</a>');
+            if (endPage < pageTotal) {
+                $nextButton.appendTo('#nav');
+            }
+
+            // 페이지 숫자 버튼에 이벤트 연결
+            $('.pageNumber').on('click', function(evt) {
+                evt.preventDefault();
+                currentPage = parseInt($(this).attr('rel'));
+                showPage(currentPage);
+            });
+
+            // 다음 버튼에 이벤트 연결
+            $('#nextPage').on('click', function(evt) {
+                evt.preventDefault();
+                if (currentPage < pageTotal - 1) {
+                    currentPage += maxPageDisplay;
+                    updatePagination();
+                    // 마지막 페이지 그룹인 경우 다음 버튼 비활성화
+                    if (currentPage >= pageTotal - maxPageDisplay) {
+                        $('#nextPage').addClass('disabled');
+                    }
+                }
+            });
+
+            // 이전 버튼에 이벤트 연결
+            $('#prevPage').on('click', function(evt) {
+                evt.preventDefault();
+                if (currentPage > 0) {
+                    currentPage -= maxPageDisplay;
+                    if (currentPage < 0) {
+                        currentPage = 0; // 현재 페이지가 0 미만으로 내려가지 않도록 함
+                    }
+                    updatePagination();
+                }
+            });
+
+            // 현재 페이지에 해당하는 페이지 숫자 버튼 활성화
+            $('.pageNumber').removeClass('active');
+            $('.pageNumber[rel="' + currentPage + '"]').addClass('active');
+
+            // 이전 버튼 활성화 여부 설정
+            $('#prevPage').toggle(currentPage > 0);
+            // 다음 버튼 활성화 여부 설정
+            $('#nextPage').toggle(currentPage < pageTotal - 1);
+        }
+
+        // 페이지 로딩 시 초기화
+        updatePagination();
+
+        // 현재 페이지에 해당하는 행 보여주기 함수
+        function showPage(page) {
+            let startRow = page * rowPerPage;
+            let endRow = Math.min(startRow + rowPerPage, rowTotals);
+            $products.hide().slice(startRow, endRow).show();
+        }
+    }
+</script>
+</body>
+
+</html>

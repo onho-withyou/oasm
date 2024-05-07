@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inquiryEnterprisePopup2</title>
+    <link th:href="@{/css/inquiryEnterprisePopup2.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="popup">
+        <div class="building_menu">
+            <form class="building_menu">
+                <label>도로 명</label>
+                <input type="text" class="roadName" id="street_adr">
+                <label>건물 번호</label>
+                <input type="text" class="building_num1" id="street_no1">
+                <input type="text" class="building_num2" id="street_no2">
+                <label>지번</label>
+                <input type="text" class="address_num" id="lot_number_adr">
+                <label>건물 명</label>
+                <input type="text" class="buildingName" id="building_nm">
+                <button type="button" class="searchbtn"></button>
+            </form>
+        </div>
+                <div class="building_table">
+                    <select id="selectRowCount" style="display: none">
+                        <option value="10">10개</option>
+                    </select>
+                    <table class="buildingList" id="buildingList">
+                        <thead>
+                        <th class="building_th">순번</th>
+                        <th class="building_th">시군구</th>
+                        <th class="building_th">지번 주소</th>
+                        <th class="building_th">도로명 주소</th>
+                        <th class="building_th">건물번호1</th>
+                        <th class="building_th">건물번호2</th>
+                        <th class="building_th">상호 갯수</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="building_td"></td>
+                            <td class="building_td">1</td>
+                            <td class="building_td">해운대구</td>
+                            <td class="building_td">재송동 104-3</td>
+                            <td class="building_td">재반로 20</td>
+                            <td class="building_td">20</td>
+                            <td class="building_td"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="btn_menu">
+                    <div id="nav"></div>
+                    <button type="button" class="savebtn" id="saveBtn">저장</button>
+                </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: '/buildingList',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function (response){
+                let groupedData = groupByBuildingCd(response);
+
+               // 가져온 데이터를 테이블에 추가
+                let tableBody = $('#buildingList tbody');
+                tableBody.empty();
+
+                Object.keys(groupedData).forEach(function (buildingCd,index){
+                    let group = groupedData[buildingCd];
+                    let item = group.buildings[0];
+                    let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+
+                    let row = $('<tr>');
+                    row.append($('<td>').text(index + 1));
+                    row.append($('<td>').text(item.sigungu_adr));
+                    row.append($('<td>').text(item.lot_number_adr));
+                    row.append($('<td>').text(item.street_adr));
+                    row.append($('<td>').text(item.street_no1));
+                    row.append($('<td>').text(item.street_no2));
+                    row.append($('<td>').text(count));
+                    row.append($('<input>').attr('type', 'hidden').val(buildingCd));
+                    row.addClass('Table');
+                    tableBody.append(row);
+                });
+                setupPagination();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // 클릭한 행의 데이터를 저장하는 클로저 함수
+        let rowData; // 변수를 이벤트 핸들러 외부로 이동
+
+        function storeRowData(data) {
+            rowData = data; // 데이터를 변수에 저장
+        }
+
+// 행 클릭 이벤트 처리
+        $('#buildingList tbody').on('click', 'tr', function() {
+            // 기존에 선택된 행의 클래스를 제거
+            $('#buildingList tbody tr').removeClass('selected-row');
+
+            // 클릭된 행에 선택 클래스 추가
+            $(this).addClass('selected-row');
+            rowData = {
+                sigungu_adr: $(this).find('td:eq(1)').text(),
+                lot_number_adr: $(this).find('td:eq(2)').text(),
+                street_adr: $(this).find('td:eq(3)').text(),
+                street_no1: $(this).find('td:eq(4)').text(),
+                street_no2: $(this).find('td:eq(5)').text(),
+                building_cd: $(this).find('input[type="hidden"]').val()
+            };
+
+            storeRowData(rowData); // 클릭한 행의 데이터 저장
+            console.log(rowData); // 콘솔에 데이터 출력
+        });
+
+// 버튼 클릭 이벤트 처리
+        $('#saveBtn').click(function() {
+            if (rowData) {
+                // 클릭 이벤트 핸들러에서와 같은 키 이름을 사용하여 값을 추출
+                let lotNumberAdr = rowData.lot_number_adr;
+                let streetAdr = rowData.street_adr;
+                let streetNo1 = rowData.street_no1;
+                let streetNo2 = rowData.street_no2;
+                let building_cd = rowData.building_cd;
+                let sigungu_adr = rowData.sigungu_adr;
+                console.log(lotNumberAdr);
+
+                // 부모 창의 각 input 요소에 값을 할당
+                window.opener.document.getElementById("lot_number_adr").value = lotNumberAdr;
+                window.opener.document.getElementById("street_adr").value = streetAdr;
+                window.opener.document.getElementById("street_no1").value = streetNo1;
+                window.opener.document.getElementById("street_no2").value = streetNo2;
+                window.opener.document.getElementById("building_cd").value = building_cd;
+                window.opener.document.getElementById("sigungu_adr").value = sigungu_adr;
+                window.close();
+            } else {
+                console.log("No row data selected.");
+            }
+        });
+
+
+        $('.searchbtn').click(function () {
+            searchBuilding();
+        });
+
+        $('#street_adr, #street_no1, #street_no2, #lot_number_adr, #building_nm').keypress(function (event) {
+
+            if (event.which === 13) {
+                searchBuilding();
+            }
+        });
+
+        function searchBuilding() {
+            let keyword1 = $('#street_adr').val();
+            let keyword2 = $('#street_no1').val();
+            let keyword3 = $('#street_no2').val();
+            let keyword4 = $('#lot_number_adr').val();
+            let keyword5 = $('#building_nm').val();
+
+            $.ajax({
+                url: '/searchBuilding',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    keyword1: keyword1,
+                    keyword2: keyword2,
+                    keyword3: keyword3,
+                    keyword4: keyword4,
+                    keyword5: keyword5
+                }),
+                success: function (response) {
+                    console.log(response);
+                    updateTable(response);
+                    setupPagination(); // 성공 시에 pagination 설정
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+
+            });
+        }
+
+
+        function updateTable(data) {
+            let groupedData = groupByBuildingCd(data); // building_cd를 기준으로 데이터를 그룹화
+            let tableBody = $('#buildingList tbody');
+
+            tableBody.empty();
+
+            let index = 1;
+            for (let buildingCode in groupedData) {
+                let group = groupedData[buildingCode];
+                let count = group.buildings[0].enterprise_nm !== null ? group.count : 0;
+                let row = $('<tr>');
+                row.append($('<td>').text(index++));
+                row.append($('<td>').text(group.buildings[0].sigungu_adr));  // 시군구
+                row.append($('<td>').text(group.buildings[0].lot_number_adr)); // 지번
+                row.append($('<td>').text(group.buildings[0].street_adr)); // 도로명
+                row.append($('<td>').text(group.buildings[0].street_no1)); // 건물번호 1
+                row.append($('<td>').text(group.buildings[0].street_no2)); // 건물번호 2
+                row.append($('<td>').text(count)); // 그룹 내의 건물 갯수
+                row.append($('<input>').attr('type', 'hidden').val(group.buildings[0].building_cd)); // building_cd를 히든 값으로 추가
+                row.addClass('updateTable');
+                tableBody.append(row);
+            }
+        }
+
+
+            function groupByBuildingCd(buildingList) {
+            let groupedData = {};
+            buildingList.forEach(function(building) {
+                let buildingCd = building.building_cd;
+                if (!groupedData[buildingCd]) {
+                    groupedData[buildingCd] = {
+                        count: 0,
+                        buildings: []
+                    };
+                }
+                groupedData[buildingCd].buildings.push(building);
+                groupedData[buildingCd].count++;
+            });
+            return groupedData;
+        }
+
+        function setupPagination() {
+            let $products = $('#buildingList tbody tr');
+            let rowPerPage = parseInt($('#selectRowCount').val()); // 선택된 행 수 가져오기
+
+            // 초기 페이징 설정 적용
+            applyPagination($products, rowPerPage, 5);
+
+            // 행 수가 변경될 때마다 새로운 값으로 업데이트하여 페이징 함수 호출
+            $('#selectRowCount').on('change', function() {
+                rowPerPage = parseInt($(this).val());
+                applyPagination($products, rowPerPage, 5);
+            });
+
+        }
+
+        // 페이징 처리 함수
+        function applyPagination($products, rowPerPage, maxPageDisplay) {
+            let rowTotals = $products.length;
+            let pageTotal = Math.ceil(rowTotals / rowPerPage);
+            let currentPage = 0;
+
+            let startRow = 0;
+            let endRow = rowPerPage;
+
+
+            $products.hide().slice(startRow, endRow).show();
+
+
+            function updatePagination() {
+                $('#nav').empty();
+
+
+                let $prevButton = $('<a href="#" id="prevPage"><</a>');
+                if (currentPage > 0) {
+                    $prevButton.appendTo('#nav');
+                } else {
+                    $prevButton.addClass('disabled'); // 현재 페이지가 첫 번째 페이지 그룹이면 이전 버튼을 비활성화
+                }
+
+                // 페이지 숫자 버튼 생성
+                let startPage = Math.floor(currentPage / maxPageDisplay) * maxPageDisplay;
+                let endPage = Math.min(startPage + maxPageDisplay, pageTotal);
+                for (let i = startPage; i < endPage; i++) {
+                    $('<a href="#" class="pageNumber"></a>')
+                        .attr('rel', i)
+                        .html(i + 1)
+                        .appendTo('#nav');
+                }
+
+                // 다음 버튼 생성
+                let $nextButton = $('<a href="#" id="nextPage">></a>');
+                if (endPage < pageTotal) {
+                    $nextButton.appendTo('#nav');
+                }
+
+                // 페이지 숫자 버튼에 이벤트 연결
+                $('.pageNumber').on('click', function(evt) {
+                    evt.preventDefault();
+                    currentPage = parseInt($(this).attr('rel'));
+                    showPage(currentPage);
+                });
+
+                // 다음 버튼에 이벤트 연결
+                $('#nextPage').on('click', function(evt) {
+                    evt.preventDefault();
+                    if (currentPage < pageTotal - 1) {
+                        currentPage += maxPageDisplay;
+                        updatePagination();
+                        // 마지막 페이지 그룹인 경우 다음 버튼 비활성화
+                        if (currentPage >= pageTotal - maxPageDisplay) {
+                            $('#nextPage').addClass('disabled');
+                        }
+                    }
+                });
+
+                // 이전 버튼에 이벤트 연결
+                $('#prevPage').on('click', function(evt) {
+                    evt.preventDefault();
+                    if (currentPage > 0) {
+                        currentPage -= maxPageDisplay;
+                        if (currentPage < 0) {
+                            currentPage = 0; // 현재 페이지가 0 미만으로 내려가지 않도록 함
+                        }
+                        updatePagination();
+                    }
+                });
+
+                // 현재 페이지에 해당하는 페이지 숫자 버튼 활성화
+                $('.pageNumber').removeClass('active');
+                $('.pageNumber[rel="' + currentPage + '"]').addClass('active');
+
+                // 이전 버튼 활성화 여부 설정
+                $('#prevPage').toggle(currentPage > 0);
+                // 다음 버튼 활성화 여부 설정
+                $('#nextPage').toggle(currentPage < pageTotal - 1);
+            }
+
+            updatePagination();
+
+            function showPage(page) {
+                let startRow = page * rowPerPage;
+                let endRow = Math.min(startRow + rowPerPage, rowTotals);
+                $products.hide().slice(startRow, endRow).show();
+            }
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,158 @@
+@font-face {
+    font-family: "SDGothic";
+    src: url("./font/AppleSDGothicNeoM.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: KBO;
+    src: url("./font/KBODiaGothic_medium.ttf") format("truetype");
+}
+
+html {
+    font-family: "SDGothic", sans-serif;
+    overflow: hidden;
+    resize: none;
+}
+.popup {
+    position: absolute;
+    box-sizing: border-box;
+    width: 700px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+}
+.building_menu{
+    width: 100%;
+    height: 50px;
+    margin-top: 15px;
+    margin-left: 7px;
+}
+.roadName{
+    width: 90px;
+    margin-right: 10px;
+}
+.building_num1{
+    width: 35px;
+}
+.building_num2{
+    width: 35px;
+    margin-right: 10px;
+}
+.address_num{
+    width: 90px;
+    margin-right: 10px;
+}
+.buildingName{
+    width: 90px;
+
+}
+.searchbtn{
+    height: 30px;
+    width: 30px;
+    border: 1px solid rgb(165, 165, 165);
+    background-image: url(./script/search.svg);
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    position: relative;
+    top: 9px;
+    left: 20px;
+}
+.building_table{
+    margin-top: 10px;
+    height: 343px;
+    overflow-y: auto;
+}
+.buildingList{
+    border-collapse: collapse;
+    width: 100%;
+
+}
+.building_th{
+    border: 1px solid black;
+    border-top: 3px solid #818181;
+    height: 28px;
+    font-size: 15px;
+}
+.building_th:nth-child(1){
+    width: 60px;
+    border-left: none;
+}
+.building_th:nth-child(2){
+    width: 60px;
+}
+.building_th:nth-child(3){
+    width: 140px;
+}
+.building_th:nth-child(4){
+    width: 140px;
+}
+.building_th:nth-child(5){
+    width: 170px;
+}
+.building_th:nth-child(6){
+    width: 70px;
+}
+.building_th:nth-child(7){
+    width: 70px;
+    border-right: none;
+}
+.building_td{
+    border: 1px solid black;
+    font-size:15px;
+    height: 28px;
+}
+.building_td:nth-child(1){
+    border-left: none;
+}
+.building_td:nth-child(2){
+    text-align: right;
+    padding-right: 13px;
+}
+.building_td:nth-child(3){
+    padding-left: 13px;
+}
+.building_td:nth-child(4){
+    padding-left: 13px;
+}
+.building_td:nth-child(5){
+    padding-left: 13px;
+}
+.building_td:nth-child(6){
+    padding-left: 13px;
+}
+.building_td:nth-child(7){
+    border-right: none;
+}
+.btn_menu{
+    margin-top: 40px;
+    height: 18px;
+    text-align: center;
+    position: relative;
+    bottom: 20px;
+}
+.pagingbtn{
+    margin-top: 7px;
+    width: 120px;
+    height: 25px;
+    background-color: rgb(251, 251, 251);
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+}
+.savebtn{
+    width: 50px;
+    height: 25px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    left: 255px;
+}

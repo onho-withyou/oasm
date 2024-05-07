@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inquirySignboardPopup</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link th:href="@{/css/inquirySignboardPopup.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="popup">
+        <form id="signForm" enctype="multipart/form-data">
+            <div class="formArea">
+                <div class="formContent">
+                    <div>
+                        <label>업체 정보</label>
+                    </div>
+                    <div>
+                        <input name="enterprise_cd" id="entCode" type="text" placeholder="업체코드" readonly>
+                        <input name="enterprise_nm" id="entName" type="text" placeholder="업체명" readonly>
+                        <div class="entButtons">
+                            <button id="searchEnt" type="button" onclick="showPopup('/stat/inquirySignboardPopup2')">기존 업체에서 찾기</button>
+                            <!--<button id="registerEnt" type="button" onclick="showPopup('/stat/inquiryEnterprisePopup')">새 업체 등록</button>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>간판 사진</label>
+                    </div>
+                    <div class="signButton">
+                        <div><button type="button" id="fakeFile">File 찾기</button> <span id="fileNameArea"></span><span id="clearFile">X</span></div>
+                        <input name="file" style="display: none;" type="file" id="realFile"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>허가 유무</label>
+                    </div>
+                    <div class="labels">
+                        <label for="Y">
+                            <input id="Y" value="Y" name="permission_yn" type="radio"> 허가
+                        </label>
+                        <label for="N">
+                            <input id="N" value="N" name="permission_yn" type="radio"> 미허가
+                        </label>
+                        <label for="F">
+                            <input id="F" value="F" name="permission_yn" type="radio"> 모름
+                        </label>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>광고물 허가 번호</label>
+                    </div>
+                    <div>
+                        <input name="permission_no" id="permitNo" type="text"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>허가 일자</label>
+                    </div>
+                    <div>
+                        <input name="permission_date" id="permitDate" type="text"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>만료 일자</label>
+                    </div>
+                    <div>
+                        <input name="permission_end_date" id="endDate" type="text"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>안전도 검사 일자</label>
+                    </div>
+                    <div>
+                        <input name="inspect_date" id="inspectDate" type="text"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>광고 내용</label>
+                    </div>
+                    <div>
+                        <input name="sign_content" id="signContent" type="text"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>광고물 크기</label>
+                    </div>
+                    <div class="signInputs">
+                        <input name="sign_width" id="signWidth" type="text" placeholder="가로"/>
+                        <input name="sign_length" id="signLength" type="text" placeholder="세로"/>
+                        <input name="sign_depth" id="signDepth" type="text" placeholder="높이"/>
+                        <input name="sign_area" id="signArea" type="text" placeholder="면"/>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>정비 상태</label>
+                    </div>
+                    <div>
+                        <select name="maintain_state" id="maintain">
+                            <option value="">선택</option>
+                            <th:block th:each="code : ${maintain}">
+                                <option th:value="${code.sub_cd}" th:text="${code.code_nm}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>광고물 종류</label>
+                    </div>
+                    <div>
+                        <select name="sign_kind" id="signKind">
+                            <option value="">선택</option>
+                            <th:block th:each="code : ${adKind}">
+                                <option th:value="${code.sub_cd}" th:text="${code.code_nm}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>조명 종류</label>
+                    </div>
+                    <div>
+                        <select name="light_kind" id="lightKind">
+                            <option value="">선택</option>
+                            <th:block th:each="code : ${lightType}">
+                                <option th:value="${code.sub_cd}" th:text="${code.code_nm}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+                <div class="formContent">
+                    <div>
+                        <label>비고</label>
+                    </div>
+                    <div>
+                        <textarea name="rmk" id="rmk" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="formSubmit">
+                <input type="submit" value="등록"/>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    function showPopup(url) {
+        var _width = "750";
+        var _height = "500";
+        // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+            url,
+            "new3",
+            "width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+        );
+    }
+
+    $(function(){
+
+        var fakeFileButton = document.getElementById('fakeFile');
+        var realFileInput = document.getElementById('realFile');
+        var fileNameArea = document.getElementById('fileNameArea');
+        var clearFileButton = document.getElementById('clearFile');
+
+        fakeFileButton.addEventListener('click', function() {
+            realFileInput.click();
+        });
+
+        realFileInput.addEventListener('change', function() {
+            var files = this.files;
+            if (files.length > 0) {
+                fileNameArea.textContent = files[0].name;
+                clearFileButton.style.visibility = 'visible'; // 파일 선택 시 X표시 보임
+            } else {
+                fileNameArea.textContent = '';
+                clearFileButton.style.visibility = 'hidden';
+            }
+        });
+
+        clearFileButton.addEventListener('click', function() {
+            realFileInput.value = ''; // input의 파일 선택을 취소
+            fileNameArea.textContent = '';
+            clearFileButton.style.visibility = 'hidden'; // X표시 숨김
+        });
+
+        $("#signForm").on("submit", function(e){
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            $.ajax({
+                type: 'post',
+                url: '/stat/insertSignboard',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    alert('등록을 성공하였습니다.');
+                    window.close();
+                    if (window.opener && !window.opener.closed){
+                        window.opener.location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>

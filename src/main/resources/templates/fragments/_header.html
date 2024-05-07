@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="main_header">
+    <!-- 헤더 -->
+    <header>
+        <div class="top">
+            <div class="logo-span">
+            <div class="logobox"><img class="logo" th:src="@{/img/sugLogo.png}"
+                                      th:onclick="|location.href='@{/}'|" style="cursor:pointer" alt=""></div>
+            <div class="logo_line"></div>
+            <div class="title"><span>옥외광고물 측정 시스템</span></div></div>
+            <div class="right-menu">
+                <div class="user">
+                    <span class="userspan" th:text="|${#authentication.authorities
+                    [#authentication.authorities.size()-1]}(${#authentication.name})님|">
+                    </span>
+                    <a class="logoutbtn" sec:authorize="isAnonymous()" th:href="@{/login}">Login</a>
+                    <a class="logoutbtn" sec:authorize="isAuthenticated()" th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+        <ul class="main-menu">
+            <li class="menu1">
+                <a>조사내역</a>
+                <ul class="sub-menu">
+                    <li><a th:href="@{/stat/advSurveyStatus}">광고물 조사 현황</a></li>
+                    <li><a th:href="@{/stat/inquiryBuilding}">건물별 조회</a></li>
+                    <li><a th:href="@{/stat/inquiryEnterprise}">업소별 조회</a></li>
+                    <li><a th:href="@{/stat/inquirySignboard}">간판별 조회</a></li>
+                    <li><a th:href="@{/stat/registerStatus}">수동 및 Excel등록</a></li>
+                </ul>
+            </li>
+            <li class="menu2">
+                <a>통계분석</a>
+                <ul class="sub-menu2">
+                    <li>
+                        <ul class="submenu-group">
+                            <li><a th:href="@{/analysis/advType}">종합 광고물 종류 통계</a></li>
+                            <li><a th:href="@{/analysis/lightType}">종합 조명 종류 통계</a></li>
+                            <li><a th:href="@{/analysis/surveyResult}">종합 광고물 조사 결과 통계</a></li>
+                            <li><a th:href="@{/analysis/roadinvasion}">종합 도로 저촉 유무 통계</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul class="submenu-group">
+                            <li><a th:href="@{/yAnalysis/yearAdvType}">연도별 광고물 종류 통계</a></li>
+                            <li><a th:href="@{/yAnalysis/yearLightType}">연도별 조명 종류 통계</a></li>
+                            <li><a th:href="@{/yAnalysis/yearSurveyResult}">연도별 광고물 조사 결과 통계</a></li>
+                            <li><a th:href="@{/yAnalysis/yearRoadInvasion}">연도별 도로 저촉 유무 통계</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <ul class="submenu-group">
+                            <li><a th:href="@{/analysis/monthAdvType}">월별 광고물 종류 통계</a></li>
+                            <li><a th:href="@{/analysis/monthLightType}">월별 조명 종류 통계</a></li>
+                            <li><a th:href="@{/analysis/monthSurveyResult}">월별 광고물 조사 결과 통계</a></li>
+                            <li><a th:href="@{/analysis/monthRoadInvasion}">월별 도로 저촉 유무 통계</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="menu3">
+                <a>기초관리</a>
+                <ul class="sub-menu">
+                    <li><a th:href="@{/base/commonCode}">공통코드 관리</a></li>
+
+                </ul>
+            </li>
+            <li class="menu4">
+                <a>권한관리</a>
+                <ul class="sub-menu">
+                    <li><a th:href="@{/auth/userGroup}">사용자 그룹 관리</a></li>
+                    <li><a th:href="@{/auth/authMenu}">메뉴 권한 관리</a></li>
+                </ul>
+            </li>
+            <li class="menu5">
+                <a>사용자관리</a>
+                <ul class="sub-menu">
+                    <li><a th:href="@{/setUsers}">사용자 관리</a></li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+</th:block>
+</html>

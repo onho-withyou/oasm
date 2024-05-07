@@ -1,0 +1,156 @@
+.searchArea {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.searchArea > div:nth-child(2) {
+    width: 5%;
+}
+.searchController {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+.searchController > div {
+    display: flex;
+    height: 100%;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.searchController > div > div:nth-child(1) {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    background: black;
+    color: white;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.searchController > div > div:nth-child(2) {
+    width: 85%;
+    height: 100%;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    border: 0.5px solid #ebebeb;
+    padding: 1%;
+    box-sizing: border-box;
+}
+.searchController > div > div > input {
+    width: 100px;
+}
+.searchDate {}
+.searchDate > div:nth-child(1) {}
+.searchDate > div:nth-child(2) {}
+.searchContents {}
+.searchContents > div:nth-child(1) {}
+.searchContents > div:nth-child(2) {}
+.searchContents > div:nth-child(2) > div {
+    margin-right: 10px;
+}
+.dataArea {
+    width: 100%;
+    max-width: 1280px;
+    height: auto;
+}
+.chartArea {
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #dbdbdb;
+    padding: 1%;
+    margin-top: 20px;
+}
+.optionDiv {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+.optionDiv > select {
+    width: 100px;
+
+}
+.chartDiv {
+    width: 100%;
+    height: 450px;
+
+}
+
+.chartArea > canvas {
+    height: 450px;
+}
+.tableArea {
+    width: 100%;
+    margin-top: 25px;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+.tableArea > table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tableArea > table th, td {
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+.tableArea > table th {
+    height: 35px;
+    background: #556be4;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+}
+.tableArea > table td {
+    border: 1px solid #c6c6c6;
+    font-size: 15px;
+    height: 34px;
+    color: #4f4f4f;
+}
+.tableArea > table > tbody > tr > td:nth-child(1) {
+    border-left: none;
+    text-align: right;
+    padding-right: 5px;
+}
+.tableArea > table > tbody > tr > td:nth-child(2) {
+    padding-left: 5px;
+}
+.tableArea > table > tbody > tr > td:nth-child(3) {
+    border-right: none;
+    text-align: center;
+}
+.clickBtn {
+    width: 100%;
+    height: 100%;
+    background: black;
+    color: white;
+    font-size: 16px;
+}
+.clickBtn:hover {
+    cursor: pointer;
+}
+
+.sort-button  {
+    border: none; /* 테두리 제거 */
+}
+.sort-button img {
+    height: 17px; /* 이미지 높이 조절 */
+    vertical-align: middle; /* 세로 정렬 */
+
+}
+
+.center-align {
+    text-align: center !important;
+
+}
+
+.right-align {
+    text-align: right; /* 오른쪽 정렬 */
+}
+

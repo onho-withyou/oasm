@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>userGroupPopup</title>
+    <link href="userGroupPopup.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script text="javascript">
+        function changeRowColor(checkbox) {
+            var row = checkbox.parentNode.parentNode; // 체크박스의 부모 요소(td)의 부모 요소(tr)를 찾음
+            if (checkbox.checked) {
+                row.classList.add('checked');
+            } else {
+                row.classList.remove('checked');
+            }
+        }
+
+        function toggleCheckSelectAll() {
+            var checkboxes = document.querySelectorAll('.tdcheck');
+            var checkall = document.getElementById('checkall');
+            checkboxes.forEach(function (cb) {
+                cb.checked = checkall.checked;
+                changeRowColor(cb);
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="popup">
+    <form name="form">
+        <div class="topBar">
+            <label>권한 명</label>
+            <input type="text" class="bartext">
+            <label>권한코드</label>
+            <input type="text" class="bartext">
+            <button type="button" class="barbtn">추가</button>
+            <button type="button" class="barbtn">삭제</button>
+            <button type="button" class="barbtn">저장</button>
+        </div>
+
+        <div class="tableContainer">
+            <table id="usertable">
+                <thead>
+                <th class="thcheck"><input type="checkbox" id="checkall" onchange="toggleCheckSelectAll(this)"></th>
+                <th class="thuserId">사용자ID</th>
+                <th class="thuserName">사용자명</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="tdcheck"><input type="checkbox" class="tdcheck"
+                                               onchange="changeRowColor(this)"></td>
+                    <td class="tduserId">admin1</td>
+                    <td class="tduserName">관리자</td>
+                </tr>
+                <tr>
+                    <td class="tdcheck"><input type="checkbox" class="tdcheck"
+                                               onchange="changeRowColor(this)"></td>
+                    <td class="tduserId">admin2</td>
+                    <td class="tduserName">관리자</td>
+                </tr>
+                <tr>
+                    <td class="tdcheck"><input type="checkbox" class="tdcheck"
+                                               onchange="changeRowColor(this)"></td>
+                    <td class="tduserId">admin3</td>
+                    <td class="tduserName">관리자</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="bottomBar">
+            <label>ID</label>
+            <input type="text" class="bartext">
+            <button class="searchbtn"></button>
+            <button class="pagingbtn">paging</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

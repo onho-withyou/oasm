@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="main_aside">
+<div class="left-menu">
+    <div class="tree-menu">
+        <strong class="treeTitle">
+            <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+            <span><img th:src="@{/img/folder_icon.png}" width="16px" height="16px" alt=""></span>
+            <span>카테고리</span>
+        </strong>
+        <ul class="main-tree-ul" id="main-tree-ul">
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn1" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt=""></span>
+                <a href="#" class="treelabel">광고물 조사 내역</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul1">
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/stat/advSurveyStatus}" class="treelabel">광고물 조사 현황</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/stat/inquiryBuilding}" class="treelabel">건물별 조회</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/stat/inquiryEnterprise}" class="treelabel">업소별 조회</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/stat/inquirySignboard}" class="treelabel">간판별 조회</a>
+                    </li>
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/stat/registerStatus}" class="treelabel">수동 및 Excel 등록</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn2" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt=""></span>
+                <a href="#" class="treelabel">종합 통계 분석관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul2">
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/advType}" class="treelabel">종합 광고물 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/lightType}" class="treelabel">종합 조명 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/surveyResult}" class="treelabel">종합 광고물 조사 결과 통계</a>
+                    </li>
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/roadinvasion}" class="treelabel">종합 도로 저촉 유무 통계</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt=""></span>
+                <a href="#" class="treelabel">연도별 통계 분석관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul3">
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/yAnalysis/yearAdvType}" class="treelabel">연도별 광고물 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/yAnalysis/yearLightType}" class="treelabel">연도별 조명 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/yAnalysis/yearSurveyResult}" class="treelabel">연도별 광고물 조사 결과 통계</a>
+                    </li>
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/yAnalysis/yearRoadInvasion}" class="treelabel">연도별 도로 저촉 유무 통계</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn4" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt=""></span>
+                <a href="#" class="treelabel">월별 통계 분석관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul4">
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/monthAdvType}" class="treelabel">월별 광고물 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/monthLightType}" class="treelabel">월별 조명 종류 통계</a>
+                    </li>
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/monthSurveyResult}" class="treelabel">월별 광고물 조사 결과 통계</a>
+                    </li>
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/analysis/monthRoadInvasion}" class="treelabel">월별 도로 저촉 유무 통계</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn5" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt="" ></span>
+                <a href="#" class="treelabel">기초관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul5">
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/base/commonCode}" class="treelabel">공통코드 관리</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn6" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt="" ></span>
+                <a href="#" class="treelabel">권한관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul6">
+                    <li class="tree-sub-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/auth/userGroup}" class="treelabel">사용자 그룹 관리</a>
+                    </li>
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/auth/authMenu}" class="treelabel">메뉴 권한 관리</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="main-tree-li main-tree-li-last">
+                <span><img th:src="@{/img/closebtn_icon.png}" id="hidebtn7" class="hidebtn" width="15px" height="15px" alt=""></span>
+                <span><img th:src="@{/img/folder_icon.png}" width="15px" height="15px" alt="" ></span>
+                <a href="#" class="treelabel">사용자관리</a>
+                <ul class="sub-tree-ul" id="sub-tree-ul7">
+                    <li class="tree-last-li">
+                        <span><img th:src="@{/img/paper_icon.png}" width="16px" height="16px" alt=""></span>
+                        <a th:href="@{/setUsers}" class="treelabel">사용자관리</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+    <div class="line_height"></div>
+<script th:inline="javascript">
+    // 권한별 메뉴 숨김 코드
+    $(function() {
+        let treelabel = [];
+        for (let i = 0; i < $(".treelabel").length; i++) {
+            treelabel.push($(".treelabel").eq(i).text().trim());
+        }
+        $.ajax({
+            url: '/_aside',
+            type: 'POST',
+            data:{},
+            dataType:'json',
+            success: function(data) {
+                $.each(data, function (key, value) {
+                    $('.treelabel:contains(' + value.menu_nm + ')').parent().css({"display": "none"});
+                });
+                $.each(data, function (key, value) {
+                    if (value.menu_flag_yn === "Y"){
+                        $('.treelabel:contains(' + value.menu_nm + ')').parent().css({"display": ""});
+                    }
+                });
+            },
+            error: function() {
+                console.log('실패')
+            }
+        });
+    });
+</script>
+</th:block>
+</html>

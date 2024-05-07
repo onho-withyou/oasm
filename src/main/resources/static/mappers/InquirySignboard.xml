@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.InquirySignboardDAO">
+
+    <insert id="insertSignboard">
+        INSERT INTO sign_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sign_cd != null and !sign_cd.equals('')">
+                sign_cd,
+            </if>
+            <if test="enterprise_cd != null and !enterprise_cd.equals('')">
+                enterprise_cd,
+            </if>
+            <if test="file_nm != null and !file_nm.equals('')">
+                file_nm,
+            </if>
+            <if test="permission_yn != null and !permission_yn.equals('')">
+                permission_yn,
+            </if>
+            <if test="permission_no != null and !permission_no.equals('')">
+                permission_no,
+            </if>
+            <if test="permission_date != null and !permission_date.equals('')">
+                permission_date,
+            </if>
+            <if test="permission_end_date != null and !permission_end_date.equals('')">
+                permission_end_date,
+            </if>
+            <if test="inspect_date != null and !inspect_date.equals('')">
+                inspect_date,
+            </if>
+            <if test="sign_content != null and !sign_content.equals('')">
+                sign_content,
+            </if>
+            <if test="sign_width != null and !sign_width.equals('')">
+                sign_width,
+            </if>
+            <if test="sign_length != null and !sign_length.equals('')">
+                sign_length,
+            </if>
+            <if test="sign_depth != null and !sign_depth.equals('')">
+                sign_depth,
+            </if>
+            <if test="sign_area != null and !sign_area.equals('')">
+                sign_area,
+            </if>
+            <if test="sign_rmk != null and !sign_rmk.equals('')">
+                sign_rmk,
+            </if>
+            <if test="maintain_state != null and !maintain_state.equals('')">
+                maintain_state,
+            </if>
+            <if test="first_date != null and !first_date.equals('')">
+                first_date,
+            </if>
+            <if test="sign_kind != null and !sign_kind.equals('')">
+                sign_kind,
+            </if>
+            <if test="light_kind != null and !light_kind.equals('')">
+                light_kind,
+            </if>
+            <if test="rmk != null and !rmk.equals('')">
+                rmk
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="sign_cd != null and !sign_cd.equals('')">
+                #{sign_cd},
+            </if>
+            <if test="enterprise_cd != null and !enterprise_cd.equals('')">
+                #{enterprise_cd},
+            </if>
+            <if test="file_nm != null and !file_nm.equals('')">
+                #{file_nm},
+            </if>
+            <if test="permission_yn != null and !permission_yn.equals('')">
+                #{permission_yn},
+            </if>
+            <if test="permission_no != null and !permission_no.equals('')">
+                #{permission_no},
+            </if>
+            <if test="permission_date != null and !permission_date.equals('')">
+                #{permission_date},
+            </if>
+            <if test="permission_end_date != null and !permission_end_date.equals('')">
+                #{permission_end_date},
+            </if>
+            <if test="inspect_date != null and !inspect_date.equals('')">
+                #{inspect_date},
+            </if>
+            <if test="sign_content != null and !sign_content.equals('')">
+                #{sign_content},
+            </if>
+            <if test="sign_width != null and !sign_width.equals('')">
+                #{sign_width},
+            </if>
+            <if test="sign_length != null and !sign_length.equals('')">
+                #{sign_length},
+            </if>
+            <if test="sign_depth != null and !sign_depth.equals('')">
+                #{sign_depth},
+            </if>
+            <if test="sign_area != null and !sign_area.equals('')">
+                #{sign_area},
+            </if>
+            <if test="sign_rmk != null and !sign_rmk.equals('')">
+                #{sign_rmk},
+            </if>
+            <if test="maintain_state != null and !maintain_state.equals('')">
+                #{maintain_state},
+            </if>
+            <if test="first_date != null and !first_date.equals('')">
+                #{first_date},
+            </if>
+            <if test="sign_kind != null and !sign_kind.equals('')">
+                #{sign_kind},
+            </if>
+            <if test="light_kind != null and !light_kind.equals('')">
+                #{light_kind},
+            </if>
+            <if test="rmk != null and !rmk.equals('')">
+                #{rmk}
+            </if>
+        </trim>
+    </insert>
+
+    <select id="selectSignboards" resultType="com.oasm.domain.InquirySignboardVO">
+
+        SELECT a.sign_cd, b.enterprise_nm, b.enterprise_type, d.lot_number_adr, d.street_adr, d.street_no1, d.street_no2,
+               a.permission_yn, a.sign_kind, a.light_kind, cm1.code_nm AS job, cm2.code_nm AS sign_nm, cm3.code_nm AS light_nm, a.file_nm
+            FROM sign_list AS a
+            JOIN enterprise_list AS b ON a.enterprise_cd = b.enterprise_cd
+            JOIN building_enter_list AS c ON a.enterprise_cd = c.enterprise_cd
+            JOIN building_list AS d ON c.building_cd = d.building_cd
+            JOIN cm_code AS cm1 ON b.enterprise_type = cm1.sub_cd
+            JOIN cm_code AS cm2 ON a.sign_kind = cm2.sub_cd
+            JOIN cm_code AS cm3 ON a.light_kind = cm3.sub_cd
+            WHERE cm1.main_cd = 'BusinessCate' AND cm2.main_cd = 'Adkind' AND cm3.main_cd = 'LightType'
+        <if test = 'lot_number_adr != null and !lot_number_adr.equals("")'>
+            AND d.lot_number_adr LIKE '%${lot_number_adr}%'
+        </if>
+        <if test = 'street_adr != null and !street_adr.equals("")'>
+            AND d.street_adr LIKE '%${street_adr}%'
+        </if>
+        <if test = 'street_no1 != null and !street_no1.equals("")'>
+            AND d.street_no1 LIKE '%${street_no1}%'
+        </if>
+        <if test = 'street_no2 != null and !street_no2.equals("")'>
+            AND d.street_no2 LIKE '%${street_no2}%'
+        </if>
+        <if test = 'enterprise_nm != null and !enterprise_nm.equals("")'>
+            AND b.enterprise_nm LIKE '%${enterprise_nm}%'
+        </if>
+        <if test = 'enterprise_type != null and !enterprise_type.equals("")'>
+            AND b.enterprise_type = #{enterprise_type}
+        </if>
+        <if test = 'permission_yn != null and !permission_yn.equals("")'>
+            AND a.permission_yn = #{permission_yn}
+        </if>
+        <if test = 'sign_kind != null and !sign_kind.equals("")'>
+            AND a.sign_kind = #{sign_kind}
+        </if>
+        <if test= 'light_kind != null and !light_kind.equals("")'>
+            AND a.light_kind = #{light_kind}
+        </if>
+
+        LIMIT ${offset}, ${size}
+    </select>
+
+    <select id="selectAllSignAdkinds" resultType="com.oasm.domain.InquirySignboardVO">
+        SELECT b. code_nm, count(b.code_nm) AS sign_kind FROM sign_list AS a
+            JOIN cm_code AS b ON a.sign_kind = b.sub_cd
+            WHERE b.main_cd = 'Adkind'
+            GROUP BY b. code_nm
+            ORDER BY sign_kind DESC;
+    </select>
+
+    <select id="selectAllSignLightTypes" resultType="com.oasm.domain.InquirySignboardVO">
+        SELECT b. code_nm, count(b.code_nm) AS light_kind FROM sign_list AS a
+            JOIN cm_code AS b ON a.light_kind = b.sub_cd
+            WHERE b.main_cd = 'LightType'
+            GROUP BY b. code_nm
+            ORDER BY light_kind DESC;
+    </select>
+
+    <select id="selectAllEnterprises" resultType="com.oasm.domain.InquiryEnterpriseVO">
+        SELECT a.enterprise_cd, a.enterprise_nm, c.sigungu_adr, c.lot_number_adr, c.street_adr, c.street_no1, c.street_no2
+            FROM enterprise_list AS a JOIN building_enter_list AS b ON a.enterprise_cd = b.enterprise_cd
+            JOIN building_list AS c ON b.building_cd = c.building_cd
+            LIMIT 0, 10;
+    </select>
+
+    <select id="selectLastSignCode" resultType="String">
+        SELECT sign_cd
+            FROM sign_list
+            ORDER BY sign_cd DESC
+            LIMIT 1;
+    </select>
+
+
+    <select id="countAllSignboards" resultType="Integer">
+        SELECT COUNT(sign_cd)
+            FROM sign_list AS a
+            JOIN enterprise_list AS b ON a.enterprise_cd = b.enterprise_cd
+            JOIN building_enter_list AS c ON a.enterprise_cd = c.enterprise_cd
+            JOIN building_list AS d ON c.building_cd = d.building_cd
+            JOIN cm_code AS cm1 ON b.enterprise_type = cm1.sub_cd
+            JOIN cm_code AS cm2 ON a.sign_kind = cm2.sub_cd
+            JOIN cm_code AS cm3 ON a.light_kind = cm3.sub_cd
+            WHERE cm1.main_cd = 'BusinessCate' AND cm2.main_cd = 'Adkind' AND cm3.main_cd = 'LightType'
+        <if test = 'lot_number_adr != null and !lot_number_adr.equals("")'>
+            AND d.lot_number_adr LIKE '%${lot_number_adr}%'
+        </if>
+        <if test = 'street_adr != null and !street_adr.equals("")'>
+            AND d.street_adr LIKE '%${street_adr}%'
+        </if>
+        <if test = 'street_no1 != null and !street_no1.equals("")'>
+            AND d.street_no1 LIKE '%${street_no1}%'
+        </if>
+        <if test = 'street_no2 != null and !street_no2.equals("")'>
+            AND d.street_no2 LIKE '%${street_no2}%'
+        </if>
+        <if test = 'enterprise_nm != null and !enterprise_nm.equals("")'>
+            AND b.enterprise_nm LIKE '%${enterprise_nm}%'
+        </if>
+        <if test = 'enterprise_type != null and !enterprise_type.equals("")'>
+            AND b.enterprise_type = #{enterprise_type}
+        </if>
+        <if test = 'permission_yn != null and !permission_yn.equals("")'>
+            AND a.permission_yn = #{permission_yn}
+        </if>
+        <if test = 'sign_kind != null and !sign_kind.equals("")'>
+            AND a.sign_kind = #{sign_kind}
+        </if>
+        <if test= 'light_kind != null and !light_kind.equals("")'>
+            AND a.light_kind = #{light_kind}
+        </if>
+    </select>
+
+</mapper>
+
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inquirySignboardPopup2</title>
+    <link th:href="@{/css/inquirySignboardPopup2.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <div class="popup">
+        <div class="building_menu">
+            <label>도로 명</label>
+            <input type="text" class="roadName" id="street_adr">
+            <label>건물 번호</label>
+            <input type="text" class="building_num1" id="street_no1">
+            <input type="text" class="building_num2" id="street_no2">
+            <label>지번</label>
+            <input type="text" class="address_num" id="lot_number_adr">
+            <label>건물 명</label>
+            <input type="text" class="buildingName" id="building_nm">
+            <button type="button" class="searchbtn"></button>
+        </div>
+        <div class="tableDiv">
+            <table class="table">
+                <thead>
+                    <th></th>
+                    <th>순번</th>
+                    <th>시군구</th>
+                    <th>업체명</th>
+                    <th>지번 주소</th>
+                    <th>도로명 주소</th>
+                    <th>건물번호1</th>
+                    <th>건물번호2</th>
+                </thead>
+                <tbody>
+                    <tr th:each="enter, no : ${enters}">
+                        <td><input name="code" type="radio" th:value="${enter.enterprise_cd}"/></td>
+                        <td th:text="${no.count}"></td>
+                        <td th:text="${enter.sigungu_adr}"></td>
+                        <td th:text="${enter.enterprise_nm}"></td>
+                        <td th:text="${enter.lot_number_adr}"></td>
+                        <td th:text="${enter.street_adr}"></td>
+                        <td th:text="${enter.street_no1}"></td>
+                        <td th:text="${enter.street_no2}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="popFooter">
+            <div class="paging"></div>
+            <div class="btn_menu">
+                <div id="nav"></div>
+                <button type="button" class="savebtn" id="saveBtn">저장</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    $(function(){
+        $("#saveBtn").on("click", function(){
+            const opener = window.opener;
+            const selected = $("input[name=code]:checked");
+            const enterCode = opener.document.getElementById("entCode");
+            const enterName = opener.document.getElementById("entName");
+
+            const code = selected.val();
+            const name = selected.parent().next().next().next().text();
+
+            enterCode.value = code;
+            enterName.value = name;
+            window.close();
+        });
+    });
+</script>

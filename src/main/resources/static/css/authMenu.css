@@ -1,0 +1,88 @@
+.searchArea {
+    width: 100%;
+    max-width: 1280px;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+}
+.clickBtn {
+    width: 100%;
+    height: 100%;
+    background: white;
+    font-size: 14px;
+    border: none;
+    border-left: 1px solid #dbdbdb;
+}
+.clickBtn:hover {
+    cursor: pointer;
+}
+.clickBtn2 {
+    width: 50px;
+    height: 25px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.menuDiv {
+    width: 80%;
+    max-width: 1200px;
+    height: auto;
+    padding: 25px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.menuName {
+    height: 30px;
+    align-content: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    border-bottom: 2px solid #888;
+}
+.nameSpace > img {
+    width: 25px;
+    margin-right: 5px;
+}
+.menuList {}
+.listLine {
+
+}
+.visibleList {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid #dbdbdb;
+
+}
+.visibleList > div:nth-child(1) {
+    width: 70%;
+    padding: 10px;
+    font-size: 15px;
+    text-align: center;
+}
+.visibleList > div:nth-child(2) {
+    width: 30%;
+}
+.hiddenList {
+    display: none;
+    justify-content: space-between;
+    padding: 10px;
+}
+.hiddenList > div {
+    display: flex;
+    flex-direction: row;
+}
+.checkList {
+    margin-right: 20px;
+}
+.hiddenAll {
+    background: #ebebeb;
+}
+.hiddenOne {
+    border: 1px solid #dbdbdb;
+}

@@ -1,0 +1,272 @@
+/* 업소별 조회 */
+.inquiryEnterprise_Container{
+  max-width: 1070px;
+  min-width: 1070px;
+  margin-left: 15px;
+  margin-top: 10px;
+}
+.enterprise_th{
+  height: 35px;
+  font-weight: 500;
+  background: #556be4;
+  color: white;
+  font-size: 14px;
+}
+.enterpriselist{
+  border-collapse: collapse;
+  width: 100%;
+}
+.table-round{
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  margin-top: 14px;
+}
+.enterprise_th:nth-child(1){
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+}
+.enterprise_th:nth-child(2){
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+.enterprise_th:nth-child(3){
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+}
+.enterprise_th:nth-child(4){
+  width: 200px;
+  min-width: 200px;
+  max-width: 200px;
+}
+.enterprise_th:nth-child(5){
+  width: 190px;
+  min-width: 190px;
+  max-width: 190px;
+}
+.enterprise_th:nth-child(6){
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  border-right: none;
+}
+.enterprise_td{
+  border: 1px solid #c6c6c6;
+  font-size: 15px;
+  height: 34px;
+  color: #4f4f4f;
+}
+.enterprise_td:nth-child(1){
+  text-align: right;
+  padding-right: 5px;
+}
+.enterprise_td:nth-child(2){
+  padding-left: 10px; 
+}
+.enterprise_td:nth-child(3){
+  text-align: center;
+}
+.enterprise_td:nth-child(4){
+  padding-left: 10px;
+}
+.enterprise_td:nth-child(5){
+  padding-left: 10px;
+}
+.enterprise_td:nth-child(6){
+  padding-left: 10px;
+  border-right: none;
+}
+
+.inquiryenterprise{
+  margin-top: 30px;
+  max-width: 1080px;
+}
+.enterpriseSearch{
+  margin-top: 20px;
+}
+.enterpriseSearch > label{
+  margin-left: 40px;
+  margin-right: 15px;
+}
+.enterpriseSearch > input{
+  width: 222px;
+  height: 20px;
+  border: none;
+  border-radius: 3px;
+}
+.enterpriseSearch > select {
+  width: 116px;
+  height: 20px;
+}
+.enterpriseSearch > button{
+    height: 30px;
+    width: 30px;
+    border: 1px solid rgb(165, 165, 165);
+    background-image: url("../img/search.svg");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+    float: right;
+    position: relative;
+    right: 8px;
+    bottom: 5px;
+}
+.total{
+  float: right;
+  position: relative;
+  right: 10px;
+  top: 10px;
+}
+.enterprisetable{
+  max-width: 1070px;
+  min-width: 1070px;
+}
+.enterprisetable > table{
+  border-collapse: collapse;
+  width: 99.7%;
+  position: relative;
+  top: 18px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.btndiv{
+  text-align: center;
+  background-color: #e4e4e4;
+  height: 40px;
+}
+.btndiv > button{
+    margin-top: 7px;
+    width: 120px;
+    height: 25px;
+    background-color: rgb(251, 251, 251);
+    border: 1px solid black;
+    color: black;
+    cursor: pointer;
+}
+.btndiv >button:hover{
+  background-color: #e4e4e4;
+}
+/* 간판코드 테이블 */
+.codetable{
+  margin-top: 20px;
+  height: 129px;
+}
+.codelist{
+  border-collapse: collapse;
+  width: 100%;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.code_th{
+  border: 1px solid;
+  height: 25px;
+  font-size: 14px;
+  background: #d0e7ff;
+}
+.code_th:nth-child(1){
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+}
+.code_th:nth-child(2){
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+}
+.code_th:nth-child(3){
+  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
+}
+.code_th:nth-child(4){
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+}
+.code_th:nth-child(5){
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+}
+.code_td{
+  border: 1px solid;
+  height: 25px;
+}
+.code_td:nth-child(1){
+  text-align: center;
+}
+.code_td:nth-child(2){
+  text-align: center;
+}
+.code_td:nth-child(3){
+  padding-left: 4px;
+}
+.code_td:nth-child(4){
+  padding-left: 4px;
+}
+.code_td:nth-child(5){
+  text-align: center;
+}
+.Table td{
+  border: 1px solid #c6c6c6;
+  font-size: 15px;
+  height: 34px;
+  color: #4f4f4f;
+}
+.Table td:nth-child(1){
+  text-align: right;
+  padding-right: 5px;
+  border-left: none;
+}
+.Table td:nth-child(2){
+  padding-left: 10px;
+}
+.Table td:nth-child(3){
+  text-align: center;
+}
+.Table td:nth-child(4){
+  padding-left: 10px;
+}
+.Table td:nth-child(5){
+  padding-left: 10px;
+}
+.Table td:nth-child(6){
+  padding-left: 10px;
+  border-right: none;
+}
+.paging{
+  margin-top: 10px;
+}
+.paging a{
+  font-size: 17px;
+  margin-right: 25px;
+}
+#nextPage, #prevPage{
+  font-size: 18px;
+  position: relative;
+  bottom: 4px;
+  padding: 2px 5px 2px 5px;
+  border-radius: 3px;
+  color: #bdbdbd;
+}
+.enterpriselist tr:hover td{
+  background-color: #ffe690; /* 마우스를 올렸을 때 배경색을 변경하세요 */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경하세요 */
+}
+#selectRowCount{
+  margin-left: 10px;
+  position: relative;
+  top: 8px;
+}
+.inquiryBar{
+  height: 61px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  background: #e9e9e9;
+  border-radius: 9px;
+}

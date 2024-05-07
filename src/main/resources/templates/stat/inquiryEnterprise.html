@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>inquiryBuilding</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="stylesheet" th:href="@{/css/inquiryEnterprise.css}">
+    <script th:src="@{/js/index.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+        <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+            <th:block layout:fragment="main"></th:block>
+            <div class="mainTitleBar">
+                <span>광고물 조사 내역 - 업소별 조회</span>
+                <div class="btnbox">
+                    <div class="btndiv1">
+                        <button class="mainbtn" type="button" onclick="showPopup()">등록</button>
+                    </div>
+                </div>
+            </div>
+            <!--화면 안-->
+            <div class="inquiryEnterprise_Container">
+                <div class="inquiryBar">
+                    <form class="enterpriseSearch">
+                        <label>도로 명</label>
+                        <input type="text" id="street_adr">
+                        <label>상호 명</label>
+                        <input type="text" id="enterprise_nm">
+                        <label>업종</label>
+                        <select id="cm_code">
+                            <option disabled hidden selected>업종선택</option>
+                            <option th:each="item : ${cm_code}" th:value="${item}" th:text="${item}"></option>
+                        </select>
+                        <button type="button" class="searchBtn"></button>
+                    </form>
+                </div>
+                <br/>
+                <div class="enterprisetable">
+                    <select id="selectRowCount">
+                        <option value="3">3개</option>
+                        <option value="5">5개</option>
+                        <option value="10" selected>10개</option>
+                    </select>
+                    <span class="total" id="total">총 10,000건</span>
+                    <div class="table-round">
+                    <table class="enterpriselist" id="enterpriseList">
+                        <thead>
+                        <th class="enterprise_th">순번</th>
+                        <th class="enterprise_th">상호명</th>
+                        <th class="enterprise_th">업종</th>
+                        <th class="enterprise_th">도로명 주소</th>
+                        <th class="enterprise_th">추가 주소</th>
+                        <th class="enterprise_th">상호 ID</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="enterprise_td">1</td>
+                            <td class="enterprise_td">센텀오딧세이치과의원</td>
+                            <td class="enterprise_td"></td>
+                            <td class="enterprise_td">해운대로 369</td>
+                            <td class="enterprise_td">해운대센텀메디칼센터9층</td>
+                            <td class="enterprise_td">1</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                    </div>
+                    </div><br/>
+
+                    <div id="nav" class="paging"></div>
+
+                <div class="codetable">
+                    <table class="codelist" id="codeList">
+                        <thead>
+                        <th class="code_th">간판코드</th>
+                        <th class="code_th">사진</th>
+                        <th class="code_th">광고물 종류</th>
+                        <th class="code_th">조명 종류</th>
+                        <th class="code_th">허가 유무</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="code_td" id="sign_cd">1234</td>
+                            <td class="code_td" id="file_nm"></td>
+                            <td class="code_td" id="adkind">광고물 종류입니다</td>
+                            <td class="code_td" id="lightType">조명 종류입니다</td>
+                            <td class="code_td" id="permission_yn">Y</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+<script>
+    function showPopup() {
+        let url = "/stat/inquiryEnterprisePopup"
+        let _width = "700";
+        let _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        let _left = Math.ceil((window.screen.width - _width) / 2);
+        let _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+            url,
+            "new",
+            "toolbar=no,width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+        );
+    }
+
+
+    $(document).ready(function (){
+        // 페이지 로드 시 codelist 테이블 숨기기
+        $('.codetable').hide();
+
+        // codelist 테이블 변수 지정
+        let codeTable = $('#codeList tbody');
+        let clickedRowIndex = null;
+
+        function countRows() {
+            let rowCount = $('#enterpriseList tbody tr').length;
+            let row = "총 " + rowCount + "건";
+            $('.total').text(row);
+        }
+
+        $.ajax({
+            url: '/Enterprise',
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(response) {
+                let enterpriseList = $('#enterpriseList tbody');
+                enterpriseList.empty();
+                console.log(response);
+
+                response.forEach(function(enterprise, index) {
+                    let address = enterprise.street_adr + " " + enterprise.street_no1 + (enterprise.street_no2 ? enterprise.street_no2 : '');
+                    let fullAddress = enterprise.building_nm + " " + (enterprise.add_addr ? enterprise.add_addr : '');
+
+                    let row = $('<tr>');
+                    row.append($('<td>').text(index + 1));
+                    row.append($('<td>').text(enterprise.enterprise_nm));
+                    row.append($('<td>').text(enterprise.business_cate));
+                    row.append($('<td>').text(address));
+                    row.append($('<td>').text(fullAddress));
+                    row.append($('<td>').text(enterprise.enterprise_cd));
+                    row.append($('<input>').attr('type', 'hidden').val(enterprise.enterprise_cd));
+                    row.addClass('Table');
+                    enterpriseList.append(row);
+
+                    row.off('click').click(function() {
+                        let clickedRow = $(this);
+                        let enterpriseCd = clickedRow.find('input[type=hidden]').val(); // 클릭한 행의 enterprise_cd 가져오기
+
+                        // enterprise_cd 값을 사용하여 EnterpriseList를 가져옴
+                        $.ajax({
+                            url: '/EnterpriseList?enterprise_cd=' + enterpriseCd,
+                            type: 'GET',
+                            contentType: 'application/json',
+                            success: function(response) {
+                                console.log(response);
+
+
+                                if (!response || response.length === 0) {
+                                    alert("간판 정보가 없습니다.");
+                                    return;
+                                }
+
+                                let signCd = response[0].sign_cd;
+                                let fileNm = response[0].file_nm;
+                                let adkind = response[0].adkind;
+                                let lightType = response[0].lightType;
+                                let permissionYn = response[0].permission_yn;
+
+                                // 가져온 정보로 codelist에 표시
+                                $('#sign_cd').text(signCd);
+                                $('#file_nm').text(fileNm);
+                                $('#adkind').text(adkind);
+                                $('#lightType').text(lightType);
+                                $('#permission_yn').text(permissionYn);
+
+                                // 같은 행을 두 번 클릭하면 숨기기
+                                if (clickedRowIndex === row.index()) {
+                                    $('.codetable').slideUp();
+                                    clickedRowIndex = null;
+                                } else {
+                                    // codelist 테이블 보여주기
+                                    $('.codetable').slideDown();
+                                    clickedRowIndex = row.index();
+                                }
+                            }
+                        });
+                    });
+                });
+                countRows();
+                setupPagination();
+            }
+        });
+
+
+
+
+
+
+        function searchEnterprise(){
+            let keyword1 = $('#street_adr').val();
+            let keyword2 = $('#enterprise_nm').val();
+            let keyword3 = $('#cm_code').val();
+
+            $.ajax({
+                url: '/searchEnterpriseList',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    keyword1: keyword1,
+                    keyword2: keyword2,
+                    keyword3: keyword3
+                }),
+                success: function (response){
+                    console.log(response);
+                    let tableBody = $('#enterpriseList tbody')
+                    tableBody.empty();
+
+                    response.forEach(function (enterprise,index){
+                        let address = enterprise.street_adr + " " + enterprise.street_no1 + (enterprise.street_no2 ? enterprise.street_no2 : '');
+                        let fullAddress = enterprise.building_nm + " " + (enterprise.add_addr ? enterprise.add_addr : '');
+                        let row = $('<tr>');
+                        row.append($('<td>').text(index + 1));
+                        row.append($('<td>').text(enterprise.enterprise_nm));
+                        row.append($('<td>').text(enterprise.business_cate));
+                        row.append($('<td>').text(address));
+                        row.append($('<td>').text(fullAddress));
+                        row.append($('<td>').text(enterprise.enterprise_cd));
+                        row.append($('<input>').attr('type', 'hidden').val(enterprise.enterprise_cd));
+                        row.addClass('Table');
+                        tableBody.append(row);
+
+                        row.off('click').click(function() {
+                            let clickedRow = $(this);
+                            let enterpriseCd = clickedRow.find('input[type=hidden]').val(); // 클릭한 행의 enterprise_cd 가져오기
+
+                            // enterprise_cd 값을 사용하여 EnterpriseList를 가져옴
+                            $.ajax({
+                                url: '/EnterpriseList?enterprise_cd=' + enterpriseCd,
+                                type: 'GET',
+                                contentType: 'application/json',
+                                success: function(response) {
+                                    console.log(response);
+
+
+                                    if (!response || response.length === 0) {
+                                        alert("간판 정보가 없습니다.");
+                                        return;
+                                    }
+
+                                    let signCd = response[0].sign_cd;
+                                    let fileNm = response[0].file_nm;
+                                    let adkind = response[0].adkind;
+                                    let lightType = response[0].lightType;
+                                    let permissionYn = response[0].permission_yn;
+
+                                    // 가져온 정보로 codelist에 표시
+                                    $('#sign_cd').text(signCd);
+                                    $('#file_nm').text(fileNm);
+                                    $('#adkind').text(adkind);
+                                    $('#lightType').text(lightType);
+                                    $('#permission_yn').text(permissionYn);
+
+                                    // 같은 행을 두 번 클릭하면 숨기기
+                                    if (clickedRowIndex === row.index()) {
+                                        $('.codetable').slideUp();
+                                        clickedRowIndex = null;
+                                    } else {
+                                        // codelist 테이블 보여주기
+                                        $('.codetable').slideDown();
+                                        clickedRowIndex = row.index();
+                                    }
+                                }
+                            });
+                        });
+
+                    });
+                    countRows();
+                    setupPagination();
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+
+        }
+
+
+        // 검색기능
+        $('.searchBtn').click(function (){
+            searchEnterprise();
+            $('#cm_code').val('');
+        });
+
+        $('#street_adr, #enterprise_nm, #cm_code').keypress(function(event) {
+            if (event.which === 13) {
+                searchEnterprise();
+                $('#cm_code').val('');
+            }
+        });
+
+    });
+    function setupPagination() {
+        let $products = $('#enterpriseList tbody tr');
+        let rowPerPage = parseInt($('#selectRowCount').val()); // 선택된 행 수 가져오기
+
+        // 초기 페이징 설정 적용
+        applyPagination($products, rowPerPage, 5);
+
+        // 행 수가 변경될 때마다 새로운 값으로 업데이트하여 페이징 함수 호출
+        $('#selectRowCount').on('change', function() {
+            rowPerPage = parseInt($(this).val());
+            applyPagination($products, rowPerPage, 5);
+        });
+
+    }
+
+    // 페이징 처리 함수
+    function applyPagination($products, rowPerPage, maxPageDisplay) {
+        let rowTotals = $products.length;
+        let pageTotal = Math.ceil(rowTotals / rowPerPage);
+        let currentPage = 0;
+
+        let startRow = 0;
+        let endRow = rowPerPage;
+
+
+        $products.hide().slice(startRow, endRow).show();
+
+
+        function updatePagination() {
+            $('#nav').empty();
+
+
+            let $prevButton = $('<a href="#" id="prevPage">〈</a>');
+            if (currentPage > 0) {
+                $prevButton.appendTo('#nav');
+            } else {
+                $prevButton.addClass('disabled'); // 현재 페이지가 첫 번째 페이지 그룹이면 이전 버튼을 비활성화
+            }
+
+            // 페이지 숫자 버튼 생성
+            let startPage = Math.floor(currentPage / maxPageDisplay) * maxPageDisplay;
+            let endPage = Math.min(startPage + maxPageDisplay, pageTotal);
+            for (let i = startPage; i < endPage; i++) {
+                $('<a href="#" class="pageNumber"></a>')
+                    .attr('rel', i)
+                    .html(i + 1)
+                    .appendTo('#nav');
+            }
+
+            // 다음 버튼 생성
+            let $nextButton = $('<a href="#" id="nextPage">〉</a>');
+            if (endPage < pageTotal) {
+                $nextButton.appendTo('#nav');
+            }
+
+            // 페이지 숫자 버튼에 이벤트 연결
+            $('.pageNumber').on('click', function(evt) {
+                evt.preventDefault();
+                currentPage = parseInt($(this).attr('rel'));
+                showPage(currentPage);
+            });
+
+            // 다음 버튼에 이벤트 연결
+            $('#nextPage').on('click', function(evt) {
+                evt.preventDefault();
+                if (currentPage < pageTotal - 1) {
+                    currentPage += maxPageDisplay;
+                    updatePagination();
+                    // 마지막 페이지 그룹인 경우 다음 버튼 비활성화
+                    if (currentPage >= pageTotal - maxPageDisplay) {
+                        $('#nextPage').addClass('disabled');
+                    }
+                }
+            });
+
+            // 이전 버튼에 이벤트 연결
+            $('#prevPage').on('click', function(evt) {
+                evt.preventDefault();
+                if (currentPage > 0) {
+                    currentPage -= maxPageDisplay;
+                    if (currentPage < 0) {
+                        currentPage = 0; // 현재 페이지가 0 미만으로 내려가지 않도록 함
+                    }
+                    updatePagination();
+                }
+            });
+
+            // 현재 페이지에 해당하는 페이지 숫자 버튼 활성화
+            $('.pageNumber').removeClass('active');
+            $('.pageNumber[rel="' + currentPage + '"]').addClass('active');
+
+            // 이전 버튼 활성화 여부 설정
+            $('#prevPage').toggle(currentPage > 0);
+            // 다음 버튼 활성화 여부 설정
+            $('#nextPage').toggle(currentPage < pageTotal - 1);
+        }
+
+        updatePagination();
+
+        function showPage(page) {
+            let startRow = page * rowPerPage;
+            let endRow = Math.min(startRow + rowPerPage, rowTotals);
+            $products.hide().slice(startRow, endRow).show();
+        }
+    }
+
+</script>
+</body>
+</html>

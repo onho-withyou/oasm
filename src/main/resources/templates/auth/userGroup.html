@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/AuthLayout}">
+<th:block layout:fragment="main">
+<div class="mainTitleBar">
+    <span>등급 권한 관리 - 사용자 그룹 관리</span>
+    <div class="btnbox">
+        <div class="btndiv1">
+            <button type="button" class="mainbtn" onclick="showPopup()">등록</button>
+        </div>
+        <div class="btndiv2">
+            <button type="button" id="rtnDel" class="mainbtn">삭제</button>
+        </div>
+    </div>
+</div>
+<!-- 화면 안 -->
+<div class="main">
+    <div class="usersetContainer">
+        <span>🟩 등급 목록</span>
+        <table class="usertable">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="rtnAll"></th>
+                <th>등급 명</th>
+                <th>등급 코드</th>
+                <th>비고</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="rt: ${ratings}">
+                    <td>
+                        <input type="checkbox" class="rtnCheck" th:value="${rt.rating_cd}">
+                    </td>
+                    <td th:text="${rt.rating_nm}"></td>
+                    <td th:text="${rt.rating_cd}"></td>
+                    <td th:text="${rt.rmk}"></td>
+                    <td>
+                        <button type="button" class="detailbtn" th:data-value="${rt.rating_cd}">상세보기</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="userGroupContainer">
+        <span>🟩 회원 등급</span>
+        <div class="deleteBar">
+            <form class="deleteform">
+                <label>아이디&nbsp;&nbsp;</label>
+                <input type="text" class="inputId"/>
+                <label>등급 명&nbsp;&nbsp;</label>
+                <select id="inputRtn">
+                    <option value="all">선택</option>
+                    <th:block th:each="rating : ${ratings}">
+                        <option th:value="${rating.rating_cd}" th:text="${rating.rating_nm}"></option>
+                    </th:block>
+                </select>
+                <label>사용자 명&nbsp;&nbsp;</label>
+                <input type="text" class="inputName" />
+                <button type="button" id="userDel" class="deletebtn">삭제</button>
+                <button type="button" class="usersearch" id="searchBtn"></button>
+            </form>
+        </div>
+        <table class="memberLevel">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="userAll"></th>
+                    <th>아이디</th>
+                    <th>등급 명</th>
+                    <th>사용자 명</th>
+                    <th>비고</th>
+                </tr>
+            </thead>
+            <tbody id="userTable">
+                <tr th:each="user : ${users}">
+                    <td>
+                        <input type="checkbox" class="userCheck" th:value="${user.user_id}" th:data-code="${user.rating_cd}"/>
+                    </td>
+                    <td th:text="${user.user_id}"></td>
+                    <td th:text="${user.rating_nm}"></td>
+                    <td th:text="${user.user_nm}"></td>
+                    <td th:text="${user.rmk}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="paging">
+            <div class="pagingDisabled">〈〈</div>
+            <div class="pagingDisabled">〈</div>
+            <div class="pagingActive">1</div>
+            <div>2</div>
+            <div>3</div>
+            <div>4</div>
+            <div>5</div>
+            <div>6</div>
+            <div>7</div>
+            <div>8</div>
+            <div>9</div>
+            <div>10</div>
+            <div>〉</div>
+            <div>〉〉</div>
+        </div>
+    </div>
+</div>
+</th:block>
+</html>
+<script>
+    $(function(){
+
+        $("#rtnAll").on("click", function(){
+            let rtnAll = $(this).is(":checked");
+            if(rtnAll) $('.rtnCheck').prop('checked', true);
+            else $('.rtnCheck').prop('checked', false);
+        });
+
+        $("#userAll").on("click", function(){
+            let userAll = $(this).is(":checked");
+            if(userAll) $('.userCheck').prop('checked', true);
+            else $('.userCheck').prop('checked', false);
+        });
+
+        $("#rtnDel").on("click", function(){
+            if (confirm("정말 삭제하시겠습니까?")){
+                const rtnGroup = [];
+                $.each( $('.rtnCheck'), function() {
+                    if ($(this).is(":checked")) {
+                        rtnGroup.push($(this).val());
+                    }
+                });
+
+                $.ajax({
+                    url:'/auth/userGroup/deleteRtn',
+                    type:'post',
+                    data:{'rtnGroup': rtnGroup},
+                    dataType:'json',
+                    success: function(data){
+                        if (data > 0){
+                            alert('삭제 완료');
+                            location.reload();
+                        }
+                    }
+                });
+            } else {
+                alert('취소되었습니다.');
+            }
+        });
+
+        $("#userDel").on("click", function (){
+            if (confirm("정말 삭제하시겠습니까?")){
+                const userGroup = [];
+                $.each( $('.userCheck'), function() {
+                    if ($(this).is(":checked")) {
+                        let user = $(this).val() + "/" + $(this).data("code");
+                        userGroup.push(user);
+                    }
+                });
+
+                $.ajax({
+                    url:'/auth/userGroup/deleteUser',
+                    type:'post',
+                    data:{'userGroup': userGroup},
+                    dataType:'json',
+                    success: function(data){
+                        if (data > 0){
+                            alert('삭제 완료');
+                            location.reload();
+                        }
+                    }
+                });
+            } else {
+                alert('취소되었습니다.');
+            }
+        });
+
+        $("#searchBtn").on("click", function(){
+            let id = $('.inputId').val();
+            let code = $('#inputRtn').val();
+            let name = $('.inputName').val();
+            let table = $('#userTable');
+
+            table.empty();
+
+            $.ajax({
+                url: '/auth/userGroup',
+                type: 'post',
+                data: {'id': id, 'code': code, 'name': name},
+                dataType: 'json',
+                success: function(data) {
+                    var tags = '';
+                    console.log(data.length);
+                    $(data).each(function(){
+                        tags += `<tr>`
+                        tags += `  <td>`
+                        tags += `    <input type="checkbox" class="userCheck" value="` + this.user_id+ `" data-code="` + this.rating_cd + `"/>`
+                        tags += `  </td>`
+                        tags += `  <td>` + this.user_id + `</td>`
+                        tags += `  <td>` + this.rating_nm + `</td>`
+                        tags += `  <td>` + this.user_nm + `</td>`
+                        tags += `  <td>` + this.rmk + `</td>`
+                        tags += `</tr>`
+
+                    });
+                    table.append(tags);
+                }
+            });
+        });
+
+    });
+</script>

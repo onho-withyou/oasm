@@ -1,0 +1,165 @@
+.searchArea {
+    width: 100%;
+    max-width: 1280px;
+    height: 150px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #e9e9e9;
+}
+.searchArea > div:nth-child(2) {
+    width: 5%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.searchController {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+.searchController > div {
+    width: 100%;
+    height: 50%;
+}
+.aboveLine {
+    display: flex;
+    flex-direction: column;
+}
+.lineHeader > div {
+    font-weight: 800;
+}
+.lineBody {
+    padding-top: 5px;
+    box-sizing: border-box;
+    display: flex;
+}
+.lineBody > div {
+    display: flex;
+    width: 50%;
+}
+.lineBody > div > div {
+    box-sizing: border-box;
+    padding-right: 10px;
+}
+.lineBody > div > input {
+    width: 50%;
+    max-width: 150px;
+    min-width: 50px;
+    height: 20px;
+    border: none;
+    border-radius: 3px;
+}
+.lineBody > div > select {
+    width: 100px;
+    height: 20px;
+    box-sizing: border-box;
+}
+.belowLine {
+    display: flex;
+}
+.belowLine > div {
+    width: 50%;
+}
+
+.dataArea {
+    width: 100%;
+    max-width: 1280px;
+    height: auto;
+}
+.chartArea {
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid #dbdbdb;
+    padding: 1%;
+    margin-top: 20px;
+}
+.optionDiv {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+}
+.optionDiv > select {
+    width: 100px;
+
+}
+
+.tableArea {
+    width: 100%;
+    max-width: 1920px;
+    height: 70vh;
+    min-height: 700px;
+    margin-top: 25px;
+}
+
+.tableArea > div:nth-child(1) {
+    display: flex;
+    justify-content: end;
+}
+
+
+.tableDiv {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+.tableDiv > table {
+    width: 100%;
+    /*height: 100%;*/
+    /*border-spacing: 0;*/
+    border-collapse: collapse;
+}
+
+.tableDiv > table th, td {
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+.tableDiv > table th {
+    height: 35px;
+    background: #556be4;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.tableDiv > table td {
+    border: 1px solid #c6c6c6;
+    font-size: 15px;
+    height: 34px;
+    color: #4f4f4f;
+}
+
+.tableDiv > table th:last-child {width: 100px;}
+
+.tableDiv > table td:nth-child(1) {border-left: none; text-align: right; padding-right: 10px;}
+.tableDiv > table td:nth-child(2) {text-align: center;}
+.tableDiv > table td:nth-child(3) {padding-left: 10px;}
+.tableDiv > table td:nth-child(4) {padding-left: 10px;}
+.tableDiv > table td:nth-child(5) {padding-left: 10px;}
+table td:last-child {
+    border-right: none;
+    position: sticky;
+    right: 0;
+    z-index: 100;
+}
+table td > img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.searchButton {
+    width: 45px;
+    height: 45px;
+    background-size: 70%;
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.RegisterStatusDAO">
+
+    <insert id="insertRegisterStatus" parameterType="com.oasm.domain.RegisterStatusVO">
+        CALL InsertRegisterStatusData(
+        #{enterpriseNm, jdbcType=VARCHAR},
+        #{surveyDate, jdbcType=CHAR},
+        #{signWidth, jdbcType=DECIMAL},
+        #{signLength, jdbcType=DECIMAL},
+        #{lotNumberAdr, jdbcType=VARCHAR},
+        #{streetAdr, jdbcType=VARCHAR},
+        #{streetNo1, jdbcType=VARCHAR},
+        #{streetNo2, jdbcType=VARCHAR},
+        #{sigunguAdr, jdbcType=VARCHAR},
+        #{surveyResult, jdbcType=VARCHAR},
+        #{signKind, jdbcType=VARCHAR},
+        #{lightKind, jdbcType=VARCHAR},
+        #{roadYn, jdbcType=CHAR}
+        )
+    </insert>
+
+
+    <insert id="batchInsertRegisterStatuses">
+        <foreach collection="list" item="status" index="index" open="" separator="" close="">
+            CALL RegisterStatusData(
+            #{status.enterprise_nm, jdbcType=VARCHAR},
+            #{status.survey_date, jdbcType=CHAR},
+            #{status.sign_width, jdbcType=DECIMAL},
+            #{status.sign_length, jdbcType=DECIMAL},
+            #{status.lot_number_adr, jdbcType=VARCHAR},
+            #{status.street_adr, jdbcType=VARCHAR},
+            #{status.street_no1, jdbcType=VARCHAR},
+            #{status.street_no2, jdbcType=VARCHAR},
+            #{status.sigungu_adr, jdbcType=VARCHAR},
+            #{status.survey_result, jdbcType=VARCHAR},
+            #{status.sign_kind, jdbcType=VARCHAR},
+            #{status.light_kind, jdbcType=VARCHAR},
+            #{status.road_yn, jdbcType=CHAR}
+            );
+        </foreach>
+    </insert>
+
+
+    <insert id="excelInsertRegisterStatus">
+        CALL RegisterStatusData(
+        #{enterpriseNm, jdbcType=VARCHAR},
+        #{surveyDate, jdbcType=CHAR},
+        #{signWidth, jdbcType=DECIMAL},
+        #{signLength, jdbcType=DECIMAL},
+        #{lotNumberAdr, jdbcType=VARCHAR},
+        #{streetAdr, jdbcType=VARCHAR},
+        #{streetNo1, jdbcType=VARCHAR},
+        #{streetNo2, jdbcType=VARCHAR},
+        #{sigunguAdr, jdbcType=VARCHAR},
+        #{surveyResult, jdbcType=VARCHAR},
+        #{signKind, jdbcType=VARCHAR},
+        #{lightKind, jdbcType=VARCHAR},
+        #{roadYn, jdbcType=CHAR}
+        );
+    </insert>
+
+</mapper>

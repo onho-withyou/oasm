@@ -1,0 +1,96 @@
+@font-face {
+    font-family: "SDGothic";
+    src: url("../font/AppleSDGothicNeoM.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: KBO;
+    src: url("../font/KBODiaGothic_medium.ttf") format("truetype");
+}
+
+html {
+    font-family: "SDGothic", sans-serif;
+    overflow: hidden;
+    resize: none;
+}
+.popup {
+    position: absolute;
+    box-sizing: border-box;
+    width: 750px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+}
+.building_menu {
+    width: 100%;
+    height: 45px;
+    background: #e9e9e9;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+}
+.building_menu > label {
+    font-size: 14px;
+    width: 55px;
+    height: 30px;
+    margin-left: 5px;
+}
+.building_menu > input {
+    width: 85px;
+    height: 20px;
+    border: none;
+    border-radius: 3px;
+}
+.building_menu > button {
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgb(165, 165, 165);
+    background-image: url("../img/search.svg");
+    background-repeat: no-repeat;
+    background-size: 20px;
+    background-position: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    cursor: pointer;
+}
+.tableDiv {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+table th, td {
+    height: 35px;
+}
+table th {
+    background: #556be4;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+}
+table td {
+    border: 1px solid #c6c6c6;
+    font-size: 15px;
+    color: #4f4f4f;
+}
+table td:nth-child(1) {border-left: none;}
+table td:nth-child(2) {text-align: right; padding-right: 5px;}
+table td:nth-child(3) {padding-left: 5px;}
+table td:nth-child(4) {padding-left: 5px;}
+table td:nth-child(5) {padding-left: 5px;}
+table td:nth-child(6) {padding-left: 5px;}
+table td:nth-child(7) {padding-left: 5px;}
+table td:nth-child(8) {padding-left: 5px;}
+table td:last-child {border-right: none;}
+.popFooter {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}

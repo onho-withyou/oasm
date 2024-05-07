@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inquiryEnterprisePopup</title>
+    <link rel="stylesheet" th:href="@{/css/inquiryBuildingPopup.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="popup">
+    <form class="building_list">
+        <label>주소</label>
+        <div class="form-group">
+            <input type="text" class="sigungu" id="sigungu" name="sigungu_adr" placeholder="시군구">
+            <input type="text" class="jibun" id="jibun" name="lot_number_adr" placeholder="지번 주소">
+        </div>
+        <div class="form-group">
+            <input type="text" class="doro" id="doro" name="street_adr" value="" placeholder="도로명 주소">
+            <input type="text" class="building_num1" value="" name="street_no1" id="building_num1" placeholder="건물 번호1">
+            <input type="text" class="building_num2" value="" name="street_no2" id="building_num2" placeholder="건물 번호2">
+            <button type="button" id="addressBtn" class="searchbtn">주소 찾기</button>
+        </div>
+        <div class="form-group">
+            <label>건물사진</label><br/>
+            <input type="file" class="fileNm" name="file_nm" value="" id="fileNm" accept=".png, .jpeg">
+        </div>
+        <div class="form-group">
+            <label>건물명</label><br/>
+            <input type="text" id="buildingNm" name="building_nm" value="" class="buildingNm">
+        </div>
+        <div class="form-group">
+            <label>도로저축가로</label><br/>
+            <input type="text" value="" name="road_width" class="road_width">
+        </div>
+        <div class="form-group">
+            <label>도로저촉세로</label><br/>
+            <input type="text" value="" name="road_length" class="road_length">
+            <input type="hidden" value="" name="map_latitude" id="map_latitude">
+            <input type="hidden" value="" name="map_longitude" id="map_longitude">
+        </div>
+        <button type="submit" class="submit">등&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp록</button>
+    </form>
+</div>
+</body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    window.onload = function(){               // Daum postcode api 팝업
+        document.getElementById("addressBtn").addEventListener("click", function(){
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log(data);
+                    document.getElementById("doro").value = data.roadname; // 도로명 주소
+                    document.getElementById("buildingNm").value = data.buildingName;  // 건물이름
+
+                    // 주소 검색 후 Kakao Local API로 추가 검색
+                    $.ajax({
+                        url: 'https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(data.address),
+                        type: 'GET',
+                        headers: {'Authorization': 'KakaoAK 3fb34a3d9fa0cda2c3ba581f18ddb523'},
+                        success: function (result) {
+                            console.log('Kakao API 검색 결과:', result);
+
+                            const region = result.documents[0].road_address.region_2depth_name;  // 구
+                            document.getElementById("sigungu").value = region;
+
+
+                            const dong = result.documents[0].address.region_3depth_name;
+                            const main_n = result.documents[0].address.main_address_no;
+                            const sub_n = result.documents[0].address.sub_address_no;
+                            const jibun = dong + " " + main_n + " " + sub_n;
+                            console.log("지번 : " + jibun);
+                            document.getElementById("jibun").value = jibun
+
+                            const mainBuildingNo = result.documents[0].road_address.main_building_no; // 건물번호1
+                            document.getElementById("building_num1").value = mainBuildingNo;
+                            const subBuildingNo = result.documents[0].road_address.sub_building_no;  // 건물번호2
+                            document.getElementById("building_num2").value = subBuildingNo;
+                            const longitude = result.documents[0].road_address.x;
+                            document.getElementById("map_longitude").value = longitude;
+                            const latitude = result.documents[0].road_address.y;
+                            document.getElementById("map_latitude").value = latitude;
+
+                        },
+                        error: function (error) {
+                            console.log('Kakao API 검색 에러:', error);
+                        }
+                    });
+                }
+            }).open();
+        });
+    }
+    // 유효성 검사 함수
+    function validateForm() {
+        // 시군구 입력값 가져오기
+        let sigungu = document.getElementById("sigungu").value;
+        // 도로명 주소 입력값 가져오기
+        let streetAdr = document.getElementById("doro").value;
+
+        // 시군구가 비어 있는지 확인
+        if (sigungu.trim() === "") {
+            alert("주소를 입력해주세요.");
+            return false;
+        }
+
+        // 도로명 주소가 비어 있는지 확인
+        if (streetAdr.trim() === "") {
+            alert("주소를 입력해주세요.");
+            return false;
+        }
+
+        // 모든 필드가 유효하면 true 반환
+        return true;
+    }
+
+    $(document).ready(function() {
+        $('.submit').click(function(e) {
+            e.preventDefault();
+
+
+            if (validateForm()) {
+                let formData = {
+                    sigungu_adr: $('#sigungu').val(),
+                    lot_number_adr: $('#jibun').val(),
+                    street_adr: $('#doro').val(),
+                    street_no1: $('#building_num1').val(),
+                    street_no2: $('#building_num2').val(),
+                    file_nm: $('#fileNm').val(),
+                    building_nm: $('#buildingNm').val(),
+                    road_width: $('#road_width').val(),
+                    road_length: $('#road_length').val(),
+                    map_latitude: $('#map_latitude').val(),
+                    map_longitude: $('#map_longitude').val()
+                };
+
+                // JSON 데이터로 변환
+                let jsonData = JSON.stringify(formData);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/insertPopup',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function(response) {
+                        console.log(response);
+                        window.close();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+                alert("✅등록되었습니다.");
+            }
+        });
+    });
+</script>
+</html>

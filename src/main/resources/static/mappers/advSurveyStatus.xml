@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.SurveyDAO">
+
+    <select id="selectSurveyResults" resultType="com.oasm.domain.SurveyStateVO">
+        SELECT a.survey_no, b.file_nm, a.survey_date, a.survey_result, a.survey_report, a.survey_distinct, c.code_nm, a.insert_id
+            FROM survey_state AS a
+            JOIN sign_list AS b ON a.sign_cd = b.sign_cd
+            JOIN cm_code AS c ON a.survey_result = c.sub_cd WHERE c.main_cd = 'Result'
+                <if test = 'survey_no != null and !survey_no.equals("")'>
+                    AND a.survey_no = #{survey_no}
+                </if>
+                <if test = 'survey_distinct != null and !survey_distinct.equals("")'>
+                    AND a.survey_distinct = #{survey_distinct}
+                </if>
+                <if test = 'sign_cd != null and !sign_cd.equals("")'>
+                    AND a.sign_cd = #{sign_cd}
+                </if>
+                <if test = 'survey_result != null and !survey_result.equals("")'>
+                    AND a.survey_result = #{survey_result}
+                </if>
+                <if test = 'survey_report != null and !survey_report.equals("")'>
+                    AND a.survey_report = #{survey_report}
+                </if>
+                <if test= 'insert_id != null and !insert_id.equals("")'>
+                    AND a.insert_id = #{insert_id}
+                </if>
+                <if test= 'firstDate != null and !firstDate.equals("")'>
+                    AND #{firstDate} <![CDATA[<=]]> a.survey_date
+                </if>
+                <if test= 'secondDate != null and !secondDate.equals("")'>
+                    AND #{secondDate} <![CDATA[>=]]> a.survey_date
+                </if>
+
+            LIMIT ${offset}, ${size}
+    </select>
+
+    <select id="countSurveyResults" resultType="Integer">
+        SELECT COUNT(survey_no)
+            FROM survey_state AS a
+            JOIN cm_code AS b ON a.survey_result = b.sub_cd
+            WHERE b.main_cd = 'Result'
+        <if test = 'survey_no != null and !survey_no.equals("")'>
+            AND a.survey_no = #{survey_no}
+        </if>
+        <if test = 'survey_distinct != null and !survey_distinct.equals("")'>
+            AND a.survey_distinct = #{survey_distinct}
+        </if>
+        <if test = 'sign_cd != null and !sign_cd.equals("")'>
+            AND a.sign_cd = #{sign_cd}
+        </if>
+        <if test = 'survey_result != null and !survey_result.equals("")'>
+            AND a.survey_result = #{survey_result}
+        </if>
+        <if test = 'survey_report != null and !survey_report.equals("")'>
+            AND a.survey_report = #{survey_report}
+        </if>
+        <if test= 'insert_id != null and !insert_id.equals("")'>
+            AND a.insert_id = #{insert_id}
+        </if>
+        <if test= 'firstDate != null and !firstDate.equals("")'>
+            AND #{firstDate} <![CDATA[<=]]> a.survey_date
+        </if>
+        <if test= 'secondDate != null and !secondDate.equals("")'>
+            AND #{secondDate} <![CDATA[>=]]> a.survey_date
+        </if>
+    </select>
+
+    <select id="countAllSurveyResults" resultType="Integer">
+        SELECT COUNT(survey_no) FROM survey_state;
+    </select>
+
+    <select id="countTodaySurveyResults" resultType="Integer">
+        SELECT COUNT(survey_no) FROM survey_state WHERE survey_date = CURDATE() + 0;
+    </select>
+
+    <select id="countIllegalSurveyResults" resultType="Integer">
+        SELECT COUNT(survey_no) FROM survey_state
+            WHERE survey_result = '14' OR survey_result = '15' OR survey_result = '16' OR survey_result = '17'
+            OR survey_result = '18' OR survey_result = '19' OR survey_result = '20' OR survey_result = '21'
+    </select>
+
+    <select id="countMySurveyResults" resultType="Integer">
+        SELECT COUNT(survey_no) FROM survey_state
+            WHERE insert_id = #{id}
+    </select>
+
+
+</mapper>
+
+

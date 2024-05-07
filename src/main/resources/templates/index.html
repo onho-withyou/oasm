@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/IndexLayout}">
+<th:block layout:fragment="main">
+    <div class="mainTitleBar">
+        <span>메인화면</span>
+        <div class="btnbox">
+            <!--<div class="btndiv1">
+                <button type="button" class="mainbtn">버튼</button>
+            </div>
+            <div class="btndiv2">
+                <button type="button" class="mainbtn">버튼</button>
+            </div>-->
+        </div>
+    </div>
+    <div class="main">
+        <div class="contentsZone">
+            <div class="contentTop">
+                <div class="contentBox leftContent">
+                    <div class="boxImg"><img th:src="@{/img/main_flag.png}"></div>
+                    <div class="boxFont">총 등록 건수</div>
+                    <div class="boxData" th:text="${data1}">[[${data1}]]</div>
+                </div>
+                <div class="contentBox rightContent">
+                    <div class="boxImg"><img th:src="@{/img/main_hourglass.png}"></div>
+                    <div class="boxFont">금일 등록 건수</div>
+                    <div class="boxData">[[${data2}]]</div>
+                </div>
+            </div>
+            <div class="contentBottom">
+                <div class="contentBox leftContent">
+                    <div class="boxImg"><img th:src="@{/img/main_lightning.png}"></div>
+                    <div class="boxFont">불법 광고물 수</div>
+                    <div class="boxData">[[${data3}]]</div>
+                </div>
+                <div class="contentBox rightContent">
+                    <div class="boxImg"><img th:src="@{/img/main_hand.png}"></div>
+                    <div class="boxFont">내 등록 건수</div>
+                    <div class="boxData">[[${data4}]]</div>
+                </div>
+            </div>
+        </div>
+        <div class="graphZone">
+            <div class="leftCanvas">
+                <div class="canvasTitle"><img th:src="@{/img/star_icon.png}"><div>종합 광고물 통계</div></div>
+                <canvas id="leftCan"></canvas>
+            </div>
+            <div class="rightCanvas">
+                <div class="canvasTitle"><img th:src="@{/img/star_icon.png}"><div>종합 조명 종류 통계</div></div>
+                <canvas id="rightCan"></canvas>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<script>
+    $(function(){
+
+        const left = $('#leftCan');
+        const right = $('#rightCan');
+        let array1 = [];
+        let array2 = [];
+        let array3 = [];
+        let array4 = [];
+
+        $.ajax({
+            url: '/adKind',
+            type: 'post',
+            success: function(data) {
+                $(data).each(function(){
+                    array1.push(this.code_nm);
+                    array2.push(this.sign_kind);
+                });
+                changeChart(left, array1, array2);
+            }
+        });
+
+        $.ajax({
+            url: '/lightType',
+            type: 'post',
+            success: function(data) {
+                $(data).each(function(){
+                    array3.push(this.code_nm);
+                    array4.push(this.light_kind);
+                });
+                changeChart(right, array3, array4);
+            }
+        });
+
+    });
+
+</script>

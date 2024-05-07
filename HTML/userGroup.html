@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>userGroup</title>
+    <link href="userGroup.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+      // 트리메뉴
+      $(function(){
+        $(".hidebtn").on("click", function(){
+          toggleMenu($(this));
+        });
+
+      });
+      function toggleMenu(btn) {
+
+        if (btn.attr('id') === 'hidebtn') {
+          var hidemenu = $("#main-tree-ul");
+        } else {
+          var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+        }
+        var img = btn.parent().find("img");
+
+        if(hidemenu.css('display') === 'none'){
+          hidemenu.show();
+          img.attr("src", "./script/closebtn_icon.png");
+        } else{
+          hidemenu.hide();
+          img.attr("src", "./script/openbtn2_icon.png");
+        }
+      }
+      function showPopup() {
+        var _width = "700";
+        var _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+                "userGroupPopup.html",
+                "new",
+                "toolbar=no,width=" +
+                _width +
+                ",height=" +
+                _height +
+                ",left=" +
+                _left +
+                ",top=" +
+                _top
+        );
+      }
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <!-- 헤더 -->
+    <header>
+      <div class="top">
+        <div class="logobox"><img class="logo" src="./script/sug_logo.png" alt=""></div>
+        <div class="title"><span>옥외광고물 측정 시스템</span></div>
+        <div class="right-menu">
+          <div class="user"><span class="userspan">관리자(admin)님</span>
+            <button type="button" class="logoutbtn">Logout</button>
+          </div>
+        </div>
+      </div>
+      <ul class="main-menu">
+        <li class="menu1">
+          <a>조사내역</a>
+        </li>
+        <li class="menu2">
+          <a>통계분석</a>
+        </li>
+        <li class="menu3">
+          <a>기초관리</a>
+          <ul class="sub-menu">
+            <li>submenu1</li>
+            <li>submenu2</li>
+            <li>submenu3</li>
+          </ul>
+        </li>
+        <li class="menu4">
+          <a>권한관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+        <li class="menu5">
+          <a>사용자관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </header>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+      <div class="left-menu">
+
+        <div class="tree-menu">
+          <strong class="treeTitle">
+            <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+            <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+            <span>카테고리</span>
+          </strong>
+          <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목1</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                <li class="tree-sub-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li main-tree-li-last">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt="" ></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+          <div class="mainTitleBar">
+            <span>등급 권한 관리 - 사용자 그룹 관리</span>
+            <div class="btnbox">
+              <div class="btndiv1">
+                <button type="button" class="mainbtn" onclick="showPopup()">등록</button>
+              </div>
+              <div class="btndiv2">
+                <button type="button" class="mainbtn">삭제</button>
+              </div>
+            </div>
+          </div>
+          <!-- 화면 안 -->
+          <div class="usersetContainer">
+            <span>🟩 등급 목록</span>
+            <table class="usertable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>등급 명</th>
+                  <th>등급 코드</th>
+                  <th>비고</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>관리자</td>
+                  <td>01</td>
+                  <td></td>
+                  <td>
+                    <button type="button" class="detailbtn" onclick="showPopup()">상세보기</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>조사자</td>
+                  <td>02</td>
+                  <td></td>
+                  <td>
+                    <button type="button" class="detailbtn" onclick="showPopup()">상세보기</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>터치PC사용자</td>
+                  <td>03</td>
+                  <td></td>
+                  <td>
+                    <button type="button" class="detailbtn" onclick="showPopup()">상세보기</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="userGroupContainer">
+            <span>🟩 회원 등급</span>
+            <div class="deleteBar">
+              <form class="deleteform">
+                <label>아이디&nbsp;&nbsp;</label>
+                <input type="text" class="inputId" />
+                <label>등급 명&nbsp;&nbsp;</label>
+                <select>
+                  <option></option>
+                </select>
+                <label>사용자 명&nbsp;&nbsp;</label>
+                <input type="text" class="inputName" />
+                <button type="button" class="deletebtn">삭제</button>
+                <button class="usersearch" value="" >
+              </form>
+            </div>
+            <table class="memberLevel">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>아이디</th>
+                  <th>등급 명</th>
+                  <th>사용자 명</th>
+                  <th>비고</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>admin1</td>
+                  <td>관리자</td>
+                  <td>관리자</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>admin2</td>
+                  <td>관리자</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>worker1</td>
+                  <td>조사자</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>worker2</td>
+                  <td>조사자</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>touch1</td>
+                  <td>터치PC사용자</td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

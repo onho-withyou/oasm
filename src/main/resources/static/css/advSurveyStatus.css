@@ -1,0 +1,186 @@
+.searchArea {
+    width: 100%;
+    max-width: 1280px;
+    height: 75px;
+    min-height: 75px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    border-radius: 7px;
+    background: #e9e9e9;
+}
+.searchArea > div:nth-child(2) {
+    width: 5%;
+}
+.searchController {
+    width: 95%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+.searchController > div {
+    display: flex;
+    flex-direction: row;
+    height: 50%;
+    align-content: center;
+    flex-wrap: wrap;
+}
+.searchController > div > div {
+    display: flex;
+    flex-direction: row;
+}
+.searchController > div > div > div:nth-child(1) {
+    box-sizing: border-box;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.datePicker {
+    border: none;
+    border-radius: 3px;
+}
+
+.searchController > div > div > input {
+    width: 125px;
+    border: none;
+    border-radius: 3px;
+}
+.searchController > div > div > select {
+    width: 100px;
+}
+
+.searchDate > div:nth-child(1) {}
+.searchDate > div:nth-child(2) {}
+.searchContents > div:nth-child(1) {}
+.searchContents > div:nth-child(2) {}
+.searchContents > div:nth-child(2) > div {
+    margin-right: 10px;
+}
+
+.aboveLine > div:nth-child(1), .aboveLine > div:nth-child(3) {
+    width: 25%;
+}
+
+.aboveLine > div:nth-child(2) {
+    width: 50%;
+}
+
+.aboveLine > div:nth-child(2) > div:nth-child(1) {
+    width: 13%;
+}
+
+.aboveLine > div:nth-child(2) > div:nth-child(2) {
+    width: 80%;
+    display: flex;
+    justify-content: start;
+}
+
+.aboveLine > div:nth-child(2) > div:nth-child(2) > input {
+    width: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+
+.belowLine > div {
+    width: 25%;
+}
+
+.belowLine > div:nth-child(2) > div {
+    width: 30%;
+}
+
+.optionDiv > select {
+    width: 100px;
+
+}
+
+.tableArea {
+    width: 100%;
+    max-width: 1920px;
+    height: 70vh;
+    min-height: 700px;
+    margin-top: 25px;
+}
+
+.tableHeader {
+    display: flex;
+    justify-content: end;
+    /*justify-content: space-between;*/
+    margin-bottom: 10px;
+}
+
+.tableDiv {
+    width: 100%;
+    height: auto;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+.tableDiv > table {
+    width: 100%;
+    /*height: 100%;*/
+    /*border-spacing: 0;*/
+    border-collapse: collapse;
+}
+
+.tableDiv > table th, td {
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+}
+.tableDiv > table th {
+    height: 35px;
+    background: #556be4;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.tableDiv > table th:nth-child(1) {width: 5%; min-width: 60px;}
+.tableDiv > table th:nth-child(2) {width: 15%; min-width: 180px;}
+.tableDiv > table th:nth-child(3) {width: 10%; min-width: 120px;}
+.tableDiv > table th:nth-child(4) {width: 14.5%; min-width: 150px;}
+.tableDiv > table th:nth-child(5) {width: 17.5%; min-width: 270px;}
+.tableDiv > table th:nth-child(6) {width: 17.5%; min-width: 270px;}
+.tableDiv > table th:nth-child(7) {width: 10%; min-width: 120px;}
+.tableDiv > table th:nth-child(8) {width: 10%; min-width: 120px;}
+
+.tableDiv > table td {
+    border: 1px solid #c6c6c6;
+    font-size: 15px;
+    height: 34px;
+    color: #4f4f4f;
+}
+.tableDiv > table td:nth-child(1) {border-left: none; text-align: right; padding-right: 10px;}
+.tableDiv > table td:nth-child(2) {text-align: center;}
+.tableDiv > table td:nth-child(3) {text-align: center;}
+.tableDiv > table td:nth-child(4) {text-align: center;}
+.tableDiv > table td:nth-child(5) {text-align: left; padding-left: 10px;}
+.tableDiv > table td:nth-child(6) {text-align: left; padding-left: 10px;}
+.tableDiv > table td:nth-child(7) {text-align: left; padding-left: 10px;}
+.tableDiv > table td:nth-child(8) {text-align: left; padding-left: 10px;}
+
+
+.tableDiv > table td:nth-child(8) {
+    border-right: none;
+}
+
+table td > img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.clickBtn {
+    width: 100%;
+    height: 99%;
+    background: #dbdbdb;
+    font-size: 14px;
+    border: none;
+}
+.clickBtn:hover {
+    cursor: pointer;
+}

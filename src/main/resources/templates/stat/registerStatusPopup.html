@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>registerStatusPopup</title>
+    <link th:href="@{/css/registerStatusPopup.css}" rel="stylesheet"/>
+</head>
+<body>
+<div class="popup-container">
+    <div class="upload-section">
+        <!-- 파일 이름을 표시하는 섹션 -->
+        <div class="files-container">
+            <div class="file-display">
+                <input type="checkbox" id="fileCheck">
+                <span id="fileName">.</span>
+            </div>
+            <div class="instructions-section">
+              <!--  data-section
+                instructions-section-->
+            </div>
+        </div>
+            <div class="data-section">
+                <!-- 안내사항과 절차를 적는 곳 -->
+                <table>
+                    <thead>
+                    <tr>
+                        <th>업체명</th>
+                        <th>조사일자</th>
+                        <th>가로크기</th>
+                        <th>세로크기</th>
+                        <th>지번주소</th>
+                        <th>도로명 주소</th>
+                        <th>건물주번호</th>
+                        <th>건물 부번호</th>
+                        <th>시군구</th>
+                        <th>조사결과</th>
+                        <th>광고물 종류</th>
+                        <th>조명 유무</th>
+                        <th>도로 저촉 유무</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    <div class="button-section">
+        <button onclick="downloadFile()">Excel 다운로드</button>
+        <!-- 파일을 선택하는 input 요소 -->
+        <input type="file" id="fileInput" accept=".xlsx" style="display: none;" onchange="handleFileSelect(this)">
+        <!-- 사용자가 클릭할 수 있는 버튼 -->
+        <button onclick="document.getElementById('fileInput').click()">Excel 업로드</button>
+        <button onclick="removeSelectedFiles()">삭제</button>
+        <button onclick="readExcel()">엑셀 읽기</button>
+        <button id="uploadButton" onclick="uploadFile()" disabled>등록</button>
+    </div>
+</div>
+</body>
+</html>
+<script>
+
+    // 파일이 선택되면 실행될 함수
+    function handleFileSelect(input) {
+        var fileCheck = document.getElementById('fileCheck'); // 체크박스
+        var fileNameDisplay = document.getElementById('fileName'); // 파일 이름을 표시할 span
+        var uploadButton = document.getElementById('uploadButton'); // "등록" 버튼
+
+        if (input.files && input.files[0]) {
+            // 파일 이름을 span에 표시
+            fileNameDisplay.textContent = input.files[0].name;
+            // 체크박스를 체크 상태로 변경
+            fileCheck.checked = true;
+            // 새 파일을 선택하면 "등록" 버튼을 비활성화
+            uploadButton.disabled = true;
+        }
+    }
+
+
+    // 선택된 파일을 삭제하는 함수
+    function removeSelectedFiles() {
+        var fileInput = document.getElementById('fileInput'); // 파일 입력 요소
+        var fileCheck = document.getElementById('fileCheck'); // 체크박스
+        var fileNameDisplay = document.getElementById('fileName'); // 파일 이름을 표시할 span
+        var uploadButton = document.getElementById('uploadButton'); // "등록" 버튼
+
+        // 파일 입력 요소를 초기화하여 현재 선택된 파일을 제거합니다.
+        fileInput.value = '';
+        // 체크박스를 해제합니다.
+        fileCheck.checked = false;
+        // 파일 이름을 초기 메시지로 변경합니다.
+        fileNameDisplay.textContent = '파일을 선택해주세요.';
+        // 파일 선택을 취소하면 "등록" 버튼을 비활성화
+        uploadButton.disabled = true;
+    }
+
+    // 엑셀양식 다운로드
+    function downloadFile() {
+        window.location.href = '/download/upload.xlsx';
+    }
+
+    // 엑셀파일을  읽어오는 함수
+    function readExcel() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0];
+
+        // "등록" 버튼을 선택합니다.
+        var uploadButton = document.getElementById('uploadButton');
+
+        if (!file) {
+            alert('먼저 파일을 선택해주세요.');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('file', file);
+
+        // 서버에 파일을 읽도록 요청하는 AJAX 호출
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/previewExcel', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // 서버로부터 받은 엑셀 데이터로 테이블을 만들어 화면에 표시
+                var data = JSON.parse(xhr.responseText);
+                displayDataInTable(data);
+
+                // 데이터 로드 성공 후, "등록" 버튼을 활성화합니다.
+                uploadButton.disabled = false;
+            } else {
+                // 요청이 실패하면 사용자에게 알립니다.
+                alert('엑셀 파일을 읽는 데 실패했습니다.');
+
+                // 요청이 실패했으므로 "등록" 버튼을 비활성화합니다.
+                uploadButton.disabled = true;
+            }
+        };
+        // 에러 처리를 위한 이벤트 리스너를 추가합니다.
+        xhr.onerror = function () {
+            alert('엑셀 파일을 읽는 동안 네트워크 오류가 발생했습니다.');
+            // 네트워크 오류가 발생하면 "등록" 버튼을 비활성화합니다.
+            uploadButton.disabled = true;
+        };
+        xhr.send(formData);
+    }
+
+    // 엑셀파일을 읽어와서  데이터를 전시하는 함수
+    function displayDataInTable(data) {
+        var tbody = document.querySelector('.data-section table tbody');
+        tbody.innerHTML = ''; // 기존의 테이블 데이터를 클리어
+
+        data.forEach(function(item) {
+            var tr = document.createElement('tr');
+            // 테이블의 컬럼 순서에 맞춰 데이터를 추가
+            tr.innerHTML = '<td>' + item.enterpriseNm + '</td>' +
+                '<td>' + item.surveyDate + '</td>' +
+                '<td>' + item.signWidth + '</td>' +
+                '<td>' + item.signLength + '</td>' +
+                '<td>' + item.lotNumberAdr + '</td>' +
+                '<td>' + item.streetAdr + '</td>' +
+                '<td>' + item.streetNo1 + '</td>' +
+                '<td>' + item.streetNo2 + '</td>' +
+                '<td>' + item.sigunguAdr + '</td>' +
+                '<td>' + item.surveyResult + '</td>' +
+                '<td>' + item.signKind + '</td>' +
+                '<td>' + item.lightKind + '</td>' +
+                '<td>' + item.roadYn + '</td>';
+            tbody.appendChild(tr);
+        });
+    }
+
+    // 엑셀파일을 db에 등록하는 함수
+    function uploadFile() {
+        var fileInput = document.getElementById('fileInput');
+        var file = fileInput.files[0]; // 선택된 파일 가져오기
+
+        if (!file) {
+            alert('파일을 먼저 선택해주세요.');
+            return;
+        }
+
+        var formData = new FormData();
+        formData.append('file', file); // FormData 객체에 파일 추가
+
+        // AJAX 요청 생성 및 설정
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/uploadExcel', true); // POST 방식으로 업로드 엔드포인트 호출
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // 서버 응답 처리
+                alert('파일이 성공적으로 업로드되었습니다.');
+            } else {
+                alert('파일 업로드에 실패했습니다.');
+            }
+        };
+        xhr.send(formData); // 요청 전송
+    }
+
+</script>

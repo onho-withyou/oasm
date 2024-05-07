@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inquiryEnterprisePopup</title>
+    <link th:href="@{/css/inquiryEnterprisePopup.css}" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="popup">
+        <form class="enterprise_register">
+            <div class="fome-group">
+            <label><img src="/img/building.svg"> 상호명</label>
+            <input type="text" class="enterprise_name" id="enterprise_nm" name="enterprise_nm"></div><br/>
+            <div class="fome-group">
+            <label><img src="/img/address.svg"> 주소</label>
+            <input type="text" class="address_num" placeholder="지번 주소" id="lot_number_adr" name="lot_number_adr">
+            <input type="text" class="address_name" placeholder="도로명 주소" id="street_adr" name="street_adr" >
+            <input type="text" class="building_num1" placeholder="건물번호1" id="street_no1" name="street_no1" >
+            <input type="text" class="building_num2" placeholder="건물번호2" id="street_no2" name="street_no2"></div><br/>
+            <div class="btnlist">
+                <button type="button" class="building_searching" onclick="showPopup()">기존 건물에서 찾기</button>
+                <button type="button" class="address_searching" id="adrBtn">주소 찾기</button>
+            </div>
+            <div class="fome-group">
+            <label><img src="/img/num.svg"> 사업자 번호</label>
+            <input type="text" class="business_num" id="enterprise_no" name="enterprise_no"></div><br/>
+            <div class="fome-group">
+            <label><img src="/img/type.svg"> 업종</label>
+            <select class="business_type" id="cm_code" onchange="updateInput()">
+                <option disabled hidden selected>업종선택</option>
+                <option th:each="item : ${cm_code}" th:value="${item}" th:text="${item}" ></option>
+            </select>
+            <input type="text" class="business_text" id="business_input" name="enterprise_type"></div><br/>
+            <div class="fome-group">
+            <label><img src="/img/ceo.svg"> 대표자</label>
+            <input type="text" class="ceo" id="enterprise_rep" name="enterprise_rep"></div> <br/>
+            <div class="fome-group">
+            <label><img src="/img/num.svg"> 주민번호</label>
+            <input type="text" class="rrnum" id="enterprise_rep_no" name="enterprise_rep_no"></div><br/>
+            <div class="fome-group">
+            <label><img src="/img/num.svg"> 전화번호</label>
+            <input type="tel" class="tel" id="enterprise_tel_no" name="enterprise_tel_no"></div><br/>
+            <div class="fome-group">
+            <label class="notelabel"><img src="/img/rmk.svg"> 비고</label>
+            <textarea class="note" id="rmk" name="rmk"></textarea></div>
+            <input type="hidden" id="building_cd" name="building_cd">
+            <input type="hidden" id="sigungu_adr" value="" name="sigungu_adr">
+            <input type="hidden" id="map_latitude" name="map_latitude">
+            <input type="hidden" id="map_longitude" name="map_longitude">
+            <input type="hidden" id="building_nm" name="building_nm">
+            <button type="button" class="register" id="submit">등록</button>
+        </form>
+    </div>
+</body>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    // 수신된 메시지를 처리하는 함수
+    function receiveMessage(event) {
+        // 메시지가 부모 창에서 오는 것인지 확인
+        if (event.origin !== '/stat/inquiryEnterprisePopup2') {
+            return;
+        }
+
+        // 메시지로부터 전달된 데이터 추출
+        let rowData = event.data;
+
+        // 수신된 데이터를 처리하는 코드 작성
+        console.log("Received data from child window:", rowData);
+    }
+
+    // 메시지 수신기 설정
+    window.addEventListener('message', receiveMessage);
+    function showPopup() {
+        let url = "/stat/inquiryEnterprisePopup2"
+        let _width = "700";
+        let _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        let _left = Math.ceil((window.screen.width - _width) / 3);
+        let _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+            url,
+            "new2",
+            "toolbar=no,width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+        );
+    }
+
+    function validateForm() {
+        // 상호명 입력값 가져오기
+        let enterpriseName = document.getElementById("enterprise_nm").value;
+        // 주소 입력값 가져오기
+        let lotNumberAdr = document.getElementById("lot_number_adr").value;
+        let streetAdr = document.getElementById("street_adr").value;
+        let streetNo1 = document.getElementById("street_no1").value;
+        let streetNo2 = document.getElementById("street_no2").value;
+
+        // 상호명이 비어 있는지 확인
+        if (enterpriseName.trim() === "") {
+            alert("상호명을 입력해주세요.");
+            return false;
+        }
+        // 주소 필드 중 하나라도 비어 있는지 확인
+        if (lotNumberAdr.trim() === "" && streetAdr.trim() === "" && streetNo1.trim() === "" && streetNo2.trim() === "") {
+            alert("주소를 입력해주세요.");
+            return false;
+        }
+        // 모든 필드가 유효하면 true 반환
+        return true;
+    }
+
+    function updateInput() {
+        // 선택한 옵션의 값을 가져와서 input 텍스트 상자에 할당
+        let selectedValue = document.getElementById("cm_code").value;
+        document.getElementById("business_input").value = selectedValue;
+    }
+    window.onload = function(){               // Daum postcode api 팝업
+        document.getElementById("adrBtn").addEventListener("click", function(){
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log(data);
+                    document.getElementById("street_adr").value = data.roadname; // 도로명 주소
+                    document.getElementById("building_nm").value = data.buildingName;  // 건물이름
+
+                    // 주소 검색 후 Kakao Local API로 추가 검색
+                    $.ajax({
+                        url: 'https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(data.address),
+                        type: 'GET',
+                        headers: {'Authorization': 'KakaoAK 3fb34a3d9fa0cda2c3ba581f18ddb523'},
+                        success: function (result) {
+                            console.log('Kakao API 검색 결과:', result);
+
+                            const dong = result.documents[0].address.region_3depth_name;
+                            const main_n = result.documents[0].address.main_address_no;
+                            const sub_n = result.documents[0].address.sub_address_no ? "-" + result.documents[0].address.sub_address_no : "";
+                            const jibun = dong + " " + main_n + sub_n;
+                            console.log("지번 : " + jibun);
+                            document.getElementById("lot_number_adr").value = jibun
+                            const region = result.documents[0].road_address.region_2depth_name;  // 구
+                            document.getElementById("sigungu_adr").value = region;
+
+                            const mainBuildingNo = result.documents[0].road_address.main_building_no; // 건물번호1
+                            document.getElementById("street_no1").value = mainBuildingNo;
+                            const subBuildingNo = result.documents[0].road_address.sub_building_no;  // 건물번호2
+                            document.getElementById("street_no2").value = subBuildingNo;
+
+                            const longitude = result.documents[0].road_address.x;
+                            document.getElementById("map_longitude").value = longitude; // 경도
+                            const latitude = result.documents[0].road_address.y;
+                            document.getElementById("map_latitude").value = latitude; // 위도
+
+
+
+                        },
+                        error: function (error) {
+                            console.log('Kakao API 검색 에러:', error);
+                        }
+                    });
+                }
+            }).open();
+        });
+    }
+
+    $(document).ready(function() {
+        $('#submit').click(function(e) {
+            e.preventDefault();
+
+
+            if (validateForm()) {
+                let buildingCode = $('#building_cd').val();
+                let formData;
+
+                if(buildingCode === ""){
+                    formData = {
+                        enterprise_nm: $('#enterprise_nm').val(),
+                        lot_number_adr: $('#lot_number_adr').val(),
+                        street_adr: $('#street_adr').val(),
+                        street_no1: $('#street_no1').val(),
+                        street_no2: $('#street_no2').val(),
+                        enterprise_no: $('#enterprise_no').val(),
+                        enterprise_type: $('#business_input').val(),
+                        enterprise_rep: $('#enterprise_rep').val(),
+                        enterprise_rep_no: $('#enterprise_rep_no').val(),
+                        enterprise_tel_no: $('#enterprise_tel_no').val(),
+                        rmk: $('#rmk').val(),
+                        sigungu_adr: $('#sigungu_adr').val(),
+                        map_longitude: $('#map_longitude').val(),
+                        map_latitude: $('#map_latitude').val(),
+                        building_nm: $('#building_nm').val()
+                    };
+                }else {
+                    formData = {
+                        enterprise_nm: $('#enterprise_nm').val(),
+                        lot_number_adr: $('#lot_number_adr').val(),
+                        street_adr: $('#street_adr').val(),
+                        street_no1: $('#street_no1').val(),
+                        street_no2: $('#street_no2').val(),
+                        enterprise_no: $('#enterprise_no').val(),
+                        enterprise_type: $('#business_input').val(),
+                        enterprise_rep: $('#enterprise_rep').val(),
+                        enterprise_rep_no: $('#enterprise_rep_no').val(),
+                        enterprise_tel_no: $('#enterprise_tel_no').val(),
+                        rmk: $('#rmk').val(),
+                        building_cd: $('#building_cd').val(),
+                        sigungu_adr: $('#sigungu_adr').val()
+                    };
+                }
+
+
+
+                console.log("FormData:", formData);
+
+                // JSON 데이터로 변환
+                let jsonData = JSON.stringify(formData);
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/insertEnterprise',
+                    contentType: 'application/json',
+                    data: jsonData,
+                    success: function(response) {
+                        console.log(response);
+                        window.close();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+
+
+
+                alert("✅등록되었습니다.");
+            }
+        });
+    });
+</script>
+</html>

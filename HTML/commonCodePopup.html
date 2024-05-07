@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기초코드 관리/서브코드 등록</title>
+    <link href="commonCodePopup.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script text="javascript">
+      function getSelect(e) {
+        e.maincode.value =
+          e.codeselect.options[e.codeselect.selectedIndex].text;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="popup">
+      <form name="form">
+        <div class="form-group">
+          <label>주코드</label><br />
+          <input type="text" name="maincode" />
+          <select name="codeselect" onchange="getSelect(this.form)">
+            <option value="All">All</option>
+            <option value="거래처유형">거래처유형</option>
+            <option value="결과">결과</option>
+            <option value="광고물종류(간판)">광고물종류(간판)</option>
+            <option value="광고유형">광고유형</option>
+            <option value="단위">단위</option>
+            <option value="도로저촉유무">도로저촉유무</option>
+            <option value="부서코드">부서코드</option>
+            <option value="불량구분">불량구분</option>
+            <option value="사업장(공장)코드">사업장(공장)코드</option>
+            <option value="사용유무">사용유무</option>
+            <option value="사용자권한">사용자권한</option>
+            <option value="사원등급">사원등급</option>
+            <option value="사이트구분">사이트구분</option>
+            <option value="성별">성별</option>
+            <option value="승인코드">승인코드</option>
+            <option value="알람코드">알람코드</option>
+            <option value="양음력">양음력</option>
+            <option value="업종">업종</option>
+            <option value="입고구분">입고구분</option>
+            <option value="입출고구분">입출고구분</option>
+            <option value="자재상태">자재상태</option>
+            <option value="정비상태">정비상태</option>
+            <option value="조구분(근무조)">조구분(근무조)</option>
+            <option value="조달유형">조달유형</option>
+            <option value="조명">조명</option>
+            <option value="졸업구분">졸업구분</option>
+            <option value="주야구분">주야구분</option>
+            <option value="직무">직무</option>
+            <option value="채용구분">채용구분</option>
+            <option value="출고유형">출고유형</option>
+            <option value="파일구분">파일구분</option>
+            <option value="품번구분">품번구분</option>
+            <option value="품번그룹">품번그룹</option>
+            <option value="품번상태">품번상태</option>
+            <option value="품번타입">품번타입</option>
+            <option value="허가유무">허가유무</option>
+          </select>
+        </div>
+        <br />
+        <div class="form-group">
+          <label>서브코드</label><br />
+          <input type="text" />
+        </div>
+        <br />
+        <div class="form-group">
+          <label>코드명</label><br />
+          <input type="text" />
+        </div>
+        <br />
+        <div class="form-group">
+          <label>비고</label><br />
+          <textarea></textarea>
+        </div>
+        <br />
+        <input type="submit" value="등록" />
+      </form>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>setUser</title>
+    <link href="setUser.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+      // 트리메뉴
+      $(function(){
+        $(".hidebtn").on("click", function(){
+          toggleMenu($(this));
+        });
+
+      });
+      function toggleMenu(btn) {
+
+        if (btn.attr('id') === 'hidebtn') {
+          var hidemenu = $("#main-tree-ul");
+        } else {
+          var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+        }
+        var img = btn.parent().find("img");
+
+        if(hidemenu.css('display') === 'none'){
+          hidemenu.show();
+          img.attr("src", "./script/closebtn_icon.png");
+        } else{
+          hidemenu.hide();
+          img.attr("src", "./script/openbtn2_icon.png");
+        }
+      }
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <!-- 헤더 -->
+    <header>
+      <div class="top">
+        <div class="logobox"><img class="logo" src="./script/sug_logo.png" alt=""></div>
+        <div class="title"><span>옥외광고물 측정 시스템</span></div>
+        <div class="right-menu">
+          <div class="user"><span class="userspan">관리자(admin)님</span>
+            <button type="button" class="logoutbtn">Logout</button>
+          </div>
+        </div>
+      </div>
+      <ul class="main-menu">
+        <li class="menu1">
+          <a>조사내역</a>
+        </li>
+        <li class="menu2">
+          <a>통계분석</a>
+        </li>
+        <li class="menu3">
+          <a>기초관리</a>
+          <ul class="sub-menu">
+            <li>submenu1</li>
+            <li>submenu2</li>
+            <li>submenu3</li>
+          </ul>
+        </li>
+        <li class="menu4">
+          <a>권한관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+        <li class="menu5">
+          <a>사용자관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </header>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+      <div class="left-menu">
+
+        <div class="tree-menu">
+          <strong class="treeTitle">
+            <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+            <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+            <span>카테고리</span>
+          </strong>
+          <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목1</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                <li class="tree-sub-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li main-tree-li-last">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt="" ></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+          <div class="mainTitleBar">
+            <span>사용자 관리</span>
+            <div class="btnbox">
+              <div class="btndiv1">
+                <button type="button" class="mainbtn">버튼</button>
+              </div>
+              <div class="btndiv2">
+                <button type="button" class="mainbtn">버튼</button>
+              </div>
+            </div>
+          </div>
+          <!-- 화면 안 -->
+          <div class="usersetContainer">
+            <form class="searchform" action="#" method="#">
+              <label>사용자 명 : </label>
+              <input type="text" class="userName" />
+              <label>사용유무 : </label>
+              <input type="submit" class="usersearch" value="" />
+            </form>
+            <table class="usertable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>사용자ID</th>
+                  <th>사용자명</th>
+                  <th>거래처명</th>
+                  <th>비고</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td>admin1</td>
+                  <td>관리자</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#" class="userupdate">수정</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>admin2</td>
+                  <td>관리자</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#" class="userupdate">수정</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>local</td>
+                  <td>지역</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#" class="userupdate">수정</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>mobile</td>
+                  <td>모바일</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#" class="userupdate">수정</a></td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>client</td>
+                  <td>거래처</td>
+                  <td></td>
+                  <td></td>
+                  <td><a href="#" class="userupdate">수정</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link href="inquiryBuilding.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".hidebtn").on("click", function () {
+                toggleMenu($(this));
+            });
+
+        });
+
+        function toggleMenu(btn) {
+
+            if (btn.attr('id') === 'hidebtn') {
+                var hidemenu = $("#main-tree-ul");
+            } else {
+                var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+            }
+            var img = btn.parent().find("img");
+
+            if (hidemenu.css('display') === 'none') {
+                hidemenu.show();
+                img.attr("src", "./script/closebtn_icon.png");
+            } else {
+                hidemenu.hide();
+                img.attr("src", "./script/openbtn2_icon.png");
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <!-- 헤더 -->
+    <header>
+        <div class="top">
+            <div class="logobox"><img class="logo" src="./script/sug_logo.png" alt=""></div>
+            <div class="title"><span>옥외광고물 측정 시스템</span></div>
+            <div class="right-menu">
+                <div class="user"><span class="userspan">관리자(admin)님</span>
+                    <button type="button" class="logoutbtn">Logout</button>
+                </div>
+            </div>
+        </div>
+        <ul class="main-menu">
+            <li class="menu1">
+                <a>조사내역</a>
+            </li>
+            <li class="menu2">
+                <a>통계분석</a>
+            </li>
+            <li class="menu3">
+                <a>기초관리</a>
+                <ul class="sub-menu">
+                    <li>submenu1</li>
+                    <li>submenu2</li>
+                    <li>submenu3</li>
+                </ul>
+            </li>
+            <li class="menu4">
+                <a>권한관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+            <li class="menu5">
+                <a>사용자관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+        <div class="left-menu">
+
+            <div class="tree-menu">
+                <strong class="treeTitle">
+                    <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px"
+                               alt=""></span>
+                    <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+                    <span>카테고리</span>
+                </strong>
+                <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+                    <li class="main-tree-li">
+                        <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px"
+                                   height="15px" alt=""></span>
+                        <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                        <a href="#" class="treelabel">항목1</a>
+                        <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                            <li class="tree-sub-li">
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목1-1</a>
+                            </li>
+                            <li class="tree-last-li">
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목1-2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="main-tree-li">
+                        <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px"
+                                   height="15px" alt=""></span>
+                        <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                        <a href="#" class="treelabel">항목2</a>
+                        <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                            <li class="tree-sub-li">
+
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목2-1</a>
+                            </li>
+                            <li class="tree-last-li">
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목2-2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="main-tree-li main-tree-li-last">
+                        <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px"
+                                   height="15px" alt=""></span>
+                        <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                        <a href="#" class="treelabel">항목2</a>
+                        <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                            <li class="tree-sub-li">
+
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목2-1</a>
+                            </li>
+                            <li class="tree-last-li">
+                                <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                <a href="#" class="treelabel">항목2-2</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+            <div class="mainTitleBar">
+                <span>광고물 조사 내역 -  건물별 조회</span>
+                <div class="btnbox">
+                    <div class="btndiv1">
+                        <button type="button" class="mainbtn">버튼</button>
+                    </div>
+                    <div class="btndiv2">
+                        <button type="button" class="mainbtn">버튼</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 화면 안 -->
+            <div class="inquiryBuilding_Container">
+                <div class="map">지도</div>
+                <form class="form-group">
+                    <label class="doroNm">도로 명</label>
+                    <input type="text" id="road_address">
+                    <label>건물 번호</label>
+                    <input type="text" id="main_build_nm">
+                    <input type="text" id="sub_build_nm">
+                    <label>상호 명</label>
+                    <input type="text" id="enterpriseName">
+                    <label>건물 명</label>
+                    <input type="text" id="buildingName">
+                    <button type="button" class="searchbtn"></button>
+                </form>
+                <div class="building-detail">
+                    <div class="building-file">건물사진</div>
+                    <div class="middle">
+                        <span id="road_adr">해운대구 재반로 20</span><br/>
+                        <span class="numofcase">해당 건물 내 상호 <span id="num">5</span> 건</span>
+                        <div class="enterprise_table">
+                            <table class="enterpriseTable">
+                                <thead>
+                                <th class="thth">순번</th>
+                                <th class="thth">상호 명</th>
+                                <th class="thth">업종</th>
+                                </thead>
+                                <div class="line"></div>
+                                <tbody>
+                                <tr>
+                                    <td class="tdtd">1</td>
+                                    <td class="tdtd">꽃도새기</td>
+                                    <td class="tdtd">요식업</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdtd">1</td>
+                                    <td class="tdtd">꽃도새기</td>
+                                    <td class="tdtd">요식업</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdtd">1</td>
+                                    <td class="tdtd">꽃도새기</td>
+                                    <td class="tdtd">요식업</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdtd">1</td>
+                                    <td class="tdtd">꽃도새기</td>
+                                    <td class="tdtd">요식업</td>
+                                </tr>
+                                <tr>
+                                    <td class="tdtd">1</td>
+                                    <td class="tdtd">꽃도새기</td>
+                                    <td class="tdtd">요식업</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="building_list">
+                        <div id="building_cd">0000001</div>
+                        <div id="building_nm">건물 이름</div>
+                        <div class="roaddiv">
+                            <span class="road_span">도로 저촉</span>
+                            <div class="road_width">가로 : <span id="road_width"></span></div>
+                            <div class="road_length">세로 : <span id="road_length"></span></div>
+                        </div>
+                        <div id="rmk">비고</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="building_table">
+                <span class="num2">총 10,000 건</span>
+                <table class="buildingList">
+                    <thead>
+                    <th class="building_th">순번</th>
+                    <th class="building_th">시군구</th>
+                    <th class="building_th">지번 주소</th>
+                    <th class="building_th">도로명 주소</th>
+                    <th class="building_th">건물번호 1</th>
+                    <th class="building_th">건물번호2</th>
+                    <th class="building_th">상호갯수</th>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="building_td">1</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">2</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 1197</td>
+                        <td class="building_td">센텀중앙로 142</td>
+                        <td class="building_td">142</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">3</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송2동 1061-11</td>
+                        <td class="building_td">재반로 105번길 10</td>
+                        <td class="building_td">10</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">4</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">5</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">6</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">5</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">7</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">10</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">8</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">1</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">9</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">2</td>
+                    </tr>
+                    <tr>
+
+                        <td class="building_td">10</td>
+                        <td class="building_td">해운대구</td>
+                        <td class="building_td">재송동 104-3</td>
+                        <td class="building_td">재반로 20</td>
+                        <td class="building_td">20</td>
+                        <td class="building_td"></td>
+                        <td class="building_td">3</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

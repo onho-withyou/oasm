@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/commonCode.css}" rel="stylesheet">
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/chart.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+        <!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+            <!-- 메인화면 -->
+            <div class="mainColumn">
+                <th:block layout:fragment="main"></th:block>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

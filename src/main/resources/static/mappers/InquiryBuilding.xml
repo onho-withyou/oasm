@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.InquiryBuildingDAO">
+    <insert id="insertBuildingList">
+        INSERT INTO building_list
+        (building_cd, sigungu_adr, lot_number_adr, street_adr, street_no1, street_no2, file_nm, building_nm, road_width, road_length, insert_date, map_latitude, map_longitude)
+        VALUES(#{building_cd}, #{sigungu_adr}, #{lot_number_adr}, #{street_adr}, #{street_no1}, #{street_no2}, #{file_nm}, #{building_nm}, #{road_width}, #{road_length},NOW(), #{map_latitude}, #{map_longitude})
+    </insert>
+
+    <select id="getBuildingCode" resultType="java.lang.String">
+        SELECT MAX(building_cd) FROM building_list;
+    </select>
+
+    <select id="getBuildingList" resultType="com.oasm.domain.InquiryBuildingVO">
+        SELECT
+        b1.building_cd, b1.building_nm, b1.sigungu_adr, b1.lot_number_adr, b1.street_adr, b1.street_no1, b1.street_no2, e.enterprise_nm, cm_code.code_nm, b1.rmk, b1.road_width, b1.road_length, b1.map_latitude, b1.map_longitude
+        FROM
+        building_list b1
+        LEFT JOIN
+        building_enter_list b2 ON b1.building_cd = b2.building_cd
+        LEFT JOIN
+        enterprise_list e ON b2.enterprise_cd = e.enterprise_cd
+        LEFT JOIN
+        (SELECT code_nm, sub_cd FROM cm_code WHERE main_cd = 'BusinessCate' AND sub_cd != '*') AS cm_code ON e.enterprise_type = cm_code.sub_cd;
+    </select>
+    <!--검색-->
+    <select id="searchBuilding" resultType="com.oasm.domain.InquiryBuildingVO">
+        SELECT
+        b1.building_cd, b1.building_nm, b1.sigungu_adr, b1.lot_number_adr, b1.street_adr, b1.street_no1, b1.street_no2, COUNT(b2.enterprise_cd) AS enterprise_count, e.enterprise_nm, cm_code.code_nm,  b1.map_latitude, b1.map_longitude
+        FROM
+        building_list b1
+        LEFT JOIN
+        building_enter_list b2 ON b1.building_cd = b2.building_cd
+        LEFT JOIN
+        enterprise_list e ON b2.enterprise_cd = e.enterprise_cd
+        LEFT JOIN
+        (SELECT code_nm, sub_cd FROM cm_code WHERE main_cd = 'BusinessCate' AND sub_cd != '*') AS cm_code ON e.enterprise_type = cm_code.sub_cd
+        <where>
+            <choose>
+                <when test="keyword1 != null and keyword1 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword1}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword1}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword1}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword1}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword1}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword1}, '%')
+                    )
+                </when>
+            </choose>
+            <choose>
+                <when test="keyword2 != null and keyword2 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword2}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword2}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword2}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword2}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword2}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword2}, '%')
+                    )
+                </when>
+            </choose>
+            <choose>
+                <when test="keyword3 != null and keyword3 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword3}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword3}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword3}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword3}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword3}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword3}, '%')
+                    )
+                </when>
+            </choose>
+            <choose>
+                <when test="keyword4 != null and keyword4 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword4}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword4}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword4}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword4}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword4}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword4}, '%')
+                    )
+                </when>
+            </choose>
+            <choose>
+                <when test="keyword5 != null and keyword5 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword5}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword5}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword5}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword5}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword5}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword5}, '%')
+                    )
+                </when>
+            </choose>
+            <choose>
+                <when test="keyword6 != null and keyword6 != ''">
+                    AND (
+                    b1.street_adr LIKE CONCAT('%', #{keyword6}, '%')
+                    OR b1.street_no1 LIKE CONCAT('%', #{keyword6}, '%')
+                    OR b1.street_no2 LIKE CONCAT('%', #{keyword6}, '%')
+                    OR e.enterprise_nm LIKE CONCAT('%', #{keyword6}, '%')
+                    OR b1.building_nm LIKE CONCAT('%', #{keyword6}, '%')
+                    OR b1.lot_number_adr LIKE CONCAT('%', #{keyword6}, '%')
+                    )
+                </when>
+            </choose>
+        </where>
+        GROUP BY
+        b1.sigungu_adr, b1.lot_number_adr, b1.street_adr, b1.street_no1, b1.street_no2, e.enterprise_nm, cm_code.code_nm;
+    </select>
+
+
+
+    <select id="checkBuildingCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(*) AS count
+        FROM building_list
+        WHERE building_cd = #{building_cd}
+    </select>
+</mapper>

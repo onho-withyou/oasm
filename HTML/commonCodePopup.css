@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'SDGothic';
+  src: url('./font/AppleSDGothicNeoM.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: KBO;
+  src: url("./font/KBODiaGothic_medium.ttf") format("truetype");
+}
+
+html {
+  font-family: "SDGothic", sans-serif;
+  overflow: hidden;
+}
+.popup {
+  position: absolute;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  width: 700px;
+  height: 500px;
+  background: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(240, 240, 240);
+}
+form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.form-group {
+  margin-top: 15px;
+}
+label {
+  font-weight: bold;
+}
+input[type="text"] {
+  margin-top: 10px;
+  border: 1px solid rgb(221, 221, 221);
+  width: 150px;
+  height: 24px;
+}
+select {
+  border: 1px solid rgb(134, 134, 134);
+  height: 26px;
+  border-radius: 6px;
+  margin-left: 3px;
+}
+textarea {
+  margin-top: 10px;
+  border: 1px solid rgb(221, 221, 221);
+  width: 230px;
+  height: 50px;
+  resize: none;
+}
+input[type="submit"] {
+  width: 60px;
+  height: 30px;
+  background-color: rgb(83, 83, 83);
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  position: absolute;
+  left: 140%;
+  top: 99%;
+}
+input[type="submit"]:hover {
+  background-color: #8f8f8f;
+}

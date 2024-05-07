@@ -1,0 +1,19 @@
+.tableArea > table > tbody > tr > td:nth-child(1) {
+    text-align: center;
+}
+.twoCols > tr > td:nth-child(2) {
+    text-align: right;
+}
+.clickBtn:not(.searchArea) {
+    /*width: 75%;*/
+    /*background: unset;*/
+}
+.left-box{
+    /*display: flex;*/
+}
+.right-box{
+    /*width: 85%;*/
+}
+.chartReverse:hover {
+    cursor: pointer;
+}

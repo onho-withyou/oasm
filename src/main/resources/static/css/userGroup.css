@@ -1,0 +1,193 @@
+
+.usersetContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 1080px;
+  height: 30%;
+  max-height: 500px;
+  margin-top: 12px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 99.7%;
+  position: relative;
+  /*top: 18px;*/
+  margin-left: 1px;
+}
+th {
+  border: 1.8px solid #b6b6b6;
+  height: 40px;
+  background-color: #e0e0e0;
+  text-align: center;
+}
+.usertable th:nth-child(1) {
+  width: 20px;
+  min-width: 20px;
+  max-width: 20px;
+}
+.usertable th:nth-child(2) {
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+}
+.usertable th:nth-child(3) {
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+}
+.usertable th:nth-child(4) {
+  width: 180px;
+  min-width: 180px;
+  max-width: 180px;
+}
+.usertable th:nth-child(5) {
+  width: 30px;
+  text-align: center;
+  /* min-width: 120px;
+  max-width: 120px; */
+}
+
+.usertable td:nth-child(1) {
+  background-color: #e0e0e0;
+  border: 1.8px solid #b6b6b6;
+  height: 40px;
+  text-align: center;
+}
+.usertable td:nth-child(2) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+.usertable td:nth-child(3) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+
+.usertable td:nth-child(4) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+.usertable td:nth-child(5) {
+  border: 1.8px solid #b6b6b6;
+  height: 40px;
+  text-align: center;
+}
+.detailbtn {
+  height: 25px;
+  width: 90px;
+  font-weight: 600;
+  border-radius: 0;
+  border: 1px solid #8f8f8f;
+  font-size: 15px;
+}
+.userGroupContainer {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  max-width: 1080px;
+  height: 30%;
+  max-height: 500px;
+}
+.deleteform {
+  margin-top: 20px;
+}
+.deleteform > label {
+  margin-left: 20px;
+}
+.deleteform > select {
+  width: 100px;
+}
+.inputId {
+  width: 100px;
+}
+.inputName {
+  width: 100px;
+}
+.deletebtn {
+  width: 50px;
+  height: 25px;
+  background-color: rgb(83, 83, 83);
+  color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  position: relative;
+  right: 60px;
+}
+.usersearch {
+  height: 30px;
+  width: 30px;
+  border: 1px solid rgb(165, 165, 165);
+  background-image: url("../img/search.svg");
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-position: center;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  float: right;
+  position: relative;
+  bottom: 2px;
+  left: 30px;
+}
+.memberLevel th:nth-child(1) {
+  width: 20px;
+  min-width: 20px;
+  max-width: 20px;
+}
+.memberLevel th:nth-child(2) {
+  width: 160px;
+  min-width: 160px;
+  max-width: 160px;
+}
+.memberLevel th:nth-child(3) {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+}
+.memberLevel th:nth-child(4) {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+}
+.memberLevel th:nth-child(5) {
+  width: 175px;
+  min-width: 175px;
+  max-width: 175px;
+}
+.memberLevel td:nth-child(1) {
+  background-color: #e0e0e0;
+  border: 1.8px solid #b6b6b6;
+  height: 40px;
+  text-align: center;
+}
+.memberLevel td:nth-child(2) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+.memberLevel td:nth-child(3) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+
+.memberLevel td:nth-child(4) {
+  border: 1.8px solid #b6b6b6;
+  padding-left: 10px;
+  height: 40px;
+}
+.memberLevel td:nth-child(5) {
+  text-align: center;
+  border: 1.8px solid #b6b6b6;
+  height: 40px;
+}
+.usersetContainer > span {
+  margin-left: 7px;
+}
+.userGroupContainer > span {
+  margin-left: 7px;
+}

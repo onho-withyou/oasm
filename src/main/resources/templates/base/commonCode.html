@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/IndexLayout}">
+<th:block layout:fragment="main">
+        <!-- 메인화면 -->
+          <div class="mainTitleBar">
+            <span>기초관리 - 공통코드관리</span>
+            <div class="btnbox">
+              <div class="btndiv1">
+                <button type="button" class="mainbtn" onclick="showPopup('/base/commonCodePopup')">
+                  등록
+                </button>
+              </div>
+              <div class="btndiv2">
+                <button type="button" class="mainbtn">삭제</button>
+              </div>
+            </div>
+          </div>
+          <!-- 화면 안 -->
+          <div class="commonCodeContainer">
+            <div class="searchArea">
+              <div>
+                <label>주 코드 : </label>
+                <select id="main_cd" class="maincodeselect">
+                  <option value="All">All</option>
+                  <th:block th:each="main : ${mains}">
+                    <option th:value="${main.main_cd}" th:text="${main.code_nm}"></option>
+                  </th:block>
+                </select>
+              </div>
+              <div>
+                <label>서브 코드 : </label>
+                <input id="sub_cd" type="text" class="subcodeBar" />
+              </div>
+              <div>
+                <label>사용유무 : </label>
+                <input type="radio" name="cd_flag_yn" value="Y" /> <span>사용</span>
+                <input type="radio" name="cd_flag_yn" value="N" /> <span>미사용</span>
+              </div>
+
+              <input type="button" class="codesearch" onclick="doGet()" />
+            </div>
+            <div class="codetablebox">
+              <table class="codetable">
+                <thead>
+                  <tr>
+                    <th class="cotnentth"></th>
+                    <th class="contentth">주 코드
+                    <th class="contentth">부 코드</th>
+                    <th class="contentth">코드명</th>
+                    <th class="contentth">순번</th>
+                    <th class="contentth">사용 유무</th>
+                    <th class="contentth"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="code : ${codes}">
+                    <td class="contenttd"><input th:value="${code.sub_cd}" th:data-value="${code.main_cd}" type="checkbox"/></td>
+                    <td class="contenttd" th:text="${code.main_cd}">AdvKind</td>
+                    <td class="contenttd" th:text="${code.sub_cd}">01</td>
+                    <td class="contenttd" th:text="${code.code_nm}">세로 간판</td>
+                    <td class="contenttd" th:text="${code.seq}">01</td>
+                    <td class="contenttd" th:text="${code.cd_flag_yn}">Y</td>
+                    <td class="btntd">
+                      <button type="button" class="detailbtn">상세보기</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+</th:block>
+</html>
+<script type="text/javascript">
+  // 팝업창
+  function showPopup(url) {
+    var _width = "700";
+    var _height = "500";
+    // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+    var _left = Math.ceil((window.screen.width - _width) / 2);
+    var _top = Math.ceil((window.screen.height - _height) / 2);
+    window.open(
+            url,
+            "new",
+            "width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+    );
+  }
+
+  function doGet() {
+    let mCd = $("#main_cd").val();
+    let sCd = $("#sub_cd").val();
+    let flag = $('input[name="cd_flag_yn"]').val();
+
+    let qry = '';
+    let params = [ ['main_cd', mCd] , ['sub_cd' , sCd] , ['cd_flag_yn' , flag] ];
+    let count = 0;
+
+    params.forEach(function(param){
+
+      if (!(!param[1])) {
+
+        if (count > 0) {
+          qry += '&';
+        } else {
+          qry += '?';
+        }
+
+        qry += param[0] + '=' + param[1];
+        count ++;
+      }
+    });
+
+    location.href = '/base/commonCode' + qry;
+  }
+
+  $(function (){
+    $('.detailbtn').on("click", function (){
+      let main = $(this).parent().parent().children('td:eq(0)').text();
+      let sub = $(this).parent().parent().children('td:eq(1)').text();
+      showPopup("/base/commonCodePopup?main="+main+"&sub="+sub);
+    });
+  });
+</script>

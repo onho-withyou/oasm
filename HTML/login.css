@@ -1,0 +1,93 @@
+* { padding: 0; margin: 0; }
+
+@font-face {
+    font-family: 'SDGothic';
+    src: url('./font/AppleSDGothicNeoM.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: KBO;
+    src: url("./font/KBODiaGothic_medium.ttf") format("truetype");
+}
+
+html, body{
+    height: 100%;
+    background: #ffffff;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+}
+
+.loginBox{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.loginBox2{
+    width: 300px;
+    text-align: center;
+    background-color: #ffffff;
+    
+}
+
+.logobox{
+    width: 100px;
+    height:40px;
+    padding-left: 230px;
+}
+.logo{
+    width: 95px;
+    position: relative;
+}
+
+.input-form-box{
+    border: 0px solid #ffffff;
+    display: flex;
+}
+
+.loginTitle{
+    color:#045FB4;
+    font-size: 23.5px;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: 2px;
+    font-family: "KBO", sans-serif;
+    
+}
+
+.form-control{
+    height: 55px;
+    
+}
+#uid{
+    border: 1px solid #A9D0F5;
+    border-radius: 17px 17px 0px 0px;
+    border-bottom: 0.5px;
+}
+#upwd{
+    border: 1px solid #A9D0F5;
+    border-radius: 0px 0px 17px 17px;
+}
+
+.button-login-box{
+    padding-top: 30px;
+}
+
+.login-btn{
+    height: 60px;
+    border: 1px solid #045FB4;
+    background-color: #A9D0F5;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 22px;
+    font-weight:500;
+    font-family: SDGothic, sans-serif;
+}
+.login-btn:hover{
+    background-color: #0174DF;
+}

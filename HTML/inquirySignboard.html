@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link href="index.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $(".hidebtn").on("click", function(){
+                toggleMenu($(this));
+            });
+
+            /* display - flex로 초기화 */
+            $('.hiddenList').css('display', 'flex');
+            $('.hiddenList').slideUp(0);
+
+            /* 클릭 이벤트 */
+            $('input[value="관리"]').on("click", function(){
+
+                let hidden;
+
+                /* 전체 관리인지 부분 관리인지 구분 */
+                if ($(this).attr('class') == 'clickBtn'){
+                    hidden = $(this).parent().parent().next();
+                } else {
+                    hidden = $(this).parent().next();
+                }
+                
+                /* 슬라이드 함수 */
+                if (hidden.css('display') == 'none') {
+                    hidden.slideDown(500);
+                } else {
+                    hidden.slideUp(500);
+                }
+                
+            });
+
+        });
+        function toggleMenu(btn) {
+
+            if (btn.attr('id') === 'hidebtn') {
+                var hidemenu = $("#main-tree-ul");
+            } else {
+                var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+            }
+            var img = btn.parent().find("img");
+
+            if(hidemenu.css('display') === 'none'){
+                hidemenu.show();
+                img.attr("src", "./script/closebtn_icon.png");
+            } else{
+                hidemenu.hide();
+                img.attr("src", "./script/openbtn2_icon.png");
+            }
+        }
+
+    </script>
+    <script>
+
+    </script>
+    <style>
+                .main {
+            display: flex;
+            flex-direction: column;
+        }
+        .searchArea {
+            width: 100%;
+            max-width: 1280px;
+            height: 150px;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-content: center;
+            box-sizing: border-box;
+            padding: 10px;
+            background: #e9e9e9;
+        }
+        .searchArea > div:nth-child(2) {
+            width: 5%;
+        }
+        .searchController {
+            width: 95%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+        }
+        .searchController > div {
+            width: 100%;
+            height: 50%;
+        }
+        .aboveLine {
+            display: flex;
+            flex-direction: column;
+        }
+        .lineHeader > div {
+            font-weight: 800;
+        }
+        .lineBody {
+            padding-top: 5px;
+            box-sizing: border-box;
+            display: flex;
+        }
+        .lineBody > div {
+            display: flex;
+            width: 50%;
+        }
+        .lineBody > div > div {
+            box-sizing: border-box;
+            padding-right: 10px;
+        }
+        .lineBody > div > input {
+            width: 50%;
+            max-width: 150px;
+            min-width: 50px;
+            height: 20px;
+        }
+        .lineBody > div > select {
+            width: 100px;
+            height: 20px;
+            box-sizing: border-box;
+        }
+        .belowLine {
+            display: flex;
+        }
+        .belowLine > div {
+            width: 50%;
+        }
+
+        .dataArea {
+            width: 100%;
+            max-width: 1280px;
+            height: auto;
+        }
+        .chartArea {
+            width: 98%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid #dbdbdb;
+            padding: 1%;
+            margin-top: 20px;
+        }
+        .optionDiv {
+            width: 100%;
+            display: flex;
+            justify-content: right;
+        }
+        .optionDiv > select {
+            width: 100px;
+
+        }
+
+        .tableArea {
+            width: 100%;
+            max-width: 1920px;
+            height: 70vh;
+            min-height: 700px;
+            margin-top: 25px;
+        }
+
+        .tableArea > div:nth-child(1) {
+            display: flex;
+            justify-content: end;
+        }
+
+        .tableDiv {
+            width: 100%;
+            height: 500px;
+            overflow-x: scroll;
+        }
+        .tableDiv > table {
+            width: 100%;
+            /*height: 100%;*/
+            border-spacing: 0;
+        }
+        .tableDiv > table th, td {
+            border: 0.5px solid #dbdbdb;
+            height: 25px;
+            min-height: 25px;
+            max-height: 25px;
+        }
+        .tableDiv > table th {
+            background: #e9e9e9;
+            border-top: 2px solid #888;
+            font-weight: 100;
+        }
+
+        .tableDiv > table th:last-child {width: 100px;}
+
+        table td:last-child {
+            position: sticky;
+            right: 0;
+            z-index: 100;
+        }
+
+        .clickBtn {
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: white;
+            font-size: 16px;
+        }
+        .clickBtn:hover {
+            cursor: pointer;
+        }
+
+
+        .clickBtn {
+            width: 100%;
+            height: 100%;
+            background: white;
+            font-size: 14px;
+            border: none;
+            border-left: 1px solid #dbdbdb;
+        }
+        .clickBtn:hover {
+            cursor: pointer;
+        }
+        .clickBtn2 {
+            width: 50px;
+            height: 25px;
+            background-color: rgb(83, 83, 83);
+            color: #ffffff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* 페이징 스타일 */
+
+        .paging {
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .paging > div {
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            margin: 5px;
+            border-radius: 50%;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .pagingDisabled {
+            color: #bdbdbd;
+            cursor: default;
+        }
+        .pagingActive {
+            background: #98ef9e;
+            cursor: default;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+    <header>
+        <div class="top">
+        <div class="logobox"><img class="logo" src="./script/sug_logo.png"></div>
+        <div class="title"><span>옥외광고물 측정 시스템</span></div>
+        <div class="right-menu">
+            <div class="user"><span class="userspan">관리자(admin)님</span>
+            <button type="button" class="logoutbtn">Logout</button>
+            </div>
+        </div>
+        </div>
+        <ul class="main-menu">
+            <li class="menu1">
+                <a>조사내역</a>
+            </li>
+            <li class="menu2">
+                <a>통계분석</a>
+            </li>
+            <li class="menu3">
+                <a>기초관리</a>
+                <ul class="sub-menu">
+                    <li>submenu1</li>
+                    <li>submenu2</li>
+                    <li>submenu3</li>
+                </ul>
+            </li>
+            <li class="menu4">
+                <a>권한관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+            <li class="menu5">
+                <a>사용자관리</a>
+                <ul>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </li>
+        </ul>
+    </header>
+<!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <div class="left-menu">
+
+                <div class="tree-menu">
+                    <strong class="treeTitle">
+                        <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+                        <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+                        <span>카테고리</span>
+                    </strong>
+                    <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+                        <li class="main-tree-li">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px" height="15px"  alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                            <a href="#" class="treelabel">항목1</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                                <li class="tree-sub-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목1-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목1-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="main-tree-li">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px" height="15px"  alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+                            <a href="#" class="treelabel">항목2</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                                <li class="tree-sub-li">
+
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="main-tree-li main-tree-li-last">
+                            <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+                            <span><img src="./script/folder_icon.png" width="15px" height="15px" alt="" ></span>
+                            <a href="#" class="treelabel">항목2</a>
+                            <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                                <li class="tree-sub-li">
+
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-1</a>
+                                </li>
+                                <li class="tree-last-li">
+                                    <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                                    <a href="#" class="treelabel">항목2-2</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    <!-- 메인화면 -->
+    <div class="mainColumn">
+        <div class="mainTitleBar">
+            <span>광고물 조사 내역 - 간판별 조회</span>
+            <div class="btnbox">
+                <!--<div class="btndiv1">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>
+                <div class="btndiv2">
+                    <button type="button" class="mainbtn">버튼</button>
+                </div>-->
+            </div>
+        </div>
+        <div class="main">
+            <div class="searchArea">
+                <div class="searchController">
+                    <div class="aboveLine">
+                        <div class="lineHeader">
+                            <div>건물 정보</div>
+                        </div>
+                        <div class="lineBody">
+                            <div>
+                                <div>지번 주소</div>
+                                <input type="text"/>
+                            </div>
+                            <div>
+                                <div>도로명 주소</div>
+                                <input type="text"/>
+                                <input class="numberInput" type="text"/>
+                                <input class="numberInput" type="text"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="belowLine">
+                        <div class="leftPart">
+                            <div class="lineHeader">
+                                <div>업소 정보</div>
+                            </div>
+                            <div class="lineBody">
+                                <div>
+                                    <div>상호명</div>
+                                    <input type="text"/>
+                                </div>
+                                <div>
+                                    <div>업종</div>
+                                    <select>
+                                        <option>선택</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rightPart">
+                            <div class="lineHeader">
+                                <div>간판 정보</div>
+                            </div>
+                            <div class="lineBody">
+                                <div>
+                                    <div>허가</div>
+                                    <select>
+                                        <option>선택</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div>광고물종류</div>
+                                    <select>
+                                        <option>선택</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <div>조명종류</div>
+                                    <select>
+                                        <option>선택</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <input class="clickBtn" type="button" value="클릭"/>
+                </div>
+            </div>
+            <div class="tableArea">
+                <div>총 10,000건</div>
+                <div class="tableDiv">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>순번</th>
+                                <th>간판 사진</th>
+                                <th>상호명</th>
+                                <th>광고물 종류</th>
+                                <th>조명 종류</th>
+                                <th></th>
+                            </tr>
+    
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                            <tr>
+                                <td>01</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                                <td>가로형 간판</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="paging">
+                    <div class="pagingDisabled">〈〈</div>
+                    <div class="pagingDisabled">〈</div>
+                    <div class="pagingActive">1</div>
+                    <div>2</div>
+                    <div>3</div>
+                    <div>4</div>
+                    <div>5</div>
+                    <div>6</div>
+                    <div>7</div>
+                    <div>8</div>
+                    <div>9</div>
+                    <div>10</div>
+                    <div>〉</div>
+                    <div>〉〉</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+        
+        
+
+
+</body>
+<script>
+	
+</script>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/AnalysisLayout}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<th:block layout:fragment="main">
+    <div class="mainTitleBar">
+        <span>통계 분석 관리(종합) - 광고물 종류 통계</span>
+        <div class="btnbox">
+            <!--<div class="btndiv1">
+                <button type="button" class="mainbtn">버튼</button>
+            </div>
+            <div class="btndiv2">
+                <button type="button" class="mainbtn">버튼</button>
+            </div>-->
+        </div>
+    </div>
+    <div class="main">
+        <div class="searchArea">
+            <div class="searchController">
+                <div class="searchDate">
+                    <div><span>조회 기간</span></div>
+                    <div>
+                        <input type="text" name="startDate" id="startDate" class="datePicker"/>
+                        <span>&nbsp;~&nbsp;</span>
+                        <input type="text" name="endDate" id="endDate" class="datePicker"/>
+                    </div>
+                </div>
+                <div class="searchContents">
+                    <div><span>선택 종류</span></div>
+                    <div>
+                        <div><input type="checkbox" id="selectAll"/> All</div>
+                        <div th:each="item : ${codeNm}">
+                            <input type="checkbox" th:id="${'checkbox_' + item}" th:name="'selectedItems'" th:value="${item}">
+                            <label th:for="${'checkbox_' + item}" th:text="${item}"></label>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <input class="clickBtn" type="button" onclick="sendDate()" value="클릭"/>
+            </div>
+        </div>
+        <div class="dataArea">
+            <div class="chartArea">
+                <div class="optionDiv">
+                    <select id="option">
+                        <option value="bar">막대</option>
+                        <option value="line">선</option>
+                        <option value="bubble">점</option>
+                    </select>
+                </div>
+                <div class="chartDiv">
+                    <canvas id="chart"></canvas>
+                </div>
+
+            </div>
+            <div class="tableArea">
+                <table>
+                    <!-- 컬럼 갯수에 따라 width 조정해둔 주석 풀어 사용 -->
+                    <thead>
+                    <tr>
+                        <th width="20%">코드</th>
+                        <th width="60%">광고물종류</th>
+                        <th width="20%">건수</th>
+                    </tr>
+                    <!--
+                        <tr>
+                            <th width="50%">연도</th>
+                            <th width="50%">건수</th>
+                        </tr>
+                    -->
+
+                    </thead>
+                    <!-- 컬럼 갯수에 따라 three, two 각각 사용 -->
+                    <tbody class="threeCols">
+                    <!--  <tbody class="twoCols">-->
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<script>
+    $(document).ready(function() {
+        loadAllData();
+    });
+
+    function loadAllData() {
+
+        // 날짜 선택
+        let startDate = "2020-01-01";
+        let endDate = "2024-12-31";
+        document.getElementById("startDate").value = startDate;
+        document.getElementById("endDate").value = endDate;
+
+        document.getElementById('selectAll').checked = true;
+        document.getElementById('selectAll').dispatchEvent(new Event('change'));
+
+        // 데이터 조회
+        sendDate();
+    }
+    $(function(){
+        const chartCanvas = document.getElementById("chart");
+        let chart = changeChart(chartCanvas);
+
+        const selectBox = document.getElementById("option");
+        selectBox.addEventListener("change", function(e){
+            chartTypeChanger(chart, e.target.value);
+        });
+    });
+    function sendDate() {
+        let startDate = document.getElementById("startDate").value;
+        let endDate = document.getElementById("endDate").value;
+        let checkedItems = document.querySelectorAll('[type="checkbox"]:checked');
+        let selectedItems = [];
+
+        checkedItems.forEach(function(checkbox) {
+            selectedItems.push(checkbox.value);
+        });
+
+        $.ajax({
+            url: '/analysis/advType',
+            type: 'POST',
+            dataType: 'json', // 서버 응답이 JSON 형식
+            data: {
+                startDate: startDate,
+                endDate: endDate,
+                selectedItems: selectedItems
+            },
+            success: function(response) {
+                console.log('서버 응답:', response);
+                // 서버 응답을 테이블에 추가
+                let tableBody = document.querySelector('.threeCols'); // 테이블의 tbody 요소 선택
+                tableBody.innerHTML = ''; // 기존 데이터 삭제
+
+                // 차트에 넣을 label
+                let codeNm = response.map(item => item.code_nm);
+                console.log(codeNm);
+
+                // 광고물 건수
+                let countArr = response.map(item => item.count);
+                console.log(countArr);
+
+                response.forEach(function(item) {
+                    let row = '<tr><td>' + item.sub_cd + '</td><td>' + item.code_nm + '</td><td>' + item.count + '</td></tr>';
+                    tableBody.innerHTML += row;
+                });
+                // 차트 타입 가져오기
+                let selectBox = document.getElementById("option");
+                selectBox.addEventListener("change", function(e){
+                    chartTypeChanger(chart, e.target.value);
+                });
+                //차트초기화
+                let chartStatus = Chart.getChart('chart');
+                if (chartStatus !== undefined) {
+                    chartStatus.destroy();
+                }
+                // 차트
+                let chartCanvas = document.getElementById("chart");
+                let chart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: codeNm,
+                        datasets: [{
+                            label: '건수',
+                            data: countArr,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        }
+                    }
+                });
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error('서버 요청 실패:', error);
+            }
+        });
+    }
+    // 전체 선택
+    document.getElementById('selectAll').addEventListener('change', function (){
+        let checkboxes = document.querySelectorAll('[name="selectedItems"]');
+        checkboxes.forEach(function (checkbox){
+            checkbox.checked = document.getElementById('selectAll').checked;
+        });
+    });
+
+</script>
+

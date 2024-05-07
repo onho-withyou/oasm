@@ -1,0 +1,174 @@
+@font-face {
+    font-family: "SDGothic";
+    src: url("./font/AppleSDGothicNeoM.ttf") format("truetype");
+  }
+  
+@font-face {
+    font-family: KBO;
+    src: url("./font/KBODiaGothic_medium.ttf") format("truetype");
+  }
+
+html {
+    font-family: "SDGothic";
+    overflow: hidden;
+}
+.popup {
+    position: absolute;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    width: 700px;
+    height: 500px;
+    background: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(240, 240, 240);
+}
+
+.fome-group{
+    margin-bottom: 15px;
+}
+.enterprise_name{
+    width: 150px;
+    height: 19px;
+    margin-left: 49px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.address_num{
+    width: 150px;
+    height: 19px;
+    margin-left: 63px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.address_name{
+    width: 150px;
+    height: 19px;
+    margin-left: 5px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.building_num1{
+    width: 105px;
+    height: 19px;
+    margin-left: 5px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.building_num2{
+    width: 105px;
+    height: 19px;
+    margin-left: 5px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.btnlist{
+    float: right;
+}
+.building_searching{
+    width: 150px;
+    height: 30px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-right: 9px;
+    position: relative;
+    bottom: 26px;
+}
+.address_searching{
+    width: 100px;
+    height: 30px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 9px;
+    position: relative;
+    bottom: 26px;
+    border: none;
+}
+.business_num{
+    width: 150px;
+    height: 19px;
+    margin-left: 16px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.business_type{
+    width: 157px;
+    height: 22px;
+    margin-left: 62px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+    
+}
+.business_text{
+    width: 150px;
+    height: 19px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+    margin-left: 5px;
+}
+.ceo{
+    width: 150px;
+    height: 19px;
+    margin-left: 48px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.rrnum{
+    width: 150px;
+    height: 19px;
+    margin-left: 33px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.tel{
+    width: 150px;
+    height: 19px;
+    margin-left: 33px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.note{
+    width: 400px;
+    height: 60px;
+    resize: none;
+    margin-left: 61px;
+    border-radius: 0;
+    border: none;
+    box-shadow: 1px 1px 1px #959595;
+}
+.notelabel{
+    position: relative;
+    bottom: 51px;
+}
+.register{
+    float: right;
+    position: relative;
+    bottom: 50px;
+    right: 10px;
+    width: 60px;
+    height: 30px;
+    background-color: rgb(83, 83, 83);
+    color: #ffffff;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 9px;
+    border: none;
+}

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/inquirySignboard.css}" rel="stylesheet">
+    <script th:src="@{/js/index.js}"></script>
+    <script th:src="@{/js/datePicker.js}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+        <!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+            <!-- 메인화면 -->
+            <div class="mainColumn">
+                <div class="mainTitleBar">
+                    <span>광고물 조사 내역 - 간판별 조회</span>
+                    <div class="btnbox">
+                        <div class="btndiv1">
+                            <button type="button" class="mainbtn" onclick="showPopup('/stat/inquirySignboardPopup')">등록</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="main">
+                    <div class="searchArea">
+                        <div class="searchController">
+                            <div class="aboveLine">
+                                <div class="lineHeader">
+                                    <div>건물 정보</div>
+                                </div>
+                                <div class="lineBody">
+                                    <div>
+                                        <div>지번 주소</div>
+                                        <input id="lotNumber" type="text" placeholder="지번"/>
+                                    </div>
+                                    <div>
+                                        <div>도로명 주소</div>
+                                        <input id="street" type="text" placeholder="도로명"/>
+                                        <input id="streetNo1" class="numberInput" type="text" placeholder="주번호"/>
+                                        <input id="streetNo2" class="numberInput" type="text" placeholder="부번호"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="belowLine">
+                                <div class="leftPart">
+                                    <div class="lineHeader">
+                                        <div>업소 정보</div>
+                                    </div>
+                                    <div class="lineBody">
+                                        <div>
+                                            <div>상호명</div>
+                                            <input id="entName" type="text"/>
+                                        </div>
+                                        <div>
+                                            <div>업종</div>
+                                            <select id="entType">
+                                                <option value="">선택</option>
+                                                <th:block th:each="re : ${job}">
+                                                    <option th:value="${re.sub_cd}" th:text="${re.code_nm}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rightPart">
+                                    <div class="lineHeader">
+                                        <div>간판 정보</div>
+                                    </div>
+                                    <div class="lineBody">
+                                        <div>
+                                            <div>허가</div>
+                                            <select id="permission">
+                                                <option value="">선택</option>
+                                                <option value="Y">허가</option>
+                                                <option value="N">미허가</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <div>광고물종류</div>
+                                            <select id="signKind">
+                                                <option value="">선택</option>
+                                                <th:block th:each="re : ${adKind}">
+                                                    <option th:value="${re.sub_cd}" th:text="${re.code_nm}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <div>조명종류</div>
+                                            <select id="lightKind">
+                                                <option value="">선택</option>
+                                                <th:block th:each="re : ${lightType}">
+                                                    <option th:value="${re.sub_cd}" th:text="${re.code_nm}"></option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <input class="searchButton" type="button"/>
+                        </div>
+                    </div>
+                    <div class="tableArea">
+                        <div>총 [[ ${elements} ]]건</div>
+                        <div class="tableDiv">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>순번</th>
+                                    <th>간판 사진</th>
+                                    <th>상호명</th>
+                                    <th>광고물 종류</th>
+                                    <th>조명 종류</th>
+                                    <th></th>
+                                </tr>
+
+                                </thead>
+                                <tbody>
+                                <tr th:each="sign, index : ${signs}">
+                                    <td th:text="${index.count}"></td>
+                                    <td><img th:src="'/image/' + ${sign.file_nm}" /></td>
+                                    <td th:text="${sign.enterprise_nm}"></td>
+                                    <td th:text="${sign.sign_nm}"></td>
+                                    <td th:text="${sign.light_nm}">가로형 간판</td>
+                                    <td>상세보기</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="paging">
+                            <th:block th:if="${current < 10}">
+                                <div class="pagingDisabled">〈〈</div>
+                                <div class="pagingDisabled">〈</div>
+                            </th:block>
+                            <th:block th:unless="${current < 10}">
+                                <div>〈〈</div>
+                                <div>〈</div>
+                            </th:block>
+                            <th:block th:each="pageNumber : ${#numbers.sequence(first, last)}">
+                                <div th:if="${current == pageNumber}" class="pagingActive" th:text="${pageNumber}"></div>
+                                <div th:unless="${current == pageNumber}" th:text="${pageNumber}"></div>
+                            </th:block>
+                            <th:block th:if="${totalPage - current < 10}">
+                                <div class="pagingDisabled">〉</div>
+                                <div class="pagingDisabled">〉〉</div>
+                            </th:block>
+                            <th:block th:unless="${totalPage - current < 10}">
+                                <div>〉</div>
+                                <div>〉〉</div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+        
+        
+
+
+</body>
+<script>
+    function showPopup(url) {
+        var _width = "720";
+        var _height = "730";
+        // 팝업을 가운데 위치시키기 위해 아래와 같이 값 구하기
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+            url,
+            "new",
+            "width=" +
+            _width +
+            ",height=" +
+            _height +
+            ",left=" +
+            _left +
+            ",top=" +
+            _top
+        );
+    }
+
+	$(function (){
+
+        $(".paging > div").on("click", function(){
+
+            let all = window.location.href;
+
+            if (all.search('pageNumber') === -1) {
+                location.href = all +  "?pageNumber=" + $(this).text();
+            } else {
+                let href = all.substring(0, all.indexOf('pageNumber'));
+                location.href = href +  "pageNumber=" + $(this).text();
+            }
+        });
+
+        $(".searchButton").on("click", function(){
+            let lotNo = $("#lotNumber").val();
+            let street = $("#street").val();
+            let streetNo1 = $("#street_no1").val();
+            let streetNo2 = $("#street_no2").val();
+            let entNm = $("#entName").val();
+            let entType = $("#entType").val();
+            let permit = $("#permission").val();
+            let sign = $("#signKind").val();
+            let light = $("#lightKind").val();
+
+            let qry = '';
+            let params = [ ['lot_number_adr', lotNo] , ['street_adr' , street] , ['street_no1' , streetNo1] , ['street_no2' , streetNo2],
+                            ['enterprise_nm', entNm], ['enterprise_type', entType], ['permission_yn', permit], ['sign_kind', sign], ['light_kind', light] ];
+            let count = 0;
+
+            params.forEach(function(param){
+
+                if (!(!param[1])) {
+
+                    if (count > 0) {
+                        qry += '&';
+                    } else {
+                        qry += '?';
+                    }
+
+                    qry += param[0] + '=' + param[1];
+                    count ++;
+                }
+            });
+
+            location.href = '/stat/inquirySignboard' + qry;
+        });
+    });
+</script>
+</html>

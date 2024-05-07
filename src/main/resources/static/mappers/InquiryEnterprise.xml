@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.InquiryEnterpriseDAO">
+    <select id="getBusinessCate" resultType="java.lang.String">
+        SELECT code_nm
+        FROM cm_code
+        WHERE main_cd = "BusinessCate" AND sub_cd != '*';
+    </select>
+    <select id="getEnterprise" resultType="com.oasm.domain.InquiryEnterpriseVO">
+        SELECT
+        e.enterprise_cd,
+        e.enterprise_nm,
+        b2.add_addr,
+        b1.street_adr,
+        b1.street_no1,
+        b1.street_no2,
+        c_business_cate.code_nm AS business_cate,
+        b1.building_cd,
+        b1.building_nm
+        FROM
+        enterprise_list e
+        LEFT JOIN
+        building_enter_list b2 ON e.enterprise_cd = b2.enterprise_cd
+        LEFT JOIN
+        building_list b1 ON b1.building_cd = b2.building_cd
+        LEFT JOIN
+        (
+        SELECT code_nm, sub_cd
+        FROM cm_code
+        WHERE main_cd = 'BusinessCate' AND sub_cd != '*'
+        ) c_business_cate ON e.enterprise_type = c_business_cate.sub_cd
+        GROUP BY
+        e.enterprise_cd, e.enterprise_nm, b2.add_addr, b1.street_adr, b1.street_no1, b1.street_no2, c_business_cate.code_nm, b1.building_cd, b1.building_nm;
+    </select>
+    <select id="getEnterpriseList" resultType="com.oasm.domain.InquiryEnterpriseVO">
+        SELECT
+        s.sign_cd,
+        s.file_nm,
+        s.permission_yn,
+        s.enterprise_cd,
+        e.enterprise_nm,
+        b2.add_addr,
+        b1.street_adr,
+        b1.street_no1,
+        b1.street_no2,
+        c_business_cate.code_nm AS business_cate,
+        c_adkind.code_nm AS adkind,
+        COUNT(c_adkind.sub_cd) AS adkind_count,
+        c_lightType.code_nm AS lightType,
+        b1.building_cd,
+        b1.building_nm
+        FROM
+        sign_list s
+        LEFT JOIN
+        enterprise_list e ON s.enterprise_cd = e.enterprise_cd
+        LEFT JOIN
+        building_enter_list b2 ON e.enterprise_cd = b2.enterprise_cd
+        LEFT JOIN
+        building_list b1 ON b1.building_cd = b2.building_cd
+        LEFT JOIN
+        (
+        SELECT code_nm, sub_cd
+        FROM cm_code
+        WHERE main_cd = 'BusinessCate' AND sub_cd != '*'
+        ) c_business_cate ON e.enterprise_type = c_business_cate.sub_cd
+        LEFT JOIN
+        (
+        SELECT code_nm, sub_cd
+        FROM cm_code
+        WHERE main_cd = 'Adkind' AND sub_cd != '*'
+        ) c_adkind ON e.enterprise_type = c_adkind.sub_cd
+        LEFT JOIN
+        (
+        SELECT code_nm, sub_cd
+        FROM cm_code
+        WHERE main_cd = 'lightType' AND sub_cd != '*'
+        ) c_lightType ON e.enterprise_type = c_lightType.sub_cd
+        WHERE
+        (s.enterprise_cd, s.sign_cd) IN (
+        SELECT enterprise_cd, MAX(sign_cd)
+        FROM sign_list
+        WHERE
+        e.enterprise_cd = #{enterprise_cd}
+        GROUP BY enterprise_cd
+        )
+        GROUP BY
+        s.sign_cd, s.file_nm, s.permission_yn, s.enterprise_cd, e.enterprise_nm, b2.add_addr, b1.street_adr, b1.street_no1, b1.street_no2, c_business_cate.code_nm, c_adkind.code_nm, c_lightType.code_nm, b1.building_cd, b1.building_nm;
+
+    </select>
+    <select id="searchEnterpriseList" resultType="com.oasm.domain.InquiryEnterpriseVO">
+        SELECT
+        e.enterprise_cd,
+        e.enterprise_nm,
+        b2.add_addr,
+        b1.street_adr,
+        b1.street_no1,
+        b1.street_no2,
+        c_business_cate.code_nm AS business_cate,
+        b1.building_cd,
+        b1.building_nm
+        FROM
+        enterprise_list e
+        LEFT JOIN
+        building_enter_list b2 ON e.enterprise_cd = b2.enterprise_cd
+        LEFT JOIN
+        building_list b1 ON b1.building_cd = b2.building_cd
+        LEFT JOIN
+        (
+        SELECT code_nm, sub_cd
+        FROM cm_code
+        WHERE main_cd = 'BusinessCate' AND sub_cd != '*'
+        ) c_business_cate ON e.enterprise_type = c_business_cate.sub_cd
+        <where>
+            <if test="keyword1 != null and keyword1 != ''">
+                AND (
+                b1.street_adr LIKE CONCAT('%', #{keyword1}, '%')
+                OR e.enterprise_nm LIKE CONCAT('%', #{keyword1}, '%')
+                OR c_business_cate.code_nm LIKE CONCAT('%', #{keyword1}, '%')
+                )
+            </if>
+            <if test="keyword2 != null and keyword2 != ''">
+                AND (
+                b1.street_adr LIKE CONCAT('%', #{keyword2}, '%')
+                OR e.enterprise_nm LIKE CONCAT('%', #{keyword2}, '%')
+                OR c_business_cate.code_nm LIKE CONCAT('%', #{keyword2}, '%')
+                )
+            </if>
+            <if test="keyword3 != null and keyword3 != ''">
+                AND (
+                b1.street_adr LIKE CONCAT('%', #{keyword3}, '%')
+                OR e.enterprise_nm LIKE CONCAT('%', #{keyword3}, '%')
+                OR c_business_cate.code_nm LIKE CONCAT('%', #{keyword3}, '%')
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="getEnterpriseCode" resultType="java.lang.String">
+        SELECT MAX(enterprise_cd) FROM enterprise_list;
+    </select>
+
+    <insert id="insertEnterprise">
+        INSERT INTO enterprise_list(enterprise_cd, enterprise_nm, enterprise_no, enterprise_type, enterprise_rep, enterprise_rep_no, enterprise_tel_no, rmk, insert_date)
+        VALUES(#{enterprise_cd}, #{enterprise_nm}, #{enterprise_no},(SELECT sub_cd FROM cm_code WHERE code_nm = #{enterprise_type}), #{enterprise_rep}, #{enterprise_rep_no}, #{enterprise_tel_no}, #{rmk}, NOW())
+    </insert>
+
+    <insert id="insertBuildingEnterprise">
+        INSERT INTO building_enter_list(building_cd, enterprise_cd, seq, insert_date)
+        VALUES(#{building_cd}, #{enterprise_cd}, #{seq}, NOW())
+    </insert>
+    <select id="getSeq"  resultType="java.lang.Integer">
+        SELECT IFNULL(MAX(seq), 0) AS new_seq
+        FROM building_enter_list
+        WHERE building_cd = #{building_cd}
+    </select>
+    <insert id="insertBuilding">
+        INSERT INTO building_list (building_cd, sigungu_adr, lot_number_adr, street_adr, street_no1, street_no2, building_nm, map_latitude, map_longitude, insert_date)
+        VALUES (#{building_cd}, #{sigungu_adr},#{lot_number_adr}, #{street_adr}, #{street_no1}, #{street_no2}, #{building_nm}, #{map_latitude}, #{map_longitude}, NOW())
+    </insert>
+    <select id="getBuildingCode" resultType="java.lang.String">
+        SELECT MAX(building_cd) FROM building_list;
+    </select>
+
+</mapper>

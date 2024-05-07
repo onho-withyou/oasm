@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link th:href="@{/css/index.css}" rel="stylesheet">
+    <link th:href="@{/css/userGroup.css}" rel="stylesheet">
+    <link th:href="@{/css/authMenu.css}" rel="stylesheet">
+    <script th:src="@{/js/index.js}"></script>
+    <script>
+        $(function(){
+            $(".detailbtn").on("click", function(){
+                let rating = $(this).data("value");
+                showPopup(rating);
+            });
+        });
+        function showPopup(rating) {
+            var _width = "700";
+            var _height = "500";
+            //팝업을 가운데위치 시키기위한 값
+            var _left = Math.ceil((window.screen.width - _width) / 2);
+            var _top = Math.ceil((window.screen.height - _height) / 2);
+            window.open(
+                "/auth/userGroupPopup?rating=" + rating,
+                "new",
+                "toolbar=no,width=" +
+                _width +
+                ",height=" +
+                _height +
+                ",left=" +
+                _left +
+                ",top=" +
+                _top
+            );
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+        <!-- 왼쪽 트리 메뉴 -->
+        <div class="middleContainer">
+            <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+            <!-- 메인화면 -->
+            <div class="mainColumn">
+                <th:block layout:fragment="main"></th:block>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

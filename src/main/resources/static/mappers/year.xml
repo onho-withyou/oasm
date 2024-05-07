@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.YearDAO">
+
+    <select id="typeOfSign" resultType="com.oasm.domain.YearVO">
+        SELECT
+            a.sign_kind,
+            cm.code_nm
+        FROM
+            sign_list AS a
+        LEFT JOIN cm_code AS cm ON a.sign_kind = cm.sub_cd
+        LEFT JOIN survey_state AS b ON a.sign_cd = b.sign_cd
+        WHERE
+            cm.main_cd = 'Adkind'
+            AND b.survey_date LIKE CONCAT(trim(#{year}), '%')
+        <if test = 'code_nm != "All"'>
+            AND cm.code_nm LIKE CONCAT('%', trim(#{code_nm}), '%');
+        </if>
+<!--            AND FIND_IN_SET(#{year}, REPLACE(#{year}, ' ', ''));-->
+    </select>
+
+    <select id="typeOfLight" resultType="com.oasm.domain.YearVO">
+        SELECT
+            a.light_kind,
+            cm.code_nm
+        FROM
+            sign_list AS a
+        LEFT JOIN cm_code AS cm ON a.light_kind = cm.sub_cd
+        LEFT JOIN survey_state AS b ON a.sign_cd = b.sign_cd
+        WHERE
+            cm.main_cd = 'LightType'
+            AND b.survey_date LIKE CONCAT(trim(#{year}), '%')
+        <if test = 'code_nm != "All"'>
+            AND cm.code_nm LIKE CONCAT('%', trim(#{code_nm}), '%');
+        </if>
+    </select>
+
+    <select id="typeOfResult" resultType="com.oasm.domain.YearVO">
+        SELECT
+            a.survey_result,
+            cm.code_nm
+        FROM
+            survey_state AS a
+        LEFT JOIN cm_code AS cm ON a.survey_result = cm.sub_cd
+        WHERE
+            cm.main_cd = 'Result'
+            AND a.survey_date LIKE CONCAT(trim(#{year}), '%')
+        <if test = 'code_nm != "All"'>
+            AND cm.code_nm LIKE CONCAT('%', trim(#{code_nm}), '%');
+        </if>
+    </select>
+
+    <select id="typeOfRoad" resultType="com.oasm.domain.YearVO">
+        SELECT
+            a.survey_date,
+            DATE_FORMAT(STR_TO_DATE(a.survey_date, '%Y%m%d'), '%Y'),
+            d.road_yn
+        FROM
+            survey_state AS a
+        LEFT JOIN sign_list AS b ON a.sign_cd = b.sign_cd
+        LEFT JOIN building_enter_list AS c ON b.enterprise_cd = c.enterprise_cd
+        LEFT JOIN building_list AS d ON c.building_cd = d.building_cd
+        LEFT JOIN cm_code AS cm ON d.road_yn = cm.sub_cd
+        <where>
+            cm.main_cd = 'Flag'
+            AND a.survey_date LIKE CONCAT(trim(#{year}), '%')
+            <if test = 'code_nm != "All"'>
+                AND cm.code_nm LIKE CONCAT('%', trim(#{code_nm}), '%')
+            </if>
+        </where>
+        GROUP BY
+            DATE_FORMAT(STR_TO_DATE(a.survey_date, '%Y%m%d'), '%Y'), d.building_cd, d.road_yn;
+    </select>
+
+</mapper>

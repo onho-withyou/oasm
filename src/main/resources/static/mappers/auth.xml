@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.AuthDAO">
+
+    <insert id="insertRating">
+        INSERT INTO `user_rating`
+            (rating_cd, rating_nm, insert_id, insert_date)
+            VALUES ( #{code}, #{name}, #{id}, NOW() )
+    </insert>
+
+
+    <insert id="insertUserRating">
+        INSERT INTO `user_rtn_manage`
+            (rating_cd, user_id, insert_id, insert_date)
+            VALUES ( #{rating}, #{user}, #{id}, NOW() );
+    </insert>
+
+    <select id="selectUsers" resultType="com.oasm.domain.UserVO">
+        SELECT * FROM user_list;
+    </select>
+
+    <select id="selectUsersByRating" resultType="com.oasm.domain.UserVO">
+        SELECT * FROM user_list AS a
+            JOIN user_rtn_manage AS b ON a.user_id = b.user_id
+            WHERE b.rating_cd = #{rating};
+    </select>
+
+    <select id="selectUserRatings" resultType="com.oasm.domain.UserVO">
+        SELECT
+            a.rating_cd, a.user_id,
+            b.user_nm, b.rmk,
+            c.rating_nm
+        FROM user_rtn_manage AS a
+            JOIN user_list AS b ON a.user_id = b.user_id
+            JOIN user_rating AS c ON a.rating_cd = c.rating_cd
+
+        <where>
+            <if test='code != null and code != ""'>
+                AND a.rating_cd = #{code}
+            </if>
+            <if test='name != null and name != ""'>
+                AND b.user_nm = #{name}
+            </if>
+            <if test='id != null and id != ""'>
+                AND a.user_id = #{id}
+            </if>
+        </where>
+
+        GROUP BY a.user_id, a.rating_cd
+        ORDER BY a.rating_cd
+
+        LIMIT 0,10;
+    </select>
+
+    <select id="selectRating" resultType="com.oasm.domain.RatingVO">
+        SELECT * FROM user_rating
+            WHERE rating_cd = #{rating};
+    </select>
+
+    <select id="selectRatings" resultType="com.oasm.domain.RatingVO">
+        SELECT * FROM user_rating;
+    </select>
+
+    <select id="selectRatingsPaging" resultType="com.oasm.domain.RatingVO">
+        SELECT * FROM user_rating
+        LIMIT 0,4;
+    </select>
+
+    <select id="selectFirstMenu" resultType="com.oasm.domain.MenuVO">
+        SELECT * FROM menu_list
+        WHERE menu_cd = #{code}
+        AND menu_lvl = 1;
+    </select>
+
+    <select id="selectFirstMenus" resultType="com.oasm.domain.MenuVO">
+        SELECT * FROM menu_list
+        WHERE menu_lvl = 1;
+    </select>
+
+    <select id="selectSecondMenus" resultType="com.oasm.domain.MenuVO">
+        SELECT * FROM menu_list
+        WHERE menu_lvl = 2
+            AND menu_high_cd = #{code}
+        ORDER BY seq;
+    </select>
+
+    <select id="countRating" resultType="Integer">
+        SELECT COUNT(rating_cd)
+            FROM user_rating
+            WHERE rating_cd = #{code};
+    </select>
+
+    <delete id="deleteRating">
+        DELETE FROM `user_rating`
+            WHERE rating_cd = #{rating} ;
+    </delete>
+
+    <delete id="deleteUserRating">
+        DELETE FROM `user_rtn_manage`
+            WHERE rating_cd = #{rating} AND user_id = #{user} ;
+    </delete>
+
+    <delete id="deleteUserRatings">
+        DELETE FROM `user_rtn_manage`
+            WHERE rating_cd = #{rating} ;
+    </delete>
+
+    <select id="typeOfRating" resultType="com.oasm.domain.UserRtnManage">
+        SELECT DISTINCT
+            c.rating_cd
+        FROM
+            user_list AS a
+        LEFT JOIN user_rtn_manage AS c ON a.user_id = c.user_id
+        LEFT JOIN user_rating AS b ON b.rating_cd = c.rating_cd
+        <if test = 'user_id != null and !user_id.equals("")'>
+            WHERE
+            BINARY(c.user_id) LIKE CONCAT('%', trim(#{user_id}), '%')
+        </if>
+    </select>
+
+    <select id="typeOfUsers" resultType="com.oasm.domain.UserList">
+        SELECT
+            a.user_id,
+            a.user_nm,
+            a.client_nm,
+            a.rmk,
+            a.user_flag_yn
+        FROM
+            user_list AS a
+    </select>
+
+    <select id="typeOfUsersSearchButton" resultType="com.oasm.domain.UserList">
+        SELECT
+            *,
+            user_id AS userId
+        FROM
+            user_list
+        WHERE
+            user_id LIKE CONCAT('%', trim(#{userId}), '%')
+            AND user_nm LIKE CONCAT('%', trim(#{user_nm}), '%')
+        <if test = 'user_flag_yn != "All"'>
+            AND user_flag_yn LIKE CONCAT('%', trim(#{user_flag_yn}), '%')
+        </if>
+    </select>
+
+    <select id="typeOfInsert" resultType="com.oasm.domain.UserList">
+        insert INTO user_list
+        (user_id, user_pw, user_nm, client_nm, rmk)
+        VALUES(#{userId}, #{user_pw}, #{user_nm}, #{client_nm}, #{rmk});
+    </select>
+
+    <select id="typeOfDelete" resultType="com.oasm.domain.UserList">
+        delete from user_list WHERE user_id LIKE CONCAT('%', trim(#{userId}), '%')
+    </select>
+
+    <select id="typeOfUpdate" resultType="com.oasm.domain.UserList">
+        UPDATE
+            user_list
+        SET
+            user_id = #{userId},
+            user_nm = #{user_nm},
+            client_nm = #{client_nm},
+            rmk = #{rmk}
+        WHERE
+            user_id LIKE CONCAT('%', trim(#{userId}), '%')
+    </select>
+
+    <select id="typeOfRead" resultType="com.oasm.domain.UserList">
+        SELECT *, user_id AS userId FROM user_list WHERE user_id LIKE CONCAT('%', trim(#{userId}), '%')
+    </select>
+
+    <select id="authAllMenuSave" resultType="string">
+        UPDATE menu_auth_manage
+        SET menu_flag_yn = 'Y'
+        WHERE
+            menu_cd IN (SELECT menu_cd FROM menu_list WHERE menu_high_cd =
+            (SELECT menu_cd FROM menu_list WHERE menu_nm = #{menu_nm}))
+            AND rating_cd LIKE CONCAT('%', TRIM(#{rating_cd}), '%');
+    </select>
+
+    <select id="authMenuSave" resultType="string">
+        UPDATE menu_auth_manage
+        SET menu_flag_yn = 'Y'
+        WHERE
+            menu_cd = (SELECT menu_cd FROM menu_list WHERE menu_nm = #{menu_nm})
+            AND rating_cd LIKE CONCAT('%', TRIM(#{rating_cd}), '%');
+    </select>
+
+    <select id="menuAuthSearch" resultType="com.oasm.domain.menuAuthManageVO">
+        SELECT
+            b.menu_nm,
+            a.*
+        FROM
+            menu_auth_manage AS a
+        LEFT JOIN menu_list AS b ON a.menu_cd = b.menu_cd
+        WHERE a.rating_cd = #{rating_cd}
+    </select>
+
+    <select id="authMenuSearch" resultType="com.oasm.domain.menuAuthManageVO">
+        SELECT
+            b.menu_nm,
+            a.*
+        FROM
+            menu_auth_manage AS a
+        LEFT JOIN menu_list AS b ON a.menu_cd = b.menu_cd
+    </select>
+
+    <select id="authAllMenuNonSave" resultType="string">
+        UPDATE menu_auth_manage
+        SET menu_flag_yn = 'N'
+        WHERE
+        menu_cd IN (SELECT menu_cd FROM menu_list WHERE menu_high_cd =
+        (SELECT menu_cd FROM menu_list WHERE menu_nm = #{menu_nm}))
+    </select>
+
+    <select id="authMenuNonSave" resultType="string">
+        UPDATE menu_auth_manage
+        SET menu_flag_yn = 'N'
+        WHERE
+        menu_cd = (SELECT menu_cd FROM menu_list WHERE menu_nm = #{menu_nm})
+    </select>
+
+</mapper>

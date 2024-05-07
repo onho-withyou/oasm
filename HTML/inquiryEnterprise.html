@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>inquiryEnterprise</title>
+    <link href="inquiryEnterprise.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+      // 트리메뉴
+      $(function(){
+        $(".hidebtn").on("click", function(){
+          toggleMenu($(this));
+        });
+
+      });
+      function toggleMenu(btn) {
+
+        if (btn.attr('id') === 'hidebtn') {
+          var hidemenu = $("#main-tree-ul");
+        } else {
+          var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+        }
+        var img = btn.parent().find("img");
+
+        if(hidemenu.css('display') === 'none'){
+          hidemenu.show();
+          img.attr("src", "./script/closebtn_icon.png");
+        } else{
+          hidemenu.hide();
+          img.attr("src", "./script/openbtn2_icon.png");
+        }
+      }
+      function showPopup() {
+        var _width = "700";
+        var _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+                "inquiryEnterprisePopup.html",
+                "new",
+                "toolbar=no,width=" +
+                _width +
+                ",height=" +
+                _height +
+                ",left=" +
+                _left +
+                ",top=" +
+                _top
+        );
+      }
+      function showPopup2(){
+        var _width = "700";
+        var _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+                "inquiryEnterprisePopup2.html",
+                "new",
+                "toolbar=no,width=" +
+                _width +
+                ",height=" +
+                _height +
+                ",left=" +
+                _left +
+                ",top=" +
+                _top
+        );
+      }
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <!-- 헤더 -->
+    <header>
+      <div class="top">
+        <div class="logobox"><img class="logo" src="./script/sug_logo.png" alt=""></div>
+        <div class="title"><span>옥외광고물 측정 시스템</span></div>
+        <div class="right-menu">
+          <div class="user"><span class="userspan">관리자(admin)님</span>
+            <button type="button" class="logoutbtn">Logout</button>
+          </div>
+        </div>
+      </div>
+      <ul class="main-menu">
+        <li class="menu1">
+          <a>조사내역</a>
+        </li>
+        <li class="menu2">
+          <a>통계분석</a>
+        </li>
+        <li class="menu3">
+          <a>기초관리</a>
+          <ul class="sub-menu">
+            <li>submenu1</li>
+            <li>submenu2</li>
+            <li>submenu3</li>
+          </ul>
+        </li>
+        <li class="menu4">
+          <a>권한관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+        <li class="menu5">
+          <a>사용자관리</a>
+          <ul>
+            <li></li>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </header>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+      <div class="left-menu">
+
+        <div class="tree-menu">
+          <strong class="treeTitle">
+            <span><img src="./script/closebtn_icon.png" id="hidebtn" class="hidebtn" width="16px" height="16px" alt=""></span>
+            <span><img src="./script/folder_icon.png" width="16px" height="16px" alt=""></span>
+            <span>카테고리</span>
+          </strong>
+          <ul class="main-tree-ul" id="main-tree-ul" data-target="main-tree-ul">
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn1" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목1</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul1" data-target="sub-tree-ul1">
+                <li class="tree-sub-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목1-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn2" class="hidebtn" width="15px" height="15px"  alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt=""></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul2" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+            <li class="main-tree-li main-tree-li-last">
+              <span><img src="./script/closebtn_icon.png" id="hidebtn3" class="hidebtn" width="15px" height="15px" alt=""></span>
+              <span><img src="./script/folder_icon.png" width="15px" height="15px" alt="" ></span>
+              <a href="#" class="treelabel">항목2</a>
+              <ul class="sub-tree-ul" id="sub-tree-ul3" data-target="sub-tree-ul1" data-value="closed">
+                <li class="tree-sub-li">
+
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-1</a>
+                </li>
+                <li class="tree-last-li">
+                  <span><img src="./script/paper_icon.png" width="16px" height="16px" alt=""></span>
+                  <a href="#" class="treelabel">항목2-2</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+          <div class="mainTitleBar">
+            <span>광고물 조사 내역 - 업소별 조회</span>
+            <div class="btnbox">
+              <div class="btndiv1">
+                <button type="button" class="mainbtn" onclick="showPopup()">등록</button>
+              </div>
+              <div class="btndiv2">
+                <button type="button" class="mainbtn">삭제</button>
+              </div>
+            </div>
+          </div>
+          <!-- 화면 안 -->
+          <div class="inquiryenterprise">
+            <div class="inquiryBar">
+              <form class="enterpriseSearch">
+                <label>도로 명</label>
+                <input type="text">
+                <label>상호 명</label>
+                <input type="text">
+                <label>업종</label>
+                <select>
+                  <option></option>
+                </select>
+                <button type="button" onclick="showPopup2()"></button>
+              </form>
+            </div>
+              <br/>
+              <span class="total">총 10,000건</span>
+              <div class="enterprisetable">
+                <table class="enterpriselist">
+                  <thead>
+                    <th class="enterprise_th">순번</th>
+                    <th class="enterprise_th">상호명</th>
+                    <th class="enterprise_th">업종</th>
+                    <th class="enterprise_th">도로명 주소</th>
+                    <th class="enterprise_th">추가 주소</th>
+                    <th class="enterprise_th">광고물 개수</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="enterprise_td">1</td>
+                      <td class="enterprise_td">센텀오딧세이치과의원</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">해운대로 369</td>
+                      <td class="enterprise_td">해운대센텀메디칼센터9층</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">2</td>
+                      <td class="enterprise_td">미앤미의원 부산센텀시티점</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀2로 19</td>
+                      <td class="enterprise_td">702호</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">3</td>
+                      <td class="enterprise_td">오디너리레시피 센텀점</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀1로 9</td>
+                      <td class="enterprise_td">E-108호</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">4</td>
+                      <td class="enterprise_td">베이커리토끼굴 센텀점</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀동로 25</td>
+                      <td class="enterprise_td">상가동 101호</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">5</td>
+                      <td class="enterprise_td">하루끝집 부산센텀</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀동로 9</td>
+                      <td class="enterprise_td">트럼프월드상가 116호</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">6</td>
+                      <td class="enterprise_td">야단</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀2로 15</td>
+                      <td class="enterprise_td">센텀브라이언 빌딩 101-1호</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">7</td>
+                      <td class="enterprise_td">센텀뮤직타운</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀2로 20</td>
+                      <td class="enterprise_td">센텀타워메디컬 3층</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">8</td>
+                      <td class="enterprise_td">센텀노래연습장</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">재반로 13</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">2</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">9</td>
+                      <td class="enterprise_td">올리브영 부산센텀점</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀동로 9</td>
+                      <td class="enterprise_td">트럼프월드센텀</td>
+                      <td class="enterprise_td">1</td>
+                    </tr>
+                    <tr>
+                      <td class="enterprise_td">10</td>
+                      <td class="enterprise_td">센텀서점SKY문구</td>
+                      <td class="enterprise_td"></td>
+                      <td class="enterprise_td">센텀중앙로 145</td>
+                      <td class="enterprise_td">더샵센텀파크1 상가6동 1층</td>
+                      <td class="enterprise_td">2</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div><br/>
+                <div class="btndiv">
+                <button type="button">paging</button>
+                </div>
+                <div class="codetable">
+                  <table class="codelist">
+                    <thead>
+                      <th class="code_th">간판코드</th>
+                      <th class="code_th">사진</th>
+                      <th class="code_th">광고물 종류</th>
+                      <th class="code_th">조명 종류</th>
+                      <th class="code_th">허가 유무</th>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="code_td">1234</td>
+                        <td class="code_td"></td>
+                        <td class="code_td">광고물 종류입니다</td>
+                        <td class="code_td">조명 종류입니다</td>
+                        <td class="code_td">Y</td>
+                      </tr>
+                      <tr>
+                        <td class="code_td">1234</td>
+                        <td class="code_td"></td>
+                        <td class="code_td">광고물 종류입니다</td>
+                        <td class="code_td">조명 종류입니다</td>
+                        <td class="code_td">Y</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

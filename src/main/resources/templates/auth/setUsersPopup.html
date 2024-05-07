@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>기초코드 관리/서브코드 등록</title>
+    <link th:href="@{/css/commonCodePopup.css}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  </head>
+  <body>
+    <div class="popup">
+      <form name="form">
+        <div class="form-group">
+          <label>아이디</label>
+          <input type="text" id="user_id" placeholder=" 아이디" th:value="${sendData?.user_id}" />
+        </div>
+        <br />
+        <div class="form-group">
+          <label>비밀번호</label>
+          <input type="text" id="user_pw" placeholder=" 비밀번호" th:value="${code?.user_pw}" />
+        </div>
+        <div class="form-group">
+          <label>사용자명</label>
+          <input type="text" id="user_nm" placeholder=" 사용자명" th:value="${code?.user_nm}" />
+        </div>
+        <br />
+        <div class="form-group">
+          <label>거래처명</label>
+          <input type="text" id="client_nm" placeholder=" 거래처명" th:value="${code?.client_nm}" />
+        </div>
+        <br />
+        <div class="form-group">
+          <label>비고</label>
+          <textarea id="remark" placeholder="비고"></textarea>
+        </div>
+        <br />
+        <input type="button" value="저장" th:text="${code?.rmk}" />
+      </form>
+    </div>
+  </body>
+</html>
+
+<script>
+
+  const sendData = JSON.parse(localStorage.getItem('sendData'));
+
+  if(sendData === '' || sendData == null) {
+    $("#user_id").removeAttr("readonly");
+  } else {
+    $("#user_id").attr("readonly",true);
+    $("#user_id").val(sendData.userId);
+    $("#user_pw").val(sendData.user_pw);
+    $("#user_nm").val(sendData.user_nm);
+    $("#client_nm").val(sendData.client_nm);
+    $("#remark").val(sendData.rmk);
+  }
+  // 등록 저장버튼 클릭 이벤트
+  $("input[type='button']").on("click", function(){
+    let user_id = $("#user_id").val();
+    let user_pw = $("#user_pw").val();
+    let user_nm = $("#user_nm").val();
+    let client_nm = $("#client_nm").val();
+    let rmk = $("#remark").val();
+    let jsonData = {"userId":user_id, "user_pw":user_pw, "user_nm":user_nm, "client_nm":client_nm, "rmk":rmk};
+
+    if(sendData === '' || sendData == null) {
+      $.ajax({
+        url: '/setUsersPopup/insert',
+        type: 'POST',
+        data: jsonData,
+        dataType: 'text',
+        success: function (data) {
+          if (data === '성공') {
+            alert('저장되었습니다.');
+            opener.location.reload();
+            window.self.close();
+          } else {
+            alert('중복된 아이디 입니다.');
+          }
+        }
+      });
+    } else {
+      $.ajax({
+        url: '/setUsersPopup/update',
+        type: 'POST',
+        data: jsonData,
+        dataType: 'text',
+        success: function () {
+          alert('수정되었습니다.');
+          opener.location.reload();
+          window.self.close();
+        }
+      });
+    }
+  });
+
+</script>

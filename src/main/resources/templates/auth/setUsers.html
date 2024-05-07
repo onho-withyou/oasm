@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>setUser</title>
+    <link th:href="@{/css/setUser.css}" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+      // 트리메뉴
+      $(function(){
+        $(".hidebtn").on("click", function(){
+          toggleMenu($(this));
+        });
+      });
+      function toggleMenu(btn) {
+
+        if (btn.attr('id') === 'hidebtn') {
+          var hidemenu = $("#main-tree-ul");
+        } else {
+          var hidemenu = btn.closest(".main-tree-li").find(".sub-tree-ul");
+        }
+        var img = btn.parent().find("img");
+
+        if(hidemenu.css('display') === 'none'){
+          hidemenu.show();
+          img.attr("src", "\img\closebtn_icon.png");
+        } else{
+          hidemenu.hide();
+          img.attr("src", "\img\openbtn2_icon.png");
+        }
+      }
+      $(function(){
+        $(".mainbtn:eq(0)").on("click", function(){
+          window.localStorage.clear();
+          let rating = $(this).data("value");
+          showPopup(rating);
+        });
+      });
+      function showPopup() {
+        var _width = "700";
+        var _height = "500";
+        //팝업을 가운데위치 시키기위한 값
+        var _left = Math.ceil((window.screen.width - _width) / 2);
+        var _top = Math.ceil((window.screen.height - _height) / 2);
+        window.open(
+                "/setUsersPopup",
+                "new",
+                "toolbar=no,width=" +
+                _width +
+                ",height=" +
+                _height +
+                ",left=" +
+                _left +
+                ",top=" +
+                _top
+        );
+      }
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <!-- 헤더 -->
+    <th:block th:replace="~{fragments/_header::main_header}"></th:block>
+    <!-- 왼쪽 트리 메뉴 -->
+    <div class="middleContainer">
+      <th:block th:replace="~{fragments/_aside::main_aside}"></th:block>
+        <!-- 메인화면 -->
+        <div class="mainColumn">
+          <th:block layout:fragment="main"></th:block>
+          <div class="mainTitleBar">
+            <span>사용자 관리</span>
+            <div class="btnbox">
+              <div class="btndiv1">
+                <button type="button" class="mainbtn">등록</button>
+              </div>
+              <div class="btndiv2">
+                <button type="button" class="mainbtn">삭제</button>
+              </div>
+            </div>
+          </div>
+          <!-- 화면 안 -->
+          <div class="usersetContainer">
+            <form class="searchform" action="#" method="#">
+              <label>사용자 ID : </label>
+                <input type="text" class="userName" />
+              <label>사용자 명 : </label>
+                <input type="text" class="userName" />
+              <label>사용유무 : </label>
+                <input type="radio" name="option" value="Y"> Y
+                <input type="radio" name="option" value="N"> N
+                <input type="radio" name="option" value="All"> All
+              <input type="submit" class="usersearch" value="" />
+            </form>
+            <table class="usertable">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>사용자ID</th>
+                  <th>사용자명</th>
+                  <th>거래처명</th>
+                  <th>비고</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="event , index: ${data}">
+                  <td><input type="checkbox" class="checkbox" /></td>
+                  <td id="user_id" th:text="|&nbsp${event.getUserId()}|">&nbsp;admin1</td>
+                  <td th:text="|&nbsp${event.getUser_nm()}|">&nbsp;관리자</td>
+                  <td th:text="|&nbsp${event.getClient_nm()}|"></td>
+                  <td th:text="|&nbsp${event.getRmk()}|"></td>
+                  <td><a href="#" class="userupdate" onclick="showPopup()">수정</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script th:inline="javascript">
+
+  $(document).on("click", ".userupdate", function(){
+    let td = $(this).parent().parent().children();
+    let user_id = td.eq(1).text().trim();
+    let jsonData = { "userId" : user_id };
+
+    $.ajax({
+      url: "/setUsersPopup/read",
+      method: "POST",
+      data: jsonData,
+      dataType: "json",
+      success: function (data) {
+        window.localStorage.clear();
+        localStorage.setItem('sendData', JSON.stringify(data));
+        showPopup();
+      }
+    });
+  });
+  $(document).on("click", ".mainbtn:eq(1)", function (){
+    var result = confirm('정말 삭제 하시겠습니까?');
+    if(result) {
+      var tableId = [];
+      var checkbox = $("input[class=checkbox]:checked");
+
+      // 체크된 체크박스 값을 가져온다
+      checkbox.each(function(i) {
+
+        // checkbox.parent() : checkbox의 부모는 <td>이다.
+        // checkbox.parent().parent() : <td>의 부모이므로 <tr>이다.
+        var tr = checkbox.parent().parent().eq(i);
+        var td = tr.children();
+
+        // td.eq(0)은 체크박스 이므로  td.eq(1)의 값부터 가져온다.
+        var user_id = td.eq(1).text().trim();
+
+        // 가져온 값을 배열에 담는다.
+        tableId.push(user_id);
+        //console.log("no : " + no);
+        //console.log("userid : " + userid);
+        //console.log("name : " + name);
+        //console.log("email : " + email);
+      });
+      let jsonData = { "userId" : tableId };
+      console.log(tableId);
+      $.ajax({
+        url: "/setUsersPopup/delete",
+        method: "POST",
+        data: jsonData,
+        dataType: "text",
+        success: function () {
+          location.reload();
+        }
+      });
+    }
+  });
+  // 테이블 검색버튼
+  $(document).on("click", ".usersearch", function(e){
+    e.preventDefault();
+    let userId = $(".userName").eq(0).val();
+    let user_nm = $(".userName").eq(1).val();
+    let user_flag_yn = $(":input:radio[name=option]:checked").val();
+    let jsonData = { "userId" : userId, "user_nm" : user_nm, "user_flag_yn" : user_flag_yn };
+    let template = $("tbody");
+    template.empty();
+
+    $.ajax({
+      url: "/setUsers/searchButton",
+      method: "POST",
+      data: jsonData,
+      dataType: "json",
+      success: function (data) {
+        let tags = '';
+        $.each(data, function (key, value) {
+          tags += `<tr><td><input type="checkbox" class="checkbox" /></td>`;
+          tags += `<td>&nbsp;${value.userId}</td><td>&nbsp;${value.user_nm}</td>`;
+          tags += `<td>&nbsp;${value.client_nm}</td><td>&nbsp;${value.rmk}</td>`;
+          tags += `<td><a href="#" class="userupdate">수정</a></td></tr>`;
+        });
+        template.append(tags);
+      }
+    });
+  });
+
+</script>

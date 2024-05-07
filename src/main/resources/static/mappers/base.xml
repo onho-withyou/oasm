@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oasm.dao.BaseDAO">
+
+    <insert id="insertCommonCode">
+        INSERT INTO `cm_code`
+        (main_cd, sub_cd, code_nm, seq, rmk, insert_id, insert_date)
+        VALUES ( #{main}, #{sub}, #{code}, #{seq}, #{rmk}, #{id}, NOW() );
+    </insert>
+
+    <select id="selectCommonCode" resultType="com.oasm.domain.CodeVO">
+        SELECT a.main_cd, b.code_nm AS code_nm, a.sub_cd, a.code_nm AS sub_nm, a.rmk
+            FROM cm_code AS a
+            JOIN cm_code AS b ON a.main_cd = b.main_cd
+        WHERE b.sub_cd = '*' AND a.sub_cd = #{sub} AND a.main_cd = #{main};
+    </select>
+
+    <select id="selectCommonCodes" resultType="com.oasm.domain.CodeVO">
+        SELECT * FROM cm_code
+        WHERE sub_cd != '*'
+        <if test='main_cd != null and !main_cd.equals("")'>
+            AND main_cd = #{main_cd}
+        </if>
+        <if test='sub_cd != null and !sub_cd.equals("")'>
+            AND sub_cd = #{sub_cd}
+        </if>
+        <if test='cd_flag_yn != null and !cd_flag_yn.equals("")'>
+            AND cd_flag_yn = #{cd_flag_yn}
+        </if>
+        ORDER BY main_cd, seq;
+    </select>
+
+    <select id="selectMainCodes" resultType="com.oasm.domain.CodeVO">
+        SELECT * FROM cm_code
+        WHERE sub_cd = '*';
+    </select>
+
+    <select id="countCommonCode" resultType="Integer">
+        SELECT COUNT(main_cd) FROM cm_code
+        WHERE main_cd = #{main}
+    </select>
+
+    <select id="countCommonFullCode" resultType="Integer">
+        SELECT COUNT(*) FROM cm_code
+        WHERE main_cd = #{main} AND sub_cd = #{sub};
+    </select>
+
+    <update id="updateCommonCode">
+        UPDATE cm_code
+        SET code_nm = #{code},
+            <if test='rmk != null and !rmk.equals("")'>
+                rmk = #{rmk},
+            </if>
+            update_id = #{id},
+            update_date = NOW()
+        WHERE main_cd = #{main}
+            AND sub_cd = #{sub};
+    </update>
+
+</mapper>
